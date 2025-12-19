@@ -15,7 +15,9 @@ const ALLOWED_ELEMENTS = new Set([
 ]);
 
 const ALLOWED_ATTRIBUTES = new Set([
-  'viewBox',
+  'viewbox',
+  'width',
+  'height',
   'd',
   'x',
   'y',

@@ -45,6 +45,8 @@ export class EditorIcon {
   render() {
     const style = {
       '--icon-size': `${this.size}px`,
+      'width': `${this.size}px`,
+      'height': `${this.size}px`,
     };
 
     return (
