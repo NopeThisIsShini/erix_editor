@@ -20,6 +20,9 @@ export namespace Components {
          */
         "middle": string;
     }
+    interface TypeForge {
+        "buttonText": string;
+    }
 }
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
@@ -28,8 +31,15 @@ declare global {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
     };
+    interface HTMLTypeForgeElement extends Components.TypeForge, HTMLStencilElement {
+    }
+    var HTMLTypeForgeElement: {
+        prototype: HTMLTypeForgeElement;
+        new (): HTMLTypeForgeElement;
+    };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
+        "type-forge": HTMLTypeForgeElement;
     }
 }
 declare namespace LocalJSX {
@@ -47,8 +57,12 @@ declare namespace LocalJSX {
          */
         "middle"?: string;
     }
+    interface TypeForge {
+        "buttonText"?: string;
+    }
     interface IntrinsicElements {
         "my-component": MyComponent;
+        "type-forge": TypeForge;
     }
 }
 export { LocalJSX as JSX };
@@ -56,6 +70,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "type-forge": LocalJSX.TypeForge & JSXBase.HTMLAttributes<HTMLTypeForgeElement>;
         }
     }
 }
