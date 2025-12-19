@@ -5,7 +5,20 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { IconName } from "./components/editor-icon/icons";
+export { IconName } from "./components/editor-icon/icons";
 export namespace Components {
+    interface EditorIcon {
+        /**
+          * The name of the semantic editor icon.
+         */
+        "name": IconName;
+        /**
+          * The size of the icon in pixels (width and height).
+          * @default 20
+         */
+        "size": number;
+    }
     interface TypeForge {
         /**
           * The editor theme.
@@ -15,6 +28,12 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLEditorIconElement extends Components.EditorIcon, HTMLStencilElement {
+    }
+    var HTMLEditorIconElement: {
+        prototype: HTMLEditorIconElement;
+        new (): HTMLEditorIconElement;
+    };
     interface HTMLTypeForgeElement extends Components.TypeForge, HTMLStencilElement {
     }
     var HTMLTypeForgeElement: {
@@ -22,10 +41,22 @@ declare global {
         new (): HTMLTypeForgeElement;
     };
     interface HTMLElementTagNameMap {
+        "editor-icon": HTMLEditorIconElement;
         "type-forge": HTMLTypeForgeElement;
     }
 }
 declare namespace LocalJSX {
+    interface EditorIcon {
+        /**
+          * The name of the semantic editor icon.
+         */
+        "name": IconName;
+        /**
+          * The size of the icon in pixels (width and height).
+          * @default 20
+         */
+        "size"?: number;
+    }
     interface TypeForge {
         /**
           * The editor theme.
@@ -34,6 +65,7 @@ declare namespace LocalJSX {
         "theme"?: 'light' | 'dark' | string;
     }
     interface IntrinsicElements {
+        "editor-icon": EditorIcon;
         "type-forge": TypeForge;
     }
 }
@@ -41,6 +73,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "editor-icon": LocalJSX.EditorIcon & JSXBase.HTMLAttributes<HTMLEditorIconElement>;
             "type-forge": LocalJSX.TypeForge & JSXBase.HTMLAttributes<HTMLTypeForgeElement>;
         }
     }
