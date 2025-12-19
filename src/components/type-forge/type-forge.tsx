@@ -36,7 +36,7 @@ export class TypeForge {
   /**
    * The editor theme.
    */
-  @Prop({ reflect: true }) theme: 'light' | 'dark' | string = 'light';
+  @Prop({ reflect: true, mutable: true }) theme: 'light' | 'dark' | string = 'light';
 
   /**
    * Placeholder text when editor is empty.
@@ -182,6 +182,10 @@ export class TypeForge {
     this.view.focus();
   };
 
+  private handleThemeToggle = () => {
+    this.theme = this.theme === 'light' ? 'dark' : 'light';
+  };
+
   // ============================================================================
   // RENDER
   // ============================================================================
@@ -279,6 +283,20 @@ export class TypeForge {
               title="Numbered List"
             >
               <editor-icon name="numberList" size={18}></editor-icon>
+            </button>
+
+            <div class="toolbar-spacer"></div>
+
+            {/* Theme Toggle */}
+            <button
+              class="toolbar-btn theme-toggle-btn"
+              onClick={this.handleThemeToggle}
+              title={this.theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+            >
+              <editor-icon 
+                name={this.theme === 'light' ? 'darkMode' : 'lightMode'} 
+                size={20}
+              ></editor-icon>
             </button>
           </div>
 

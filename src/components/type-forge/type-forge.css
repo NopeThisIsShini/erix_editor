@@ -61,6 +61,10 @@
   margin: 0 8px;
 }
 
+.toolbar-spacer {
+  flex: 1;
+}
+
 /* Toolbar Buttons */
 .toolbar-btn {
   display: inline-flex;
@@ -130,13 +134,16 @@
 
 .editor-content {
   flex: 1;
-  overflow: auto;
+  overflow-y: auto;
   background-color: var(--editor-bg);
+  height: 100%;
 }
 
 .editor-canvas {
   min-height: 100%;
-  padding: 16px 20px;
+  padding: 40px; /* More padding for a document feel */
+  max-width: 800px;
+  margin: 0 auto; /* Center the document */
 }
 
 /* ============================================================================
