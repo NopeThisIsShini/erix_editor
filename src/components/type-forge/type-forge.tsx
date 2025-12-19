@@ -1,4 +1,4 @@
-import { Component, Host, Prop, h } from '@stencil/core';
+import { Component, Host, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'type-forge',
@@ -6,17 +6,15 @@ import { Component, Host, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class TypeForge {
+  /**
+   * The editor theme.
+   */
+  @Prop({ reflect: true }) theme: 'light' | 'dark' | string = 'light';
 
-
-  @Prop() buttonText: string;
-
-  private handleClick =() => {
-    window.open('https://typeforge.com', '_blank');
-  }
   render() {
     return (
-      <Host>
-        <button onClick={this.handleClick}>{this.buttonText}</button>
+      <Host data-theme={this.theme}>
+        <slot></slot>
       </Host>
     );
   }
