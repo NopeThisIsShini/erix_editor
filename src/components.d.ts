@@ -19,7 +19,16 @@ export namespace Components {
          */
         "size": number;
     }
+    /**
+     * @component TypeForge
+     * A rich text editor component with built-in toolbar.
+     */
     interface TypeForge {
+        /**
+          * Placeholder text when editor is empty.
+          * @default 'Start typing...'
+         */
+        "placeholder": string;
         /**
           * The editor theme.
           * @default 'light'
@@ -34,6 +43,10 @@ declare global {
         prototype: HTMLEditorIconElement;
         new (): HTMLEditorIconElement;
     };
+    /**
+     * @component TypeForge
+     * A rich text editor component with built-in toolbar.
+     */
     interface HTMLTypeForgeElement extends Components.TypeForge, HTMLStencilElement {
     }
     var HTMLTypeForgeElement: {
@@ -57,7 +70,16 @@ declare namespace LocalJSX {
          */
         "size"?: number;
     }
+    /**
+     * @component TypeForge
+     * A rich text editor component with built-in toolbar.
+     */
     interface TypeForge {
+        /**
+          * Placeholder text when editor is empty.
+          * @default 'Start typing...'
+         */
+        "placeholder"?: string;
         /**
           * The editor theme.
           * @default 'light'
@@ -74,6 +96,10 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "editor-icon": LocalJSX.EditorIcon & JSXBase.HTMLAttributes<HTMLEditorIconElement>;
+            /**
+             * @component TypeForge
+             * A rich text editor component with built-in toolbar.
+             */
             "type-forge": LocalJSX.TypeForge & JSXBase.HTMLAttributes<HTMLTypeForgeElement>;
         }
     }
