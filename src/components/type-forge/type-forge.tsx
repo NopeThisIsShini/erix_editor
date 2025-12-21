@@ -29,6 +29,8 @@ import {
   getActiveAlignment,
   setTextLineSpacing,
   getActiveLineSpacing,
+  undo,
+  redo,
 } from '../../core';
 
 /**
@@ -66,6 +68,8 @@ export class TypeForge {
     fontSize: string;
     textAlign: string;
     lineSpacing: string;
+    canUndo: boolean;
+    canRedo: boolean;
   } = {
       bold: false,
       italic: false,
@@ -78,6 +82,8 @@ export class TypeForge {
       fontSize: '',
       textAlign: 'left',
       lineSpacing: 'normal',
+      canUndo: false,
+      canRedo: false,
     };
 
   @State() private isAlignmentMenuOpen: boolean = false;
@@ -140,13 +146,15 @@ export class TypeForge {
       fontSize: getActiveFontSize(state),
       textAlign: getActiveAlignment(state),
       lineSpacing: getActiveLineSpacing(state),
+      canUndo: undo(state),
+      canRedo: redo(state),
     };
   }
 
   @Listen('mousedown', { target: 'document' })
   handleDocumentClick(event: MouseEvent) {
     const path = event.composedPath();
-    
+
     if (this.isAlignmentMenuOpen) {
       const el = this.el.shadowRoot?.querySelector('.alignment-dropdown-container');
       if (el && !path.includes(el)) {
@@ -269,6 +277,20 @@ export class TypeForge {
     }
   };
 
+  private handleUndo = () => {
+    if (this.view) {
+      undo(this.view.state, this.view.dispatch);
+      this.view.focus();
+    }
+  };
+
+  private handleRedo = () => {
+    if (this.view) {
+      redo(this.view.state, this.view.dispatch);
+      this.view.focus();
+    }
+  };
+
   private getAlignmentIcon(align: string): string {
     switch (align) {
       case 'center': return 'textAlignCenter';
@@ -290,6 +312,28 @@ export class TypeForge {
         <div class="editor-wrapper">
           {/* Toolbar */}
           <div class="editor-toolbar">
+            {/* Undo */}
+            <button
+              class="toolbar-btn"
+              onClick={this.handleUndo}
+              disabled={!activeFormats.canUndo}
+              title="Undo (Ctrl+Z)"
+            >
+              <editor-icon name="undo" size={18}></editor-icon>
+            </button>
+
+            {/* Redo */}
+            <button
+              class="toolbar-btn"
+              onClick={this.handleRedo}
+              disabled={!activeFormats.canRedo}
+              title="Redo (Ctrl+Y)"
+            >
+              <editor-icon name="redo" size={18}></editor-icon>
+            </button>
+
+            <div class="toolbar-divider"></div>
+
             {/* Heading Dropdown */}
             <select
               class="toolbar-select"
@@ -404,7 +448,7 @@ export class TypeForge {
               {this.isLineSpacingMenuOpen && (
                 <div class="toolbar-dropdown-menu line-spacing-menu">
                   {['1', '1.15', '1.5', '2', '2.5', '3'].map(spacing => (
-                    <button 
+                    <button
                       class={{ 'dropdown-item spacing-item': true, 'active': activeFormats.lineSpacing === spacing }}
                       onClick={() => this.handleLineSpacingChange(spacing)}
                     >
