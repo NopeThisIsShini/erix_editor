@@ -9,6 +9,7 @@ import { baseKeymap, toggleMark } from "prosemirror-commands";
 import { splitListItem, liftListItem, sinkListItem } from "prosemirror-schema-list";
 import { Plugin } from "prosemirror-state";
 import { editorSchema } from "./schema";
+import { insertPageBreak, printDocument } from "./commands";
 
 // ============================================================================
 // KEYMAP CONFIGURATIONS
@@ -41,6 +42,17 @@ const listKeymap = {
   "Shift-Tab": liftListItem(editorSchema.nodes.list_item),
 };
 
+/**
+ * Keyboard shortcuts for document operations
+ */
+const docKeymap = {
+  "Mod-Enter": insertPageBreak,
+  "Mod-p": (_state: any, _dispatch: any) => {
+    printDocument();
+    return true;
+  },
+};
+
 // ============================================================================
 // PLUGIN CONFIGURATION
 // ============================================================================
@@ -57,6 +69,7 @@ export function createEditorPlugins(): Plugin[] {
     // Custom keymaps (order: most specific to least specific)
     keymap(historyKeymap),
     keymap(markKeymap),
+    keymap(docKeymap),
     keymap(listKeymap),
     keymap(baseKeymap),
   ];

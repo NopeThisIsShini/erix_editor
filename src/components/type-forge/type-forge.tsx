@@ -19,6 +19,8 @@ import {
   setHeading,
   setParagraph,
   getCurrentHeadingLevel,
+  printDocument,
+  insertPageBreak,
 } from '../../core';
 
 /**
@@ -44,7 +46,6 @@ export class TypeForge {
   @Prop() placeholder: string = 'Start typing...';
 
   // Internal state
-  @State() private editorReady: boolean = false;
   @State() private activeFormats: {
     bold: boolean;
     italic: boolean;
@@ -54,14 +55,14 @@ export class TypeForge {
     orderedList: boolean;
     headingLevel: number | null;
   } = {
-    bold: false,
-    italic: false,
-    underline: false,
-    strikethrough: false,
-    bulletList: false,
-    orderedList: false,
-    headingLevel: null,
-  };
+      bold: false,
+      italic: false,
+      underline: false,
+      strikethrough: false,
+      bulletList: false,
+      orderedList: false,
+      headingLevel: null,
+    };
 
   private editorContainer?: HTMLDivElement;
   private view?: EditorView;
@@ -101,7 +102,6 @@ export class TypeForge {
       },
     });
 
-    this.editorReady = true;
     this.updateActiveFormats();
   }
 
@@ -184,6 +184,17 @@ export class TypeForge {
 
   private handleThemeToggle = () => {
     this.theme = this.theme === 'light' ? 'dark' : 'light';
+  };
+
+  private handlePageBreak = () => {
+    if (this.view) {
+      insertPageBreak(this.view.state, this.view.dispatch);
+      this.view.focus();
+    }
+  };
+
+  private handlePrint = () => {
+    printDocument();
   };
 
   // ============================================================================
@@ -285,6 +296,26 @@ export class TypeForge {
               <editor-icon name="numberList" size={18}></editor-icon>
             </button>
 
+            <div class="toolbar-divider"></div>
+
+            {/* Page Break */}
+            <button
+              class="toolbar-btn"
+              onClick={this.handlePageBreak}
+              title="Insert Page Break"
+            >
+              <editor-icon name="pageBreak" size={18}></editor-icon>
+            </button>
+
+            {/* Print */}
+            <button
+              class="toolbar-btn"
+              onClick={this.handlePrint}
+              title="Print Document (Ctrl+P)"
+            >
+              <editor-icon name="print" size={18}></editor-icon>
+            </button>
+
             <div class="toolbar-spacer"></div>
 
             {/* Theme Toggle */}
@@ -293,8 +324,8 @@ export class TypeForge {
               onClick={this.handleThemeToggle}
               title={this.theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
             >
-              <editor-icon 
-                name={this.theme === 'light' ? 'darkMode' : 'lightMode'} 
+              <editor-icon
+                name={this.theme === 'light' ? 'darkMode' : 'lightMode'}
                 size={20}
               ></editor-icon>
             </button>

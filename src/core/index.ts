@@ -39,6 +39,10 @@ export {
   setParagraph,
   getCurrentHeadingLevel,
 
+  // Document commands
+  printDocument,
+  insertPageBreak,
+
   // History
   undo,
   redo,

@@ -21,7 +21,9 @@
   overflow: hidden;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -141,9 +143,11 @@
 
 .editor-canvas {
   min-height: 100%;
-  padding: 40px; /* More padding for a document feel */
+  padding: 40px;
+  /* More padding for a document feel */
   max-width: 800px;
-  margin: 0 auto; /* Center the document */
+  margin: 0 auto;
+  /* Center the document */
 }
 
 /* ============================================================================
@@ -203,12 +207,29 @@
   margin-top: 0;
 }
 
-.editor-canvas .ProseMirror h1 { font-size: 2em; }
-.editor-canvas .ProseMirror h2 { font-size: 1.5em; }
-.editor-canvas .ProseMirror h3 { font-size: 1.25em; }
-.editor-canvas .ProseMirror h4 { font-size: 1.1em; }
-.editor-canvas .ProseMirror h5 { font-size: 1em; }
-.editor-canvas .ProseMirror h6 { font-size: 0.9em; }
+.editor-canvas .ProseMirror h1 {
+  font-size: 2em;
+}
+
+.editor-canvas .ProseMirror h2 {
+  font-size: 1.5em;
+}
+
+.editor-canvas .ProseMirror h3 {
+  font-size: 1.25em;
+}
+
+.editor-canvas .ProseMirror h4 {
+  font-size: 1.1em;
+}
+
+.editor-canvas .ProseMirror h5 {
+  font-size: 1em;
+}
+
+.editor-canvas .ProseMirror h6 {
+  font-size: 0.9em;
+}
 
 /* Lists */
 .editor-canvas .ProseMirror ul,
@@ -225,8 +246,8 @@
   margin: 0;
 }
 
-.editor-canvas .ProseMirror li > ul,
-.editor-canvas .ProseMirror li > ol {
+.editor-canvas .ProseMirror li>ul,
+.editor-canvas .ProseMirror li>ol {
   margin: 0.25em 0;
 }
 
@@ -308,4 +329,99 @@
 
 :host([data-theme="dark"]) .editor-canvas .ProseMirror ::selection {
   background: rgba(96, 165, 250, 0.4);
+}
+
+/* ============================================================================
+   PAGE BREAK
+   ============================================================================ */
+
+.editor-canvas .ProseMirror .page-break {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 48px 0;
+  user-select: none;
+  cursor: default;
+}
+
+.editor-canvas .ProseMirror .page-break::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -40px;
+  right: -40px;
+  height: 1px;
+  border-top: 2px dashed var(--editor-border);
+  z-index: 1;
+  opacity: 0.6;
+}
+
+.editor-canvas .ProseMirror .page-break span {
+  position: relative;
+  z-index: 2;
+  background-color: var(--editor-surface);
+  padding: 6px 16px;
+  border: 1px solid var(--editor-border);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--editor-muted-text);
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.editor-canvas .ProseMirror .page-break:hover span {
+  color: var(--editor-text);
+  border-color: var(--editor-muted-text);
+  transform: translateY(-1px);
+}
+
+/* ============================================================================
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {
+  :host, 
+  .editor-wrapper, 
+  .editor-content, 
+  .editor-canvas {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    background-color: white !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+  
+  .editor-toolbar {
+    display: none !important;
+  }
+  
+  .editor-canvas .ProseMirror {
+    color: black !important;
+    padding: 0 !important;
+  }
+
+  /* The actual page break magic */
+  .editor-canvas .ProseMirror .page-break {
+    display: block !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    visibility: visible !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+  
+  .editor-canvas .ProseMirror .page-break span,
+  .editor-canvas .ProseMirror .page-break::before {
+    display: none !important;
+  }
 }

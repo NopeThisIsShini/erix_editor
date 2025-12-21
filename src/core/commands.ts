@@ -3,12 +3,12 @@
  * Provides commands for formatting and list operations.
  */
 
-import { EditorState, Transaction } from "prosemirror-state";
-import { NodeType, MarkType } from "prosemirror-model";
-import { toggleMark } from "prosemirror-commands";
-import { wrapInList, liftListItem, sinkListItem } from "prosemirror-schema-list";
-import { undo, redo } from "prosemirror-history";
-import { editorSchema, TextAlignment } from "./schema";
+import { EditorState, Transaction, TextSelection } from 'prosemirror-state';
+import { NodeType, MarkType } from 'prosemirror-model';
+import { toggleMark } from 'prosemirror-commands';
+import { wrapInList, liftListItem, sinkListItem } from 'prosemirror-schema-list';
+import { undo, redo } from 'prosemirror-history';
+import { editorSchema } from './schema';
 
 // ============================================================================
 // TYPES
@@ -89,10 +89,7 @@ function toggleList(listType: NodeType, itemType: NodeType): Command {
     if (!range) return false;
 
     // Check if we're already in a list
-    const inAnyList = findParentNode((node) =>
-      node.type === editorSchema.nodes.bullet_list ||
-      node.type === editorSchema.nodes.ordered_list
-    )(state.selection);
+    const inAnyList = findParentNode(node => node.type === editorSchema.nodes.bullet_list || node.type === editorSchema.nodes.ordered_list)(state.selection);
 
     if (inAnyList) {
       if (inAnyList.node.type === listType) {
@@ -127,16 +124,12 @@ export function toggleOrderedList(state: EditorState, dispatch?: (tr: Transactio
 // ============================================================================
 
 export function isInBulletList(state: EditorState): boolean {
-  const parentList = findParentNode(
-    (node) => node.type === editorSchema.nodes.bullet_list
-  )(state.selection);
+  const parentList = findParentNode(node => node.type === editorSchema.nodes.bullet_list)(state.selection);
   return !!parentList;
 }
 
 export function isInOrderedList(state: EditorState): boolean {
-  const parentList = findParentNode(
-    (node) => node.type === editorSchema.nodes.ordered_list
-  )(state.selection);
+  const parentList = findParentNode(node => node.type === editorSchema.nodes.ordered_list)(state.selection);
   return !!parentList;
 }
 
@@ -201,6 +194,46 @@ export function getCurrentHeadingLevel(state: EditorState): number | null {
   }
 
   return null;
+}
+
+// ============================================================================
+// DOCUMENT COMMANDS
+// ============================================================================
+
+export function printDocument(): boolean {
+  window.print();
+  return true;
+}
+
+export function insertPageBreak(state: EditorState, dispatch?: (tr: Transaction) => void): boolean {
+  const { page_break, paragraph } = editorSchema.nodes;
+  if (!page_break) return false;
+
+  if (dispatch) {
+    const { tr } = state;
+    
+    // Create the page break node
+    const pbNode = page_break.create();
+    
+    // Replace selection with the page break
+    tr.replaceSelectionWith(pbNode);
+    
+    // If the page break is at the end of the document, or if the next node is not a paragraph,
+    // add an empty paragraph to ensure the user can continue typing.
+    const $pos = tr.doc.resolve(tr.selection.to);
+    const nextNode = $pos.nodeAfter;
+    
+    if (!nextNode) {
+      tr.insert(tr.selection.to, paragraph.create());
+    }
+    
+    // Move selection to the start of the next block (which we just ensured exists)
+    const nextSelectable = TextSelection.near(tr.doc.resolve(tr.selection.to));
+    tr.setSelection(nextSelectable);
+    
+    dispatch(tr.scrollIntoView());
+  }
+  return true;
 }
 
 // ============================================================================
