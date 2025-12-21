@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, State, Element, Watch } from '@stencil/core';
+import { Component, Host, h, Prop, State, Element, Watch, Listen } from '@stencil/core';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import {
@@ -25,6 +25,8 @@ import {
   getActiveFontSize,
   setFontFamily,
   setFontSize,
+  setTextAlignment,
+  getActiveAlignment,
 } from '../../core';
 
 /**
@@ -60,6 +62,7 @@ export class TypeForge {
     headingLevel: number | null;
     fontFamily: string;
     fontSize: string;
+    textAlign: string;
   } = {
       bold: false,
       italic: false,
@@ -70,7 +73,10 @@ export class TypeForge {
       headingLevel: null,
       fontFamily: '',
       fontSize: '',
+      textAlign: 'left',
     };
+
+  @State() private isAlignmentMenuOpen: boolean = false;
 
   private editorContainer?: HTMLDivElement;
   private view?: EditorView;
@@ -127,7 +133,19 @@ export class TypeForge {
       headingLevel: getCurrentHeadingLevel(state),
       fontFamily: getActiveFontFamily(state),
       fontSize: getActiveFontSize(state),
+      textAlign: getActiveAlignment(state),
     };
+  }
+
+  @Listen('mousedown', { target: 'document' })
+  handleDocumentClick(event: MouseEvent) {
+    if (this.isAlignmentMenuOpen) {
+      const path = event.composedPath();
+      const toolbarDropdown = this.el.shadowRoot?.querySelector('.alignment-dropdown-container');
+      if (toolbarDropdown && !path.includes(toolbarDropdown)) {
+        this.isAlignmentMenuOpen = false;
+      }
+    }
   }
 
   // ============================================================================
@@ -221,6 +239,23 @@ export class TypeForge {
     this.view.focus();
   };
 
+  private handleAlignmentChange = (align: string) => {
+    if (this.view) {
+      setTextAlignment(align)(this.view.state, this.view.dispatch);
+      this.isAlignmentMenuOpen = false;
+      this.view.focus();
+    }
+  };
+
+  private getAlignmentIcon(align: string): string {
+    switch (align) {
+      case 'center': return 'textAlignCenter';
+      case 'right': return 'textAlignRight';
+      case 'justify': return 'textAlignJustify';
+      default: return 'textAlignLeft';
+    }
+  }
+
   // ============================================================================
   // RENDER
   // ============================================================================
@@ -289,6 +324,51 @@ export class TypeForge {
                 <option value={`${size}px`} selected={activeFormats.fontSize === `${size}px`}>{size}</option>
               ))}
             </select>
+
+            <div class="toolbar-divider"></div>
+
+            {/* Alignment Dropdown */}
+            <div class="toolbar-dropdown-container alignment-dropdown-container">
+              <button
+                class={{ 'toolbar-btn': true, 'active': this.isAlignmentMenuOpen }}
+                onClick={() => this.isAlignmentMenuOpen = !this.isAlignmentMenuOpen}
+                title="Text Alignment"
+              >
+                <editor-icon name={this.getAlignmentIcon(activeFormats.textAlign) as any} size={18}></editor-icon>
+              </button>
+              {this.isAlignmentMenuOpen && (
+                <div class="toolbar-dropdown-menu alignment-menu">
+                  <button
+                    class={{ 'dropdown-item': true, 'active': activeFormats.textAlign === 'left' }}
+                    onClick={() => this.handleAlignmentChange('left')}
+                    title="Align Left"
+                  >
+                    <editor-icon name="textAlignLeft" size={18}></editor-icon>
+                  </button>
+                  <button
+                    class={{ 'dropdown-item': true, 'active': activeFormats.textAlign === 'center' }}
+                    onClick={() => this.handleAlignmentChange('center')}
+                    title="Align Center"
+                  >
+                    <editor-icon name="textAlignCenter" size={18}></editor-icon>
+                  </button>
+                  <button
+                    class={{ 'dropdown-item': true, 'active': activeFormats.textAlign === 'right' }}
+                    onClick={() => this.handleAlignmentChange('right')}
+                    title="Align Right"
+                  >
+                    <editor-icon name="textAlignRight" size={18}></editor-icon>
+                  </button>
+                  <button
+                    class={{ 'dropdown-item': true, 'active': activeFormats.textAlign === 'justify' }}
+                    onClick={() => this.handleAlignmentChange('justify')}
+                    title="Justify"
+                  >
+                    <editor-icon name="textAlignJustify" size={18}></editor-icon>
+                  </button>
+                </div>
+              )}
+            </div>
 
             <div class="toolbar-divider"></div>
 

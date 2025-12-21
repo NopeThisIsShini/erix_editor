@@ -283,6 +283,44 @@ export function getActiveFontSize(state: EditorState): string {
 }
 
 // ============================================================================
+// ALIGNMENT COMMANDS
+// ============================================================================
+
+export function setTextAlignment(align: string): Command {
+  return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
+    const { from, to } = state.selection;
+    let tr = state.tr;
+    let hasChanged = false;
+
+    state.doc.nodesBetween(from, to, (node, pos) => {
+      if (node.type === editorSchema.nodes.paragraph || node.type === editorSchema.nodes.heading) {
+        tr = tr.setNodeMarkup(pos, undefined, { ...node.attrs, align });
+        hasChanged = true;
+      }
+    });
+
+    if (hasChanged && dispatch) {
+      dispatch(tr);
+    }
+
+    return hasChanged;
+  };
+}
+
+export function getActiveAlignment(state: EditorState): string {
+  const { $from } = state.selection;
+  let node = $from.parent;
+  
+  // If we are in a list item or something that contains blocks, go deeper or up?
+  // Usually $from.parent is the block node (paragraph, heading)
+  if (node.attrs && node.attrs.align) {
+    return node.attrs.align;
+  }
+
+  return 'left';
+}
+
+// ============================================================================
 // DOCUMENT COMMANDS
 // ============================================================================
 

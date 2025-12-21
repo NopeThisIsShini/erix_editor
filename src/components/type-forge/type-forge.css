@@ -1,13 +1,4 @@
-/* ============================================================================
-   TYPE-FORGE EDITOR STYLES
-   A clean, modern rich text editor component
-   ============================================================================ */
-
 @import '../../styles/theme.css';
-
-/* ============================================================================
-   HOST STYLES
-   ============================================================================ */
 
 :host {
   display: flex;
@@ -27,9 +18,6 @@
   box-sizing: border-box;
 }
 
-/* ============================================================================
-   EDITOR WRAPPER
-   ============================================================================ */
 
 .editor-wrapper {
   display: flex;
@@ -42,9 +30,6 @@
   background-color: var(--editor-bg);
 }
 
-/* ============================================================================
-   TOOLBAR
-   ============================================================================ */
 
 .editor-toolbar {
   display: flex;
@@ -88,8 +73,18 @@
 }
 
 .toolbar-btn.active {
-  background-color: var(--editor-accent);
-  color: var(--editor-accent-foreground);
+  background-color: var(--editor-active-bg);
+  color: var(--editor-accent);
+  position: relative;
+}
+
+.toolbar-btn.active::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1.5px solid var(--editor-accent);
+  border-radius: 4px;
+  pointer-events: none;
 }
 
 .toolbar-btn:focus {
@@ -138,9 +133,66 @@
   width: 70px;
 }
 
-/* ============================================================================
-   EDITOR CONTENT AREA
-   ============================================================================ */
+/* Dropdowns */
+.toolbar-dropdown-container {
+  position: relative;
+  display: inline-flex;
+}
+
+.toolbar-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background-color: var(--editor-surface);
+  border: 1px solid var(--editor-border);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  min-width: 40px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--editor-text);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background-color: var(--editor-border);
+}
+
+.dropdown-item.active {
+  background-color: var(--editor-active-bg);
+  color: var(--editor-accent);
+  position: relative;
+}
+
+.dropdown-item.active::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1.5px solid var(--editor-accent);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+
+:host([data-theme="dark"]) .dropdown-item.active::after {
+  border-color: var(--editor-accent);
+}
 
 .editor-content {
   flex: 1;
@@ -158,9 +210,6 @@
   /* Center the document */
 }
 
-/* ============================================================================
-   PROSEMIRROR EDITOR STYLES
-   ============================================================================ */
 
 /* Main editor area */
 .editor-canvas .ProseMirror {
@@ -327,9 +376,6 @@
   background: rgba(59, 130, 246, 0.3);
 }
 
-/* ============================================================================
-   DARK THEME ADJUSTMENTS
-   ============================================================================ */
 
 :host([data-theme="dark"]) .toolbar-select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
@@ -339,9 +385,7 @@
   background: rgba(96, 165, 250, 0.4);
 }
 
-/* ============================================================================
-   PAGE BREAK
-   ============================================================================ */
+
 
 .editor-canvas .ProseMirror .page-break {
   display: flex;
@@ -387,9 +431,6 @@
   transform: translateY(-1px);
 }
 
-/* ============================================================================
-   PRINT STYLES
-   ============================================================================ */
 
 @media print {
 

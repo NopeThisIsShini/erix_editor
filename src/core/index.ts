@@ -45,6 +45,10 @@ export {
   setFontFamily,
   setFontSize,
 
+  // Alignment commands
+  setTextAlignment,
+  getActiveAlignment,
+
   // Document commands
   printDocument,
   insertPageBreak,
