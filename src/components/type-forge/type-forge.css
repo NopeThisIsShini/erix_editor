@@ -194,6 +194,30 @@
   border-color: var(--editor-accent);
 }
 
+.line-spacing-menu {
+  min-width: 100px;
+}
+
+.spacing-item {
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0 8px;
+  gap: 8px;
+}
+
+.spacing-check {
+  width: 14px;
+  font-size: 12px;
+  color: var(--editor-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spacing-value {
+  font-size: 13px;
+}
+
 .editor-content {
   flex: 1;
   overflow-y: auto;

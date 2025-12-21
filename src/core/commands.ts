@@ -310,14 +310,44 @@ export function setTextAlignment(align: string): Command {
 export function getActiveAlignment(state: EditorState): string {
   const { $from } = state.selection;
   let node = $from.parent;
-  
-  // If we are in a list item or something that contains blocks, go deeper or up?
-  // Usually $from.parent is the block node (paragraph, heading)
+
   if (node.attrs && node.attrs.align) {
     return node.attrs.align;
   }
 
   return 'left';
+}
+
+export function setTextLineSpacing(lineHeight: string): Command {
+  return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
+    const { from, to } = state.selection;
+    let tr = state.tr;
+    let hasChanged = false;
+
+    state.doc.nodesBetween(from, to, (node, pos) => {
+      if (node.type === editorSchema.nodes.paragraph || node.type === editorSchema.nodes.heading) {
+        tr = tr.setNodeMarkup(pos, undefined, { ...node.attrs, lineHeight });
+        hasChanged = true;
+      }
+    });
+
+    if (hasChanged && dispatch) {
+      dispatch(tr);
+    }
+
+    return hasChanged;
+  };
+}
+
+export function getActiveLineSpacing(state: EditorState): string {
+  const { $from } = state.selection;
+  let node = $from.parent;
+
+  if (node.attrs && node.attrs.lineHeight) {
+    return node.attrs.lineHeight;
+  }
+
+  return 'normal';
 }
 
 // ============================================================================
@@ -335,26 +365,26 @@ export function insertPageBreak(state: EditorState, dispatch?: (tr: Transaction)
 
   if (dispatch) {
     const { tr } = state;
-    
+
     // Create the page break node
     const pbNode = page_break.create();
-    
+
     // Replace selection with the page break
     tr.replaceSelectionWith(pbNode);
-    
+
     // If the page break is at the end of the document, or if the next node is not a paragraph,
     // add an empty paragraph to ensure the user can continue typing.
     const $pos = tr.doc.resolve(tr.selection.to);
     const nextNode = $pos.nodeAfter;
-    
+
     if (!nextNode) {
       tr.insert(tr.selection.to, paragraph.create());
     }
-    
+
     // Move selection to the start of the next block (which we just ensured exists)
     const nextSelectable = TextSelection.near(tr.doc.resolve(tr.selection.to));
     tr.setSelection(nextSelectable);
-    
+
     dispatch(tr.scrollIntoView());
   }
   return true;

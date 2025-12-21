@@ -16,20 +16,26 @@ import { schema as basicSchema } from 'prosemirror-schema-basic';
 
 export type TextAlignment = 'left' | 'center' | 'right' | 'justify';
 
-const alignmentAttrs = {
+const formattingAttrs = {
   align: { default: 'left' as TextAlignment },
+  lineHeight: { default: 'normal' },
 };
 
-function getAlignmentFromDOM(dom: HTMLElement): { align: TextAlignment } {
+function getFormattingFromDOM(dom: HTMLElement) {
   const align = (dom.style.textAlign || dom.getAttribute('align') || 'left') as TextAlignment;
-  return { align };
+  const lineHeight = dom.style.lineHeight || 'normal';
+  return { align, lineHeight };
 }
 
-function createAlignmentDOMAttrs(node: { attrs: { align?: TextAlignment } }): Record<string, string> {
+function createFormattingDOMAttrs(node: { attrs: { align?: TextAlignment, lineHeight?: string } }): Record<string, string> {
+  const styles: string[] = [];
   if (node.attrs.align && node.attrs.align !== 'left') {
-    return { style: `text-align: ${node.attrs.align}` };
+    styles.push(`text-align: ${node.attrs.align}`);
   }
-  return {};
+  if (node.attrs.lineHeight && node.attrs.lineHeight !== 'normal') {
+    styles.push(`line-height: ${node.attrs.lineHeight}`);
+  }
+  return styles.length ? { style: styles.join('; ') } : {};
 }
 
 // ============================================================================
@@ -39,17 +45,17 @@ function createAlignmentDOMAttrs(node: { attrs: { align?: TextAlignment } }): Re
 const paragraphNode: NodeSpec = {
   content: 'inline*',
   group: 'block',
-  attrs: alignmentAttrs,
+  attrs: formattingAttrs,
   parseDOM: [
     {
       tag: 'p',
       getAttrs(dom) {
-        return getAlignmentFromDOM(dom as HTMLElement);
+        return getFormattingFromDOM(dom as HTMLElement);
       },
     },
   ],
   toDOM(node) {
-    return ['p', createAlignmentDOMAttrs(node), 0];
+    return ['p', createFormattingDOMAttrs(node), 0];
   },
 };
 
@@ -58,17 +64,17 @@ const headingNode: NodeSpec = {
   group: 'block',
   attrs: {
     level: { default: 1 },
-    align: { default: 'left' as TextAlignment },
+    ...formattingAttrs,
   },
   parseDOM: [1, 2, 3, 4, 5, 6].map(level => ({
     tag: `h${level}`,
     attrs: { level },
     getAttrs(dom) {
-      return { level, ...getAlignmentFromDOM(dom as HTMLElement) };
+      return { level, ...getFormattingFromDOM(dom as HTMLElement) };
     },
   })),
   toDOM(node) {
-    return [`h${node.attrs.level}`, createAlignmentDOMAttrs(node), 0];
+    return [`h${node.attrs.level}`, createFormattingDOMAttrs(node), 0];
   },
   defining: true,
 };

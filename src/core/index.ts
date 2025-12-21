@@ -4,10 +4,10 @@
  */
 
 // Schema
-export { editorSchema, type TextAlignment } from "./schema";
+export { editorSchema, type TextAlignment } from './schema';
 
 // Plugins
-export { editorPlugins, createEditorPlugins } from "./plugins";
+export { editorPlugins, createEditorPlugins } from './plugins';
 
 // Commands
 export {
@@ -45,9 +45,11 @@ export {
   setFontFamily,
   setFontSize,
 
-  // Alignment commands
+  // Alignment and spacing commands
   setTextAlignment,
   getActiveAlignment,
+  setTextLineSpacing,
+  getActiveLineSpacing,
 
   // Document commands
   printDocument,
@@ -56,4 +58,4 @@ export {
   // History
   undo,
   redo,
-} from "./commands";
+} from './commands';

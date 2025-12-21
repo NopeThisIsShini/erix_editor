@@ -27,6 +27,8 @@ import {
   setFontSize,
   setTextAlignment,
   getActiveAlignment,
+  setTextLineSpacing,
+  getActiveLineSpacing,
 } from '../../core';
 
 /**
@@ -63,6 +65,7 @@ export class TypeForge {
     fontFamily: string;
     fontSize: string;
     textAlign: string;
+    lineSpacing: string;
   } = {
       bold: false,
       italic: false,
@@ -74,9 +77,11 @@ export class TypeForge {
       fontFamily: '',
       fontSize: '',
       textAlign: 'left',
+      lineSpacing: 'normal',
     };
 
   @State() private isAlignmentMenuOpen: boolean = false;
+  @State() private isLineSpacingMenuOpen: boolean = false;
 
   private editorContainer?: HTMLDivElement;
   private view?: EditorView;
@@ -134,16 +139,25 @@ export class TypeForge {
       fontFamily: getActiveFontFamily(state),
       fontSize: getActiveFontSize(state),
       textAlign: getActiveAlignment(state),
+      lineSpacing: getActiveLineSpacing(state),
     };
   }
 
   @Listen('mousedown', { target: 'document' })
   handleDocumentClick(event: MouseEvent) {
+    const path = event.composedPath();
+    
     if (this.isAlignmentMenuOpen) {
-      const path = event.composedPath();
-      const toolbarDropdown = this.el.shadowRoot?.querySelector('.alignment-dropdown-container');
-      if (toolbarDropdown && !path.includes(toolbarDropdown)) {
+      const el = this.el.shadowRoot?.querySelector('.alignment-dropdown-container');
+      if (el && !path.includes(el)) {
         this.isAlignmentMenuOpen = false;
+      }
+    }
+
+    if (this.isLineSpacingMenuOpen) {
+      const el = this.el.shadowRoot?.querySelector('.line-spacing-dropdown-container');
+      if (el && !path.includes(el)) {
+        this.isLineSpacingMenuOpen = false;
       }
     }
   }
@@ -243,6 +257,14 @@ export class TypeForge {
     if (this.view) {
       setTextAlignment(align)(this.view.state, this.view.dispatch);
       this.isAlignmentMenuOpen = false;
+      this.view.focus();
+    }
+  };
+
+  private handleLineSpacingChange = (spacing: string) => {
+    if (this.view) {
+      setTextLineSpacing(spacing)(this.view.state, this.view.dispatch);
+      this.isLineSpacingMenuOpen = false;
       this.view.focus();
     }
   };
@@ -366,6 +388,30 @@ export class TypeForge {
                   >
                     <editor-icon name="textAlignJustify" size={18}></editor-icon>
                   </button>
+                </div>
+              )}
+            </div>
+
+            {/* Line Spacing Dropdown */}
+            <div class="toolbar-dropdown-container line-spacing-dropdown-container">
+              <button
+                class={{ 'toolbar-btn': true, 'active': this.isLineSpacingMenuOpen }}
+                onClick={() => this.isLineSpacingMenuOpen = !this.isLineSpacingMenuOpen}
+                title="Line Spacing"
+              >
+                <editor-icon name="textLineSpacing" size={18}></editor-icon>
+              </button>
+              {this.isLineSpacingMenuOpen && (
+                <div class="toolbar-dropdown-menu line-spacing-menu">
+                  {['1', '1.15', '1.5', '2', '2.5', '3'].map(spacing => (
+                    <button 
+                      class={{ 'dropdown-item spacing-item': true, 'active': activeFormats.lineSpacing === spacing }}
+                      onClick={() => this.handleLineSpacingChange(spacing)}
+                    >
+                      <span class="spacing-check">{activeFormats.lineSpacing === spacing ? '✓' : ''}</span>
+                      <span class="spacing-value">{spacing}</span>
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
