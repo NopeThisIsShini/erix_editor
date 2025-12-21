@@ -21,6 +21,10 @@ import {
   getCurrentHeadingLevel,
   printDocument,
   insertPageBreak,
+  getActiveFontFamily,
+  getActiveFontSize,
+  setFontFamily,
+  setFontSize,
 } from '../../core';
 
 /**
@@ -54,6 +58,8 @@ export class TypeForge {
     bulletList: boolean;
     orderedList: boolean;
     headingLevel: number | null;
+    fontFamily: string;
+    fontSize: string;
   } = {
       bold: false,
       italic: false,
@@ -62,6 +68,8 @@ export class TypeForge {
       bulletList: false,
       orderedList: false,
       headingLevel: null,
+      fontFamily: '',
+      fontSize: '',
     };
 
   private editorContainer?: HTMLDivElement;
@@ -117,6 +125,8 @@ export class TypeForge {
       bulletList: isInBulletList(state),
       orderedList: isInOrderedList(state),
       headingLevel: getCurrentHeadingLevel(state),
+      fontFamily: getActiveFontFamily(state),
+      fontSize: getActiveFontSize(state),
     };
   }
 
@@ -197,6 +207,20 @@ export class TypeForge {
     printDocument();
   };
 
+  private handleFontFamilyChange = (event: Event) => {
+    if (!this.view) return;
+    const select = event.target as HTMLSelectElement;
+    setFontFamily(select.value)(this.view.state, this.view.dispatch);
+    this.view.focus();
+  };
+
+  private handleFontSizeChange = (event: Event) => {
+    if (!this.view) return;
+    const select = event.target as HTMLSelectElement;
+    setFontSize(select.value)(this.view.state, this.view.dispatch);
+    this.view.focus();
+  };
+
   // ============================================================================
   // RENDER
   // ============================================================================
@@ -236,6 +260,34 @@ export class TypeForge {
               <option value="6" selected={activeFormats.headingLevel === 6}>
                 Heading 6
               </option>
+            </select>
+
+            <div class="toolbar-divider"></div>
+
+            {/* Font Family Dropdown */}
+            <select
+              class="toolbar-select font-family-select"
+              onChange={this.handleFontFamilyChange}
+              title="Font Family"
+            >
+              <option value="" selected={activeFormats.fontFamily === ''}>Font</option>
+              <option value="Inter, system-ui, sans-serif" selected={activeFormats.fontFamily === 'Inter, system-ui, sans-serif'}>Inter</option>
+              <option value="Roboto, sans-serif" selected={activeFormats.fontFamily === 'Roboto, sans-serif'}>Roboto</option>
+              <option value="Playfair Display, serif" selected={activeFormats.fontFamily === 'Playfair Display, serif'}>Serif</option>
+              <option value="Fira Code, monospace" selected={activeFormats.fontFamily === 'Fira Code, monospace'}>Monospace</option>
+              <option value="cursive" selected={activeFormats.fontFamily === 'cursive'}>Cursive</option>
+            </select>
+
+            {/* Font Size Dropdown */}
+            <select
+              class="toolbar-select font-size-select"
+              onChange={this.handleFontSizeChange}
+              title="Font Size"
+            >
+              <option value="" selected={activeFormats.fontSize === ''}>Size</option>
+              {[10, 11, 12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72].map(size => (
+                <option value={`${size}px`} selected={activeFormats.fontSize === `${size}px`}>{size}</option>
+              ))}
             </select>
 
             <div class="toolbar-divider"></div>

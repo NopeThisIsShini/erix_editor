@@ -39,6 +39,12 @@ export {
   setParagraph,
   getCurrentHeadingLevel,
 
+  // Font commands
+  getActiveFontFamily,
+  getActiveFontSize,
+  setFontFamily,
+  setFontSize,
+
   // Document commands
   printDocument,
   insertPageBreak,

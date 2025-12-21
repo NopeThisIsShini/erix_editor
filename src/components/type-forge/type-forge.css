@@ -130,6 +130,14 @@
   border-color: var(--editor-accent);
 }
 
+.font-family-select {
+  width: 100px;
+}
+
+.font-size-select {
+  width: 70px;
+}
+
 /* ============================================================================
    EDITOR CONTENT AREA
    ============================================================================ */
@@ -384,9 +392,10 @@
    ============================================================================ */
 
 @media print {
-  :host, 
-  .editor-wrapper, 
-  .editor-content, 
+
+  :host,
+  .editor-wrapper,
+  .editor-content,
   .editor-canvas {
     display: block !important;
     height: auto !important;
@@ -398,11 +407,11 @@
     width: 100% !important;
     max-width: none !important;
   }
-  
+
   .editor-toolbar {
     display: none !important;
   }
-  
+
   .editor-canvas .ProseMirror {
     color: black !important;
     padding: 0 !important;
@@ -419,7 +428,7 @@
     page-break-after: always !important;
     break-after: page !important;
   }
-  
+
   .editor-canvas .ProseMirror .page-break span,
   .editor-canvas .ProseMirror .page-break::before {
     display: none !important;

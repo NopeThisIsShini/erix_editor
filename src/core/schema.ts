@@ -164,6 +164,30 @@ const extendedMarks: { [key: string]: MarkSpec } = {
       return ['s', 0];
     },
   },
+  fontFamily: {
+    attrs: { family: { default: '' } },
+    parseDOM: [
+      {
+        style: 'font-family',
+        getAttrs: (value: string) => ({ family: value.replace(/['"]/g, '') }),
+      },
+    ],
+    toDOM(mark) {
+      return ['span', { style: `font-family: ${mark.attrs.family}` }, 0];
+    },
+  },
+  fontSize: {
+    attrs: { size: { default: '' } },
+    parseDOM: [
+      {
+        style: 'font-size',
+        getAttrs: (value: string) => ({ size: value }),
+      },
+    ],
+    toDOM(mark) {
+      return ['span', { style: `font-size: ${mark.attrs.size}` }, 0];
+    },
+  },
 };
 
 // ============================================================================
