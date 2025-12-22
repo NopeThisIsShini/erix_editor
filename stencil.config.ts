@@ -1,6 +1,4 @@
 import { Config } from '@stencil/core';
-import { postcss } from '@stencil/postcss';
-import autoprefixer from 'autoprefixer';
 export const config: Config = {
   namespace: 'typeforge',
   outputTargets: [
@@ -24,13 +22,5 @@ export const config: Config = {
   testing: {
     browserHeadless: "shell",
   },
-  plugins: [
-    postcss({
-      plugins: [
-        require("postcss-import"),
-        require("tailwindcss")("./tailwind.config.js"),
-        autoprefixer()
-      ]
-    })
-  ],
+  plugins: [],
 };

@@ -1,7 +1,0 @@
-/* src/styles/tailwind.css */
-@import './theme.css';
-
-/* We only import components and utilities for Shadow DOM usage. 
-   Base/Preflight is avoided as per requirements. */
-@tailwind components;
-@tailwind utilities;

@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property            | Attribute | Description                                        | Type                                                                                                                                             | Default     |
-| ------------------- | --------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `name` _(required)_ | `name`    | The name of the semantic editor icon.              | `"bulletList" \| "formatBold" \| "formatHeading" \| "formatItalic" \| "formatStrikethrough" \| "formatUnderline" \| "numberList" \| "pageBreak"` | `undefined` |
-| `size`              | `size`    | The size of the icon in pixels (width and height). | `number`                                                                                                                                         | `20`        |
+| Property            | Attribute | Description                                        | Type                                                                                                                                                                                                                                                                                                                | Default     |
+| ------------------- | --------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `name` _(required)_ | `name`    | The name of the semantic editor icon.              | `"bulletList" \| "darkMode" \| "formatBold" \| "formatHeading" \| "formatItalic" \| "formatStrikethrough" \| "formatUnderline" \| "lightMode" \| "numberList" \| "pageBreak" \| "print" \| "redo" \| "textAlignCenter" \| "textAlignJustify" \| "textAlignLeft" \| "textAlignRight" \| "textLineSpacing" \| "undo"` | `undefined` |
+| `size`              | `size`    | The size of the icon in pixels (width and height). | `number`                                                                                                                                                                                                                                                                                                            | `20`        |
 
 
 ## Dependencies
