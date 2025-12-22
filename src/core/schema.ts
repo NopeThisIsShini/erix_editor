@@ -194,6 +194,18 @@ const extendedMarks: { [key: string]: MarkSpec } = {
       return ['span', { style: `font-size: ${mark.attrs.size}` }, 0];
     },
   },
+  superscript: {
+    parseDOM: [{ tag: 'sup' }, { style: 'vertical-align=super' }],
+    toDOM() {
+      return ['sup', 0];
+    },
+  },
+  subscript: {
+    parseDOM: [{ tag: 'sub' }, { style: 'vertical-align=sub' }],
+    toDOM() {
+      return ['sub', 0];
+    },
+  },
 };
 
 // ============================================================================

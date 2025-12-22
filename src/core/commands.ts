@@ -36,6 +36,14 @@ export function toggleStrikethrough(state: EditorState, dispatch?: (tr: Transact
   return toggleMark(editorSchema.marks.strikethrough)(state, dispatch);
 }
 
+export function toggleSuperscript(state: EditorState, dispatch?: (tr: Transaction) => void): boolean {
+  return toggleMark(editorSchema.marks.superscript)(state, dispatch);
+}
+
+export function toggleSubscript(state: EditorState, dispatch?: (tr: Transaction) => void): boolean {
+  return toggleMark(editorSchema.marks.subscript)(state, dispatch);
+}
+
 // ============================================================================
 // MARK STATE CHECKS
 // ============================================================================
@@ -62,6 +70,51 @@ export function isUnderlineActive(state: EditorState): boolean {
 
 export function isStrikethroughActive(state: EditorState): boolean {
   return isMarkActive(state, editorSchema.marks.strikethrough);
+}
+
+export function isSuperscriptActive(state: EditorState): boolean {
+  return editorSchema.marks.superscript ? isMarkActive(state, editorSchema.marks.superscript) : false;
+}
+
+export function isSubscriptActive(state: EditorState): boolean {
+  return editorSchema.marks.subscript ? isMarkActive(state, editorSchema.marks.subscript) : false;
+}
+
+// ============================================================================
+// TEXT CASE COMMANDS
+// ============================================================================
+
+export function setTextCase(type: 'uppercase' | 'lowercase'): Command {
+  return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
+    const { from, to, empty } = state.selection;
+    if (empty) return false;
+
+    if (dispatch) {
+      const tr = state.tr;
+      const changes: { start: number; end: number; text: string }[] = [];
+
+      state.doc.nodesBetween(from, to, (node, pos) => {
+        if (node.isText) {
+          const start = Math.max(from, pos);
+          const end = Math.min(to, pos + node.nodeSize);
+          const text = node.textContent.slice(start - pos, end - pos);
+          const transformedText = type === 'uppercase' ? text.toUpperCase() : text.toLowerCase();
+          if (transformedText !== text) {
+            changes.push({ start, end, text: transformedText });
+          }
+        }
+      });
+
+      // Apply changes in reverse order to keep positions valid
+      for (let i = changes.length - 1; i >= 0; i--) {
+        const { start, end, text } = changes[i];
+        tr.insertText(text, start, end);
+      }
+
+      dispatch(tr);
+    }
+    return true;
+  };
 }
 
 // ============================================================================

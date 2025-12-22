@@ -16,13 +16,20 @@ export {
   toggleItalic,
   toggleUnderline,
   toggleStrikethrough,
+  toggleSuperscript,
+  toggleSubscript,
 
   // Mark state checks
   isBoldActive,
   isItalicActive,
   isUnderlineActive,
   isStrikethroughActive,
+  isSuperscriptActive,
+  isSubscriptActive,
   isMarkActive,
+
+  // Text Case commands
+  setTextCase,
 
   // List commands
   toggleBulletList,

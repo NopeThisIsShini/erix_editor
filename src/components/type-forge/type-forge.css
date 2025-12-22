@@ -384,6 +384,22 @@
   text-decoration: line-through;
 }
 
+.editor-canvas .ProseMirror sup {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+  top: -0.5em;
+}
+
+.editor-canvas .ProseMirror sub {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+  bottom: -0.25em;
+}
+
 /* Links */
 .editor-canvas .ProseMirror a {
   color: var(--editor-accent);

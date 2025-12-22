@@ -8,12 +8,16 @@ import {
   toggleItalic,
   toggleUnderline,
   toggleStrikethrough,
+  toggleSuperscript,
+  toggleSubscript,
   toggleBulletList,
   toggleOrderedList,
   isBoldActive,
   isItalicActive,
   isUnderlineActive,
   isStrikethroughActive,
+  isSuperscriptActive,
+  isSubscriptActive,
   isInBulletList,
   isInOrderedList,
   setHeading,
@@ -29,6 +33,7 @@ import {
   getActiveAlignment,
   setTextLineSpacing,
   getActiveLineSpacing,
+  setTextCase,
   undo,
   redo,
 } from '../../core';
@@ -61,6 +66,8 @@ export class TypeForge {
     italic: boolean;
     underline: boolean;
     strikethrough: boolean;
+    superscript: boolean;
+    subscript: boolean;
     bulletList: boolean;
     orderedList: boolean;
     headingLevel: number | null;
@@ -75,6 +82,8 @@ export class TypeForge {
       italic: false,
       underline: false,
       strikethrough: false,
+      superscript: false,
+      subscript: false,
       bulletList: false,
       orderedList: false,
       headingLevel: null,
@@ -139,6 +148,8 @@ export class TypeForge {
       italic: isItalicActive(state),
       underline: isUnderlineActive(state),
       strikethrough: isStrikethroughActive(state),
+      superscript: isSuperscriptActive(state),
+      subscript: isSubscriptActive(state),
       bulletList: isInBulletList(state),
       orderedList: isInOrderedList(state),
       headingLevel: getCurrentHeadingLevel(state),
@@ -198,6 +209,34 @@ export class TypeForge {
   private handleStrikethrough = () => {
     if (this.view) {
       toggleStrikethrough(this.view.state, this.view.dispatch);
+      this.view.focus();
+    }
+  };
+  
+  private handleSuperscript = () => {
+    if (this.view) {
+      toggleSuperscript(this.view.state, this.view.dispatch);
+      this.view.focus();
+    }
+  };
+
+  private handleSubscript = () => {
+    if (this.view) {
+      toggleSubscript(this.view.state, this.view.dispatch);
+      this.view.focus();
+    }
+  };
+
+  private handleUpperCase = () => {
+    if (this.view) {
+      setTextCase('uppercase')(this.view.state, this.view.dispatch);
+      this.view.focus();
+    }
+  };
+
+  private handleLowerCase = () => {
+    if (this.view) {
+      setTextCase('lowercase')(this.view.state, this.view.dispatch);
       this.view.focus();
     }
   };
@@ -496,6 +535,44 @@ export class TypeForge {
               title="Strikethrough"
             >
               <editor-icon name="formatStrikethrough" size={18}></editor-icon>
+            </button>
+
+            {/* Superscript */}
+            <button
+              class={{ 'toolbar-btn': true, 'active': activeFormats.superscript }}
+              onClick={this.handleSuperscript}
+              title="Superscript"
+            >
+              <editor-icon name="superScript" size={18}></editor-icon>
+            </button>
+
+            {/* Subscript */}
+            <button
+              class={{ 'toolbar-btn': true, 'active': activeFormats.subscript }}
+              onClick={this.handleSubscript}
+              title="Subscript"
+            >
+              <editor-icon name="subScript" size={18}></editor-icon>
+            </button>
+
+            <div class="toolbar-divider"></div>
+
+            {/* Uppercase */}
+            <button
+              class="toolbar-btn"
+              onClick={this.handleUpperCase}
+              title="Convert to Uppercase"
+            >
+              <editor-icon name="upperCase" size={18}></editor-icon>
+            </button>
+
+            {/* Lowercase */}
+            <button
+              class="toolbar-btn"
+              onClick={this.handleLowerCase}
+              title="Convert to Lowercase"
+            >
+              <editor-icon name="lowerCase" size={18}></editor-icon>
             </button>
 
             <div class="toolbar-divider"></div>
