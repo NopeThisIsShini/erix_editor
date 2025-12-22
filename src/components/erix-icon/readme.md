@@ -1,4 +1,4 @@
-# editor-icon
+# erix-icon
 
 
 
@@ -22,8 +22,8 @@
 ### Graph
 ```mermaid
 graph TD;
-  erix-editor --> editor-icon
-  style editor-icon fill:#f9f,stroke:#333,stroke-width:4px
+  erix-editor --> erix-icon
+  style erix-icon fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

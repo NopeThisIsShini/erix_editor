@@ -1,8 +1,3 @@
-/**
- * Erix Editor Commands
- * Provides commands for formatting and list operations.
- */
-
 import { EditorState, Transaction, TextSelection } from 'prosemirror-state';
 import { NodeType, MarkType } from 'prosemirror-model';
 import { toggleMark } from 'prosemirror-commands';
@@ -10,15 +5,7 @@ import { wrapInList, liftListItem, sinkListItem } from 'prosemirror-schema-list'
 import { undo, redo } from 'prosemirror-history';
 import { editorSchema } from '@src/core/schema';
 
-// ============================================================================
-// TYPES
-// ============================================================================
-
 type Command = (state: EditorState, dispatch?: (tr: Transaction) => void) => boolean;
-
-// ============================================================================
-// MARK COMMANDS
-// ============================================================================
 
 export function toggleBold(state: EditorState, dispatch?: (tr: Transaction) => void): boolean {
   return toggleMark(editorSchema.marks.strong)(state, dispatch);
@@ -44,9 +31,6 @@ export function toggleSubscript(state: EditorState, dispatch?: (tr: Transaction)
   return toggleMark(editorSchema.marks.subscript)(state, dispatch);
 }
 
-// ============================================================================
-// MARK STATE CHECKS
-// ============================================================================
 
 export function isMarkActive(state: EditorState, markType: MarkType): boolean {
   const { from, $from, to, empty } = state.selection;
@@ -80,9 +64,6 @@ export function isSubscriptActive(state: EditorState): boolean {
   return editorSchema.marks.subscript ? isMarkActive(state, editorSchema.marks.subscript) : false;
 }
 
-// ============================================================================
-// TEXT CASE COMMANDS
-// ============================================================================
 
 export function setTextCase(type: 'uppercase' | 'lowercase'): Command {
   return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
@@ -116,10 +97,6 @@ export function setTextCase(type: 'uppercase' | 'lowercase'): Command {
     return true;
   };
 }
-
-// ============================================================================
-// LIST COMMANDS
-// ============================================================================
 
 function findParentNode(predicate: (node: any) => boolean) {
   return (selection: any) => {
@@ -186,10 +163,7 @@ export function isInOrderedList(state: EditorState): boolean {
   return !!parentList;
 }
 
-// ============================================================================
 // INDENT COMMANDS
-// ============================================================================
-
 export function increaseIndent(state: EditorState, dispatch?: (tr: Transaction) => void): boolean {
   const { list_item } = editorSchema.nodes;
   return sinkListItem(list_item)(state, dispatch);
@@ -200,10 +174,8 @@ export function decreaseIndent(state: EditorState, dispatch?: (tr: Transaction) 
   return liftListItem(list_item)(state, dispatch);
 }
 
-// ============================================================================
-// HEADING COMMANDS
-// ============================================================================
 
+// HEADING COMMANDS
 export function setHeading(level: number): Command {
   return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
     const { $from, $to } = state.selection;
@@ -249,10 +221,7 @@ export function getCurrentHeadingLevel(state: EditorState): number | null {
   return null;
 }
 
-// ============================================================================
 // FONT COMMANDS
-// ============================================================================
-
 export function setFontFamily(family: string): Command {
   return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
     const { from, to, empty } = state.selection;
@@ -335,10 +304,7 @@ export function getActiveFontSize(state: EditorState): string {
   return mark ? mark.attrs.size : '';
 }
 
-// ============================================================================
 // ALIGNMENT COMMANDS
-// ============================================================================
-
 export function setTextAlignment(align: string): Command {
   return (state: EditorState, dispatch?: (tr: Transaction) => void): boolean => {
     const { from, to } = state.selection;
@@ -403,10 +369,7 @@ export function getActiveLineSpacing(state: EditorState): string {
   return 'normal';
 }
 
-// ============================================================================
 // DOCUMENT COMMANDS
-// ============================================================================
-
 export function printDocument(): boolean {
   window.print();
   return true;
@@ -443,8 +406,5 @@ export function insertPageBreak(state: EditorState, dispatch?: (tr: Transaction)
   return true;
 }
 
-// ============================================================================
 // HISTORY COMMANDS
-// ============================================================================
-
 export { undo, redo };

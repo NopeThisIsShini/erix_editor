@@ -358,7 +358,7 @@ export class ErixEditor {
               disabled={!activeFormats.canUndo}
               title="Undo (Ctrl+Z)"
             >
-              <editor-icon name="undo" size={18}></editor-icon>
+              <erix-icon name="undo" size={18}></erix-icon>
             </button>
 
             {/* Redo */}
@@ -368,7 +368,7 @@ export class ErixEditor {
               disabled={!activeFormats.canRedo}
               title="Redo (Ctrl+Y)"
             >
-              <editor-icon name="redo" size={18}></editor-icon>
+              <erix-icon name="redo" size={18}></erix-icon>
             </button>
 
             <div class="toolbar-divider"></div>
@@ -439,7 +439,7 @@ export class ErixEditor {
                 onClick={() => this.isAlignmentMenuOpen = !this.isAlignmentMenuOpen}
                 title="Text Alignment"
               >
-                <editor-icon name={this.getAlignmentIcon(activeFormats.textAlign) as any} size={18}></editor-icon>
+                <erix-icon name={this.getAlignmentIcon(activeFormats.textAlign) as any} size={18}></erix-icon>
               </button>
               {this.isAlignmentMenuOpen && (
                 <div class="toolbar-dropdown-menu alignment-menu">
@@ -448,28 +448,28 @@ export class ErixEditor {
                     onClick={() => this.handleAlignmentChange('left')}
                     title="Align Left"
                   >
-                    <editor-icon name="textAlignLeft" size={18}></editor-icon>
+                    <erix-icon name="textAlignLeft" size={18}></erix-icon>
                   </button>
                   <button
                     class={{ 'dropdown-item': true, 'active': activeFormats.textAlign === 'center' }}
                     onClick={() => this.handleAlignmentChange('center')}
                     title="Align Center"
                   >
-                    <editor-icon name="textAlignCenter" size={18}></editor-icon>
+                    <erix-icon name="textAlignCenter" size={18}></erix-icon>
                   </button>
                   <button
                     class={{ 'dropdown-item': true, 'active': activeFormats.textAlign === 'right' }}
                     onClick={() => this.handleAlignmentChange('right')}
                     title="Align Right"
                   >
-                    <editor-icon name="textAlignRight" size={18}></editor-icon>
+                    <erix-icon name="textAlignRight" size={18}></erix-icon>
                   </button>
                   <button
                     class={{ 'dropdown-item': true, 'active': activeFormats.textAlign === 'justify' }}
                     onClick={() => this.handleAlignmentChange('justify')}
                     title="Justify"
                   >
-                    <editor-icon name="textAlignJustify" size={18}></editor-icon>
+                    <erix-icon name="textAlignJustify" size={18}></erix-icon>
                   </button>
                 </div>
               )}
@@ -482,7 +482,7 @@ export class ErixEditor {
                 onClick={() => this.isLineSpacingMenuOpen = !this.isLineSpacingMenuOpen}
                 title="Line Spacing"
               >
-                <editor-icon name="textLineSpacing" size={18}></editor-icon>
+                <erix-icon name="textLineSpacing" size={18}></erix-icon>
               </button>
               {this.isLineSpacingMenuOpen && (
                 <div class="toolbar-dropdown-menu line-spacing-menu">
@@ -507,7 +507,7 @@ export class ErixEditor {
               onClick={this.handleBold}
               title="Bold (Ctrl+B)"
             >
-              <editor-icon name="formatBold" size={18}></editor-icon>
+              <erix-icon name="formatBold" size={18}></erix-icon>
             </button>
 
             {/* Italic */}
@@ -516,7 +516,7 @@ export class ErixEditor {
               onClick={this.handleItalic}
               title="Italic (Ctrl+I)"
             >
-              <editor-icon name="formatItalic" size={18}></editor-icon>
+              <erix-icon name="formatItalic" size={18}></erix-icon>
             </button>
 
             {/* Underline */}
@@ -525,7 +525,7 @@ export class ErixEditor {
               onClick={this.handleUnderline}
               title="Underline (Ctrl+U)"
             >
-              <editor-icon name="formatUnderline" size={18}></editor-icon>
+              <erix-icon name="formatUnderline" size={18}></erix-icon>
             </button>
 
             {/* Strikethrough */}
@@ -534,7 +534,7 @@ export class ErixEditor {
               onClick={this.handleStrikethrough}
               title="Strikethrough"
             >
-              <editor-icon name="formatStrikethrough" size={18}></editor-icon>
+              <erix-icon name="formatStrikethrough" size={18}></erix-icon>
             </button>
 
             {/* Superscript */}
@@ -543,7 +543,7 @@ export class ErixEditor {
               onClick={this.handleSuperscript}
               title="Superscript"
             >
-              <editor-icon name="superScript" size={18}></editor-icon>
+              <erix-icon name="superScript" size={18}></erix-icon>
             </button>
 
             {/* Subscript */}
@@ -552,7 +552,7 @@ export class ErixEditor {
               onClick={this.handleSubscript}
               title="Subscript"
             >
-              <editor-icon name="subScript" size={18}></editor-icon>
+              <erix-icon name="subScript" size={18}></erix-icon>
             </button>
 
             <div class="toolbar-divider"></div>
@@ -563,7 +563,7 @@ export class ErixEditor {
               onClick={this.handleUpperCase}
               title="Convert to Uppercase"
             >
-              <editor-icon name="upperCase" size={18}></editor-icon>
+              <erix-icon name="upperCase" size={18}></erix-icon>
             </button>
 
             {/* Lowercase */}
@@ -572,7 +572,7 @@ export class ErixEditor {
               onClick={this.handleLowerCase}
               title="Convert to Lowercase"
             >
-              <editor-icon name="lowerCase" size={18}></editor-icon>
+              <erix-icon name="lowerCase" size={18}></erix-icon>
             </button>
 
             <div class="toolbar-divider"></div>
@@ -583,7 +583,7 @@ export class ErixEditor {
               onClick={this.handleBulletList}
               title="Bullet List"
             >
-              <editor-icon name="bulletList" size={18}></editor-icon>
+              <erix-icon name="bulletList" size={18}></erix-icon>
             </button>
 
             {/* Numbered List */}
@@ -592,7 +592,7 @@ export class ErixEditor {
               onClick={this.handleOrderedList}
               title="Numbered List"
             >
-              <editor-icon name="numberList" size={18}></editor-icon>
+              <erix-icon name="numberList" size={18}></erix-icon>
             </button>
 
             <div class="toolbar-divider"></div>
@@ -603,7 +603,7 @@ export class ErixEditor {
               onClick={this.handlePageBreak}
               title="Insert Page Break"
             >
-              <editor-icon name="pageBreak" size={18}></editor-icon>
+              <erix-icon name="pageBreak" size={18}></erix-icon>
             </button>
 
             {/* Print */}
@@ -612,7 +612,7 @@ export class ErixEditor {
               onClick={this.handlePrint}
               title="Print Document (Ctrl+P)"
             >
-              <editor-icon name="print" size={18}></editor-icon>
+              <erix-icon name="print" size={18}></erix-icon>
             </button>
 
             <div class="toolbar-spacer"></div>
@@ -623,10 +623,10 @@ export class ErixEditor {
               onClick={this.handleThemeToggle}
               title={this.theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
             >
-              <editor-icon
+              <erix-icon
                 name={this.theme === 'light' ? 'darkMode' : 'lightMode'}
                 size={20}
-              ></editor-icon>
+              ></erix-icon>
             </button>
           </div>
 

@@ -5,20 +5,9 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { IconName } from "./components/editor-icon/icons";
-export { IconName } from "./components/editor-icon/icons";
+import { IconName } from "./components/erix-icon/icons";
+export { IconName } from "./components/erix-icon/icons";
 export namespace Components {
-    interface EditorIcon {
-        /**
-          * The name of the semantic editor icon.
-         */
-        "name": IconName;
-        /**
-          * The size of the icon in pixels (width and height).
-          * @default 20
-         */
-        "size": number;
-    }
     /**
      * @component ErixEditor
      * A rich text editor component with built-in toolbar.
@@ -35,14 +24,19 @@ export namespace Components {
          */
         "theme": 'light' | 'dark' | string;
     }
+    interface ErixIcon {
+        /**
+          * The name of the semantic editor icon.
+         */
+        "name": IconName;
+        /**
+          * The size of the icon in pixels (width and height).
+          * @default 20
+         */
+        "size": number;
+    }
 }
 declare global {
-    interface HTMLEditorIconElement extends Components.EditorIcon, HTMLStencilElement {
-    }
-    var HTMLEditorIconElement: {
-        prototype: HTMLEditorIconElement;
-        new (): HTMLEditorIconElement;
-    };
     /**
      * @component ErixEditor
      * A rich text editor component with built-in toolbar.
@@ -53,23 +47,18 @@ declare global {
         prototype: HTMLErixEditorElement;
         new (): HTMLErixEditorElement;
     };
+    interface HTMLErixIconElement extends Components.ErixIcon, HTMLStencilElement {
+    }
+    var HTMLErixIconElement: {
+        prototype: HTMLErixIconElement;
+        new (): HTMLErixIconElement;
+    };
     interface HTMLElementTagNameMap {
-        "editor-icon": HTMLEditorIconElement;
         "erix-editor": HTMLErixEditorElement;
+        "erix-icon": HTMLErixIconElement;
     }
 }
 declare namespace LocalJSX {
-    interface EditorIcon {
-        /**
-          * The name of the semantic editor icon.
-         */
-        "name": IconName;
-        /**
-          * The size of the icon in pixels (width and height).
-          * @default 20
-         */
-        "size"?: number;
-    }
     /**
      * @component ErixEditor
      * A rich text editor component with built-in toolbar.
@@ -86,21 +75,32 @@ declare namespace LocalJSX {
          */
         "theme"?: 'light' | 'dark' | string;
     }
+    interface ErixIcon {
+        /**
+          * The name of the semantic editor icon.
+         */
+        "name": IconName;
+        /**
+          * The size of the icon in pixels (width and height).
+          * @default 20
+         */
+        "size"?: number;
+    }
     interface IntrinsicElements {
-        "editor-icon": EditorIcon;
         "erix-editor": ErixEditor;
+        "erix-icon": ErixIcon;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "editor-icon": LocalJSX.EditorIcon & JSXBase.HTMLAttributes<HTMLEditorIconElement>;
             /**
              * @component ErixEditor
              * A rich text editor component with built-in toolbar.
              */
             "erix-editor": LocalJSX.ErixEditor & JSXBase.HTMLAttributes<HTMLErixEditorElement>;
+            "erix-icon": LocalJSX.ErixIcon & JSXBase.HTMLAttributes<HTMLErixIconElement>;
         }
     }
 }

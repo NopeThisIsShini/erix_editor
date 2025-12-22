@@ -1,7 +1,3 @@
-/**
- * Erix Core - Entry Point
- * Exports all core editor functionality.
- */
 
 // Schema
 export { editorSchema, type TextAlignment } from '@src/core/schema';

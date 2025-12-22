@@ -13,13 +13,13 @@
 
 ### Depends on
 
-- [editor-icon](../editor-icon)
+- [erix-icon](../erix-icon)
 
 ### Graph
 
 ```mermaid
 graph TD;
-  erix-editor --> editor-icon
+  erix-editor --> erix-icon
   style erix-editor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

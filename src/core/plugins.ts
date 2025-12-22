@@ -11,10 +11,6 @@ import { Plugin } from 'prosemirror-state';
 import { editorSchema } from '@src/core/schema';
 import { insertPageBreak, printDocument } from '@src/core/commands';
 
-// ============================================================================
-// KEYMAP CONFIGURATIONS
-// ============================================================================
-
 /**
  * Keyboard shortcuts for formatting marks
  */
@@ -52,10 +48,6 @@ const docKeymap = {
     return true;
   },
 };
-
-// ============================================================================
-// PLUGIN CONFIGURATION
-// ============================================================================
 
 /**
  * Creates the array of plugins for the editor.

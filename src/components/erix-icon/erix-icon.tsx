@@ -1,13 +1,13 @@
 import { Component, Host, h, Prop, Watch, State } from '@stencil/core';
-import { ICONS, IconName } from '@src/components/editor-icon/icons';
+import { ICONS, IconName } from '@src/components/erix-icon/icons';
 import { sanitizeSvg } from '@src/utils/svg-sanitizer';
 
 @Component({
-  tag: 'editor-icon',
-  styleUrl: 'editor-icon.css',
+  tag: 'erix-icon',
+  styleUrl: 'erix-icon.css',
   shadow: true,
 })
-export class EditorIcon {
+export class ErixIcon {
   /**
    * The name of the semantic editor icon.
    */
@@ -34,7 +34,7 @@ export class EditorIcon {
     const rawSvg = ICONS[this.name];
 
     if (!rawSvg) {
-      console.warn(`[editor-icon] Icon "${this.name}" not found in icon map.`);
+      console.warn(`[erix-icon] Icon "${this.name}" not found in icon map.`);
       this.sanitizedSvg = '';
       return;
     }
