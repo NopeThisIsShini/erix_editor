@@ -1,5 +1,5 @@
 /**
- * TypeForge Core - Entry Point
+ * Erix Core - Entry Point
  * Exports all core editor functionality.
  */
 

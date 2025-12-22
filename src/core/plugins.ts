@@ -1,15 +1,15 @@
 /**
- * TypeForge Editor Plugins
+ * Erix Editor Plugins
  * Configures keyboard shortcuts and history for the editor.
  */
 
-import { history, undo, redo } from "prosemirror-history";
-import { keymap } from "prosemirror-keymap";
-import { baseKeymap, toggleMark } from "prosemirror-commands";
-import { splitListItem, liftListItem, sinkListItem } from "prosemirror-schema-list";
-import { Plugin } from "prosemirror-state";
-import { editorSchema } from "./schema";
-import { insertPageBreak, printDocument } from "./commands";
+import { history, undo, redo } from 'prosemirror-history';
+import { keymap } from 'prosemirror-keymap';
+import { baseKeymap, toggleMark } from 'prosemirror-commands';
+import { splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
+import { Plugin } from 'prosemirror-state';
+import { editorSchema } from './schema';
+import { insertPageBreak, printDocument } from './commands';
 
 // ============================================================================
 // KEYMAP CONFIGURATIONS
@@ -19,35 +19,35 @@ import { insertPageBreak, printDocument } from "./commands";
  * Keyboard shortcuts for formatting marks
  */
 const markKeymap = {
-  "Mod-b": toggleMark(editorSchema.marks.strong),
-  "Mod-i": toggleMark(editorSchema.marks.em),
-  "Mod-u": toggleMark(editorSchema.marks.underline),
+  'Mod-b': toggleMark(editorSchema.marks.strong),
+  'Mod-i': toggleMark(editorSchema.marks.em),
+  'Mod-u': toggleMark(editorSchema.marks.underline),
 };
 
 /**
  * Keyboard shortcuts for history (undo/redo)
  */
 const historyKeymap = {
-  "Mod-z": undo,
-  "Mod-y": redo,
-  "Mod-Shift-z": redo,
+  'Mod-z': undo,
+  'Mod-y': redo,
+  'Mod-Shift-z': redo,
 };
 
 /**
  * Keyboard shortcuts for list operations
  */
 const listKeymap = {
-  "Enter": splitListItem(editorSchema.nodes.list_item),
-  "Tab": sinkListItem(editorSchema.nodes.list_item),
-  "Shift-Tab": liftListItem(editorSchema.nodes.list_item),
+  'Enter': splitListItem(editorSchema.nodes.list_item),
+  'Tab': sinkListItem(editorSchema.nodes.list_item),
+  'Shift-Tab': liftListItem(editorSchema.nodes.list_item),
 };
 
 /**
  * Keyboard shortcuts for document operations
  */
 const docKeymap = {
-  "Mod-Enter": insertPageBreak,
-  "Mod-p": (_state: any, _dispatch: any) => {
+  'Mod-Enter': insertPageBreak,
+  'Mod-p': (_state: any, _dispatch: any) => {
     printDocument();
     return true;
   },

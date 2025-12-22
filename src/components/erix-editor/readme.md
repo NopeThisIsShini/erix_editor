@@ -1,9 +1,6 @@
-# type-forge
-
-
+# erix-editor
 
 <!-- Auto Generated Below -->
-
 
 ## Properties
 
@@ -12,7 +9,6 @@
 | `placeholder` | `placeholder` | Placeholder text when editor is empty. | `string` | `'Start typing...'` |
 | `theme`       | `theme`       | The editor theme.                      | `string` | `'light'`           |
 
-
 ## Dependencies
 
 ### Depends on
@@ -20,12 +16,13 @@
 - [editor-icon](../editor-icon)
 
 ### Graph
+
 ```mermaid
 graph TD;
-  type-forge --> editor-icon
-  style type-forge fill:#f9f,stroke:#333,stroke-width:4px
+  erix-editor --> editor-icon
+  style erix-editor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

@@ -1,5 +1,5 @@
 /**
- * TypeForge Editor Schema
+ * Erix Editor Schema
  * Defines the structure of the document with support for:
  * - Paragraphs with alignment
  * - Headings (h1-h6) with alignment
@@ -27,7 +27,7 @@ function getFormattingFromDOM(dom: HTMLElement) {
   return { align, lineHeight };
 }
 
-function createFormattingDOMAttrs(node: { attrs: { align?: TextAlignment, lineHeight?: string } }): Record<string, string> {
+function createFormattingDOMAttrs(node: { attrs: { align?: TextAlignment; lineHeight?: string } }): Record<string, string> {
   const styles: string[] = [];
   if (node.attrs.align && node.attrs.align !== 'left') {
     styles.push(`text-align: ${node.attrs.align}`);

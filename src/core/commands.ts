@@ -1,5 +1,5 @@
 /**
- * TypeForge Editor Commands
+ * Erix Editor Commands
  * Provides commands for formatting and list operations.
  */
 

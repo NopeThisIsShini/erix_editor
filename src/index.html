@@ -1,56 +1,61 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TypeForge - Rich Text Editor</title>
 
-    <script type="module" src="/build/typeforge.esm.js"></script>
-    <script nomodule src="/build/typeforge.js"></script>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Erix - Rich Text Editor</title>
 
-    <style>
+  <script type="module" src="/build/erix.esm.js"></script>
+  <script nomodule src="/build/erix.js"></script>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #f0f2f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+
+
+    .editor-viewport {
+      width: 100vw;
+      height: 100vh;
+      background: white;
+      overflow: hidden;
+    }
+
+    erix-editor {
+      width: 100%;
+      height: 100%;
+    }
+
+    @media print {
+
       html,
       body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #f0f2f5;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        height: auto !important;
+        overflow: visible !important;
+        background-color: white !important;
       }
-
-
 
       .editor-viewport {
-        width: 100vw;
-        height: 100vh;
-        background: white;
-        overflow: hidden;
+        height: auto !important;
+        overflow: visible !important;
+        width: auto !important;
       }
+    }
+  </style>
+</head>
 
-      type-forge {
-        width: 100%;
-        height: 100%;
-      }
+<body>
+  <div class="editor-viewport">
+    <erix-editor id="editor" theme="light"></erix-editor>
+  </div>
+</body>
 
-      @media print {
-        html, body {
-          height: auto !important;
-          overflow: visible !important;
-          background-color: white !important;
-        }
-
-        .editor-viewport {
-          height: auto !important;
-          overflow: visible !important;
-          width: auto !important;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="editor-viewport">
-      <type-forge id="editor" theme="light"></type-forge>
-    </div>
-  </body>
 </html>

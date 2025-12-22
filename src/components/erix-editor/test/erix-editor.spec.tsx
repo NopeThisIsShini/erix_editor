@@ -1,18 +1,18 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { TypeForge } from '../type-forge';
+import { ErixEditor } from '../erix-editor';
 
-describe('type-forge', () => {
+describe('erix-editor', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [TypeForge],
-      html: `<type-forge></type-forge>`,
+      components: [ErixEditor],
+      html: `<erix-editor></erix-editor>`,
     });
     expect(page.root).toEqualHtml(`
-      <type-forge>
+      <erix-editor>
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
-      </type-forge>
+      </erix-editor>
     `);
   });
 });

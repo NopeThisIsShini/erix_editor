@@ -39,15 +39,15 @@ import {
 } from '../../core';
 
 /**
- * @component TypeForge
+ * @component ErixEditor
  * A rich text editor component with built-in toolbar.
  */
 @Component({
-  tag: 'type-forge',
-  styleUrl: 'type-forge.css',
+  tag: 'erix-editor',
+  styleUrl: 'erix-editor.css',
   shadow: true,
 })
-export class TypeForge {
+export class ErixEditor {
   @Element() el!: HTMLElement;
 
   /**
@@ -212,7 +212,7 @@ export class TypeForge {
       this.view.focus();
     }
   };
-  
+
   private handleSuperscript = () => {
     if (this.view) {
       toggleSuperscript(this.view.state, this.view.dispatch);

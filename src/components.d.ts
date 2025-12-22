@@ -20,10 +20,10 @@ export namespace Components {
         "size": number;
     }
     /**
-     * @component TypeForge
+     * @component ErixEditor
      * A rich text editor component with built-in toolbar.
      */
-    interface TypeForge {
+    interface ErixEditor {
         /**
           * Placeholder text when editor is empty.
           * @default 'Start typing...'
@@ -44,18 +44,18 @@ declare global {
         new (): HTMLEditorIconElement;
     };
     /**
-     * @component TypeForge
+     * @component ErixEditor
      * A rich text editor component with built-in toolbar.
      */
-    interface HTMLTypeForgeElement extends Components.TypeForge, HTMLStencilElement {
+    interface HTMLErixEditorElement extends Components.ErixEditor, HTMLStencilElement {
     }
-    var HTMLTypeForgeElement: {
-        prototype: HTMLTypeForgeElement;
-        new (): HTMLTypeForgeElement;
+    var HTMLErixEditorElement: {
+        prototype: HTMLErixEditorElement;
+        new (): HTMLErixEditorElement;
     };
     interface HTMLElementTagNameMap {
         "editor-icon": HTMLEditorIconElement;
-        "type-forge": HTMLTypeForgeElement;
+        "erix-editor": HTMLErixEditorElement;
     }
 }
 declare namespace LocalJSX {
@@ -71,10 +71,10 @@ declare namespace LocalJSX {
         "size"?: number;
     }
     /**
-     * @component TypeForge
+     * @component ErixEditor
      * A rich text editor component with built-in toolbar.
      */
-    interface TypeForge {
+    interface ErixEditor {
         /**
           * Placeholder text when editor is empty.
           * @default 'Start typing...'
@@ -88,7 +88,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "editor-icon": EditorIcon;
-        "type-forge": TypeForge;
+        "erix-editor": ErixEditor;
     }
 }
 export { LocalJSX as JSX };
@@ -97,10 +97,10 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "editor-icon": LocalJSX.EditorIcon & JSXBase.HTMLAttributes<HTMLEditorIconElement>;
             /**
-             * @component TypeForge
+             * @component ErixEditor
              * A rich text editor component with built-in toolbar.
              */
-            "type-forge": LocalJSX.TypeForge & JSXBase.HTMLAttributes<HTMLTypeForgeElement>;
+            "erix-editor": LocalJSX.ErixEditor & JSXBase.HTMLAttributes<HTMLErixEditorElement>;
         }
     }
 }

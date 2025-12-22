@@ -17,12 +17,12 @@
 
 ### Used by
 
- - [type-forge](../type-forge)
+ - [erix-editor](../erix-editor)
 
 ### Graph
 ```mermaid
 graph TD;
-  type-forge --> editor-icon
+  erix-editor --> editor-icon
   style editor-icon fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

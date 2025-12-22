@@ -1,5 +1,5 @@
 {
-  "name": "typeforge",
+  "name": "erix",
   "version": "0.0.1",
   "description": "Stencil Component Starter",
   "main": "dist/index.cjs.js",
@@ -7,11 +7,11 @@
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/typeforge/typeforge.esm.js",
+  "unpkg": "dist/erix/erix.esm.js",
   "exports": {
     ".": {
-      "import": "./dist/typeforge/typeforge.esm.js",
-      "require": "./dist/typeforge/typeforge.cjs.js"
+      "import": "./dist/erix/erix.esm.js",
+      "require": "./dist/erix/erix.cjs.js"
     },
     "./my-component": {
       "import": "./dist/components/my-component.js",
