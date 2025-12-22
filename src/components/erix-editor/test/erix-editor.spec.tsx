@@ -1,5 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { ErixEditor } from '../erix-editor';
+import { ErixEditor } from '@src/components/erix-editor/erix-editor';
 
 describe('erix-editor', () => {
   it('renders', async () => {

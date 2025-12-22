@@ -1,6 +1,6 @@
 import { Component, Host, h, Prop, Watch, State } from '@stencil/core';
-import { ICONS, IconName } from './icons';
-import { sanitizeSvg } from '../../utils/svg-sanitizer';
+import { ICONS, IconName } from '@src/components/editor-icon/icons';
+import { sanitizeSvg } from '@src/utils/svg-sanitizer';
 
 @Component({
   tag: 'editor-icon',

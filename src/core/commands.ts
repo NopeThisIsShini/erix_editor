@@ -8,7 +8,7 @@ import { NodeType, MarkType } from 'prosemirror-model';
 import { toggleMark } from 'prosemirror-commands';
 import { wrapInList, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 import { undo, redo } from 'prosemirror-history';
-import { editorSchema } from './schema';
+import { editorSchema } from '@src/core/schema';
 
 // ============================================================================
 // TYPES

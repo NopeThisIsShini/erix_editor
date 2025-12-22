@@ -36,7 +36,7 @@ import {
   setTextCase,
   undo,
   redo,
-} from '../../core';
+} from '@src/core';
 
 /**
  * @component ErixEditor

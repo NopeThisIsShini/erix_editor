@@ -4,10 +4,10 @@
  */
 
 // Schema
-export { editorSchema, type TextAlignment } from './schema';
+export { editorSchema, type TextAlignment } from '@src/core/schema';
 
 // Plugins
-export { editorPlugins, createEditorPlugins } from './plugins';
+export { editorPlugins, createEditorPlugins } from '@src/core/plugins';
 
 // Commands
 export {
@@ -65,4 +65,4 @@ export {
   // History
   undo,
   redo,
-} from './commands';
+} from '@src/core/commands';

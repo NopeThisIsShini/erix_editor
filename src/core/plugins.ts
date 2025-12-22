@@ -8,8 +8,8 @@ import { keymap } from 'prosemirror-keymap';
 import { baseKeymap, toggleMark } from 'prosemirror-commands';
 import { splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 import { Plugin } from 'prosemirror-state';
-import { editorSchema } from './schema';
-import { insertPageBreak, printDocument } from './commands';
+import { editorSchema } from '@src/core/schema';
+import { insertPageBreak, printDocument } from '@src/core/commands';
 
 // ============================================================================
 // KEYMAP CONFIGURATIONS
