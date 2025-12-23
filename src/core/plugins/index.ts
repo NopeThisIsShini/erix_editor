@@ -10,6 +10,10 @@ import { splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-li
 import { Plugin } from 'prosemirror-state';
 import { editorSchema } from '../schema/index';
 import { insertPageBreak, printDocument } from '../commands/index';
+import { createPlaceholderPlugin } from './placeholder';
+
+// Re-export placeholder utilities for external API usage
+export { placeholderPluginKey, updatePlaceholder } from './placeholder';
 
 /**
  * Keyboard shortcuts for formatting marks
@@ -49,12 +53,25 @@ const docKeymap = {
   },
 };
 
+export interface EditorPluginsOptions {
+  /**
+   * Placeholder text to show when editor is empty
+   */
+  placeholder?: string;
+}
+
 /**
  * Creates the array of plugins for the editor.
  * Order matters - more specific keymaps should come before less specific ones.
+ * @param options - Configuration options for plugins
  */
-export function createEditorPlugins(): Plugin[] {
+export function createEditorPlugins(options: EditorPluginsOptions = {}): Plugin[] {
+  const { placeholder = 'Start typing...' } = options;
+
   return [
+    // Placeholder plugin
+    createPlaceholderPlugin(placeholder),
+
     // History plugin (undo/redo stack)
     history(),
 
@@ -67,5 +84,5 @@ export function createEditorPlugins(): Plugin[] {
   ];
 }
 
-// Export the plugins array for direct usage
+// Export the plugins array for direct usage (with default options)
 export const editorPlugins = createEditorPlugins();

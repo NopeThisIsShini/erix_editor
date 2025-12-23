@@ -1,7 +1,7 @@
 import { Component, Host, h, Prop, State, Element, Watch, Method } from '@stencil/core';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-import { editorSchema, editorPlugins } from '@src/core';
+import { editorSchema, createEditorPlugins } from '@src/core';
 import { EditorController } from '@src/core/editor';
 import { ErixEditorAPI } from '@src/api';
 import type { EditorConfig, ErixPluginConfig } from '@src/api';
@@ -194,7 +194,7 @@ export class ErixEditor {
 
     const state = EditorState.create({
       schema: editorSchema,
-      plugins: editorPlugins,
+      plugins: createEditorPlugins({ placeholder: this.placeholder }),
     });
 
     this.editorView = new EditorView(this.editorContainer, {
