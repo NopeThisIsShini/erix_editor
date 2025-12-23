@@ -1,4 +1,4 @@
-@import '../../../styles/theme.css';
+/* Note: Theme CSS variables are inherited from parent erix-editor component */
 
 :host {
   display: inline-flex;

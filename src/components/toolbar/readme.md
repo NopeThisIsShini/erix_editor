@@ -7,10 +7,12 @@
 
 ## Properties
 
-| Property | Attribute | Description                             | Type         | Default     |
-| -------- | --------- | --------------------------------------- | ------------ | ----------- |
-| `theme`  | `theme`   | Current theme                           | `string`     | `'light'`   |
-| `view`   | --        | Reference to the ProseMirror EditorView | `EditorView` | `undefined` |
+| Property          | Attribute           | Description                                                                                                                                                                   | Type            | Default     |
+| ----------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ----------- |
+| `items`           | --                  | Toolbar items to display. Array of plugin IDs. Use '\|' for separator (only shown between different groups). Example: ['bold', 'italic', '\|', 'bullet-list', 'ordered-list'] | `ToolbarItem[]` | `[]`        |
+| `showThemeToggle` | `show-theme-toggle` | Show theme toggle in toolbar                                                                                                                                                  | `boolean`       | `true`      |
+| `theme`           | `data-theme`        | Current theme                                                                                                                                                                 | `string`        | `'light'`   |
+| `view`            | --                  | Reference to the ProseMirror EditorView                                                                                                                                       | `EditorView`    | `undefined` |
 
 
 ## Events

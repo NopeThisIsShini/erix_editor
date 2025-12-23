@@ -17,46 +17,165 @@ import {
   isSubscriptActive,
   isInBulletList,
   isInOrderedList,
-  setHeading,
-  setParagraph,
-  getCurrentHeadingLevel,
   printDocument,
   insertPageBreak,
-  getActiveFontFamily,
-  getActiveFontSize,
-  setFontFamily,
-  setFontSize,
-  setTextAlignment,
-  getActiveAlignment,
-  setTextLineSpacing,
-  getActiveLineSpacing,
   setTextCase,
   undo,
   redo,
 } from '@src/core';
+import type { ToolbarItem } from '@src/api';
 
-export interface ToolbarState {
-  bold: boolean;
-  italic: boolean;
-  underline: boolean;
-  strikethrough: boolean;
-  superscript: boolean;
-  subscript: boolean;
-  bulletList: boolean;
-  orderedList: boolean;
-  headingLevel: number | null;
-  fontFamily: string;
-  fontSize: string;
-  textAlign: string;
-  lineSpacing: string;
-  canUndo: boolean;
-  canRedo: boolean;
+/**
+ * Plugin definition for toolbar items
+ */
+export interface ToolbarPluginDef {
+  id: string;
+  label: string;
+  icon: string;
+  group: string;
+  shortcut?: string;
+  execute: (view: EditorView) => void;
+  isActive?: (view: EditorView) => boolean;
+  isDisabled?: (view: EditorView) => boolean;
+  type?: 'button' | 'dropdown' | 'select';
+  options?: { value: string; label: string }[];
 }
 
 /**
+ * Built-in plugin definitions
+ */
+const BUILTIN_PLUGINS: Record<string, ToolbarPluginDef> = {
+  // History
+  'undo': {
+    id: 'undo',
+    label: 'Undo',
+    icon: 'undo',
+    group: 'history',
+    shortcut: 'Ctrl+Z',
+    execute: (view) => { undo(view.state, view.dispatch); view.focus(); },
+    isDisabled: (view) => !undo(view.state),
+  },
+  'redo': {
+    id: 'redo',
+    label: 'Redo',
+    icon: 'redo',
+    group: 'history',
+    shortcut: 'Ctrl+Y',
+    execute: (view) => { redo(view.state, view.dispatch); view.focus(); },
+    isDisabled: (view) => !redo(view.state),
+  },
+
+  // Formatting
+  'bold': {
+    id: 'bold',
+    label: 'Bold',
+    icon: 'formatBold',
+    group: 'formatting',
+    shortcut: 'Ctrl+B',
+    execute: (view) => { toggleBold(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => isBoldActive(view.state),
+  },
+  'italic': {
+    id: 'italic',
+    label: 'Italic',
+    icon: 'formatItalic',
+    group: 'formatting',
+    shortcut: 'Ctrl+I',
+    execute: (view) => { toggleItalic(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => isItalicActive(view.state),
+  },
+  'underline': {
+    id: 'underline',
+    label: 'Underline',
+    icon: 'formatUnderline',
+    group: 'formatting',
+    shortcut: 'Ctrl+U',
+    execute: (view) => { toggleUnderline(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => isUnderlineActive(view.state),
+  },
+  'strikethrough': {
+    id: 'strikethrough',
+    label: 'Strikethrough',
+    icon: 'formatStrikethrough',
+    group: 'formatting',
+    execute: (view) => { toggleStrikethrough(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => isStrikethroughActive(view.state),
+  },
+  'superscript': {
+    id: 'superscript',
+    label: 'Superscript',
+    icon: 'superScript',
+    group: 'formatting',
+    execute: (view) => { toggleSuperscript(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => isSuperscriptActive(view.state),
+  },
+  'subscript': {
+    id: 'subscript',
+    label: 'Subscript',
+    icon: 'subScript',
+    group: 'formatting',
+    execute: (view) => { toggleSubscript(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => isSubscriptActive(view.state),
+  },
+
+  // Text Case
+  'uppercase': {
+    id: 'uppercase',
+    label: 'Uppercase',
+    icon: 'upperCase',
+    group: 'textcase',
+    execute: (view) => { setTextCase('uppercase')(view.state, view.dispatch); view.focus(); },
+  },
+  'lowercase': {
+    id: 'lowercase',
+    label: 'Lowercase',
+    icon: 'lowerCase',
+    group: 'textcase',
+    execute: (view) => { setTextCase('lowercase')(view.state, view.dispatch); view.focus(); },
+  },
+
+  // Lists
+  'bullet-list': {
+    id: 'bullet-list',
+    label: 'Bullet List',
+    icon: 'bulletList',
+    group: 'lists',
+    execute: (view) => { toggleBulletList(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => isInBulletList(view.state),
+  },
+  'ordered-list': {
+    id: 'ordered-list',
+    label: 'Numbered List',
+    icon: 'numberList',
+    group: 'lists',
+    execute: (view) => { toggleOrderedList(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => isInOrderedList(view.state),
+  },
+
+  // Insert
+  'page-break': {
+    id: 'page-break',
+    label: 'Page Break',
+    icon: 'pageBreak',
+    group: 'insert',
+    execute: (view) => { insertPageBreak(view.state, view.dispatch); view.focus(); },
+  },
+
+  // Tools
+  'print': {
+    id: 'print',
+    label: 'Print',
+    icon: 'print',
+    group: 'tools',
+    shortcut: 'Ctrl+P',
+    execute: () => { printDocument(); },
+  },
+};
+
+/**
  * @component ErixToolbar
- * The main toolbar component for the editor.
- * Provides all formatting controls and delegates commands to the editor view.
+ * Dynamic toolbar that renders plugins based on configuration.
+ * Only shows plugins that are configured - no static buttons.
  */
 @Component({
   tag: 'erix-toolbar',
@@ -73,32 +192,32 @@ export class ErixToolbar {
 
   /**
    * Current theme
+   * @default 'light'
    */
-  @Prop() theme: 'light' | 'dark' | string = 'light';
+  @Prop({ reflect: true, attribute: 'data-theme' }) theme: 'light' | 'dark' | string = 'light';
 
   /**
-   * Current active formats state
+   * Toolbar items to display. Array of plugin IDs.
+   * Use '|' for separator (only shown between different groups).
+   * Example: ['bold', 'italic', '|', 'bullet-list', 'ordered-list']
    */
-  @State() private activeFormats: ToolbarState = {
-    bold: false,
-    italic: false,
-    underline: false,
-    strikethrough: false,
-    superscript: false,
-    subscript: false,
-    bulletList: false,
-    orderedList: false,
-    headingLevel: null,
-    fontFamily: '',
-    fontSize: '',
-    textAlign: 'left',
-    lineSpacing: 'normal',
-    canUndo: false,
-    canRedo: false,
-  };
+  @Prop() items: ToolbarItem[] = [];
 
-  @State() private isAlignmentMenuOpen: boolean = false;
-  @State() private isLineSpacingMenuOpen: boolean = false;
+  /**
+   * Show theme toggle in toolbar
+   * @default true
+   */
+  @Prop() showThemeToggle: boolean = true;
+
+  /**
+   * State for dropdown menus
+   */
+  @State() private activeDropdown: string | null = null;
+
+  /**
+   * Force re-render on selection change
+   */
+  @State() private updateCounter: number = 0;
 
   /**
    * Event emitted when theme toggle is requested
@@ -117,18 +236,11 @@ export class ErixToolbar {
   @Listen('mousedown', { target: 'document' })
   handleDocumentClick(event: MouseEvent) {
     const path = event.composedPath();
-
-    if (this.isAlignmentMenuOpen) {
-      const el = this.el.shadowRoot?.querySelector('.alignment-dropdown-container');
+    
+    if (this.activeDropdown) {
+      const el = this.el.shadowRoot?.querySelector(`.dropdown-${this.activeDropdown}`);
       if (el && !path.includes(el)) {
-        this.isAlignmentMenuOpen = false;
-      }
-    }
-
-    if (this.isLineSpacingMenuOpen) {
-      const el = this.el.shadowRoot?.querySelector('.line-spacing-dropdown-container');
-      if (el && !path.includes(el)) {
-        this.isLineSpacingMenuOpen = false;
+        this.activeDropdown = null;
       }
     }
   }
@@ -139,458 +251,129 @@ export class ErixToolbar {
   @Method()
   async updateActiveFormats() {
     if (!this.view) return;
-
-    const state = this.view.state;
-    this.activeFormats = {
-      bold: isBoldActive(state),
-      italic: isItalicActive(state),
-      underline: isUnderlineActive(state),
-      strikethrough: isStrikethroughActive(state),
-      superscript: isSuperscriptActive(state),
-      subscript: isSubscriptActive(state),
-      bulletList: isInBulletList(state),
-      orderedList: isInOrderedList(state),
-      headingLevel: getCurrentHeadingLevel(state),
-      fontFamily: getActiveFontFamily(state),
-      fontSize: getActiveFontSize(state),
-      textAlign: getActiveAlignment(state),
-      lineSpacing: getActiveLineSpacing(state),
-      canUndo: undo(state),
-      canRedo: redo(state),
-    };
+    // Trigger re-render by updating counter
+    this.updateCounter++;
   }
-
-  // Command handlers
-  private handleBold = () => {
-    if (this.view) {
-      toggleBold(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
-
-  private handleItalic = () => {
-    if (this.view) {
-      toggleItalic(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
-
-  private handleUnderline = () => {
-    if (this.view) {
-      toggleUnderline(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
-
-  private handleStrikethrough = () => {
-    if (this.view) {
-      toggleStrikethrough(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
-
-  private handleSuperscript = () => {
-    if (this.view) {
-      toggleSuperscript(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
-
-  private handleSubscript = () => {
-    if (this.view) {
-      toggleSubscript(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
-
-  private handleUpperCase = () => {
-    if (this.view) {
-      setTextCase('uppercase')(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
-
-  private handleLowerCase = () => {
-    if (this.view) {
-      setTextCase('lowercase')(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
-
-  private handleBulletList = () => {
-    if (this.view) {
-      toggleBulletList(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
-
-  private handleOrderedList = () => {
-    if (this.view) {
-      toggleOrderedList(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
-
-  private handleHeadingChange = (event: Event) => {
-    if (!this.view) return;
-
-    const select = event.target as HTMLSelectElement;
-    const value = select.value;
-
-    if (value === 'p') {
-      setParagraph(this.view.state, this.view.dispatch);
-    } else {
-      const level = parseInt(value, 10);
-      setHeading(level)(this.view.state, this.view.dispatch);
-    }
-
-    this.view.focus();
-  };
 
   private handleThemeToggle = () => {
     this.themeToggle.emit();
   };
 
-  private handlePageBreak = () => {
-    if (this.view) {
-      insertPageBreak(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
+  private getPlugin(id: string): ToolbarPluginDef | null {
+    return BUILTIN_PLUGINS[id] || null;
+  }
 
-  private handlePrint = () => {
-    printDocument();
-  };
-
-  private handleFontFamilyChange = (event: Event) => {
+  private handlePluginClick = (plugin: ToolbarPluginDef) => {
     if (!this.view) return;
-    const select = event.target as HTMLSelectElement;
-    setFontFamily(select.value)(this.view.state, this.view.dispatch);
-    this.view.focus();
+    plugin.execute(this.view);
+    this.updateActiveFormats();
   };
 
-  private handleFontSizeChange = (event: Event) => {
-    if (!this.view) return;
-    const select = event.target as HTMLSelectElement;
-    setFontSize(select.value)(this.view.state, this.view.dispatch);
-    this.view.focus();
-  };
+  /**
+   * Render a single plugin button
+   */
+  private renderPluginButton(plugin: ToolbarPluginDef) {
+    if (!this.view) return null;
 
-  private handleAlignmentChange = (align: string) => {
-    if (this.view) {
-      setTextAlignment(align)(this.view.state, this.view.dispatch);
-      this.isAlignmentMenuOpen = false;
-      this.view.focus();
+    const isActive = plugin.isActive ? plugin.isActive(this.view) : false;
+    const isDisabled = plugin.isDisabled ? plugin.isDisabled(this.view) : false;
+    const tooltip = plugin.shortcut ? `${plugin.label} (${plugin.shortcut})` : plugin.label;
+
+    return (
+      <erix-button
+        key={plugin.id}
+        active={isActive}
+        disabled={isDisabled}
+        buttonTitle={tooltip}
+        onErixClick={() => this.handlePluginClick(plugin)}
+      >
+        <erix-icon name={plugin.icon as any} size={18}></erix-icon>
+      </erix-button>
+    );
+  }
+
+  /**
+   * Render toolbar items dynamically
+   */
+  private renderItems() {
+    if (!this.items || this.items.length === 0) {
+      return null;
     }
-  };
 
-  private handleLineSpacingChange = (spacing: string) => {
-    if (this.view) {
-      setTextLineSpacing(spacing)(this.view.state, this.view.dispatch);
-      this.isLineSpacingMenuOpen = false;
-      this.view.focus();
-    }
-  };
+    const elements: any[] = [];
+    let lastGroup: string | null = null;
+    let currentGroupItems: any[] = [];
 
-  private handleUndo = () => {
-    if (this.view) {
-      undo(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
+    const flushGroup = () => {
+      if (currentGroupItems.length > 0) {
+        elements.push(
+          <div class="toolbar-group" key={`group-${elements.length}`}>
+            {currentGroupItems}
+          </div>
+        );
+        currentGroupItems = [];
+      }
+    };
 
-  private handleRedo = () => {
-    if (this.view) {
-      redo(this.view.state, this.view.dispatch);
-      this.view.focus();
-    }
-  };
+    for (let i = 0; i < this.items.length; i++) {
+      const item = this.items[i];
 
-  private getAlignmentIcon(align: string): string {
-    switch (align) {
-      case 'center': return 'textAlignCenter';
-      case 'right': return 'textAlignRight';
-      case 'justify': return 'textAlignJustify';
-      default: return 'textAlignLeft';
+      // Handle separator
+      if (item === '|' || item === '-') {
+        flushGroup();
+        lastGroup = null;
+        continue;
+      }
+
+      // Handle plugin ID
+      if (typeof item === 'string') {
+        const plugin = this.getPlugin(item);
+        if (!plugin) {
+          console.warn(`[erix-toolbar] Unknown plugin: ${item}`);
+          continue;
+        }
+
+        // Check if we need to start a new group (different group from last item)
+        if (lastGroup !== null && lastGroup !== plugin.group) {
+          flushGroup();
+          // Add divider between different groups
+          elements.push(<erix-divider key={`divider-${elements.length}`}></erix-divider>);
+        }
+
+        currentGroupItems.push(this.renderPluginButton(plugin));
+        lastGroup = plugin.group;
+      }
     }
+
+    // Flush remaining items
+    flushGroup();
+
+    return elements;
   }
 
   render() {
-    const { activeFormats } = this;
-
     return (
       <Host>
         <div class="erix-toolbar">
-          {/* History Group: Undo/Redo */}
-          <div class="toolbar-group">
-            <erix-button
-              active={false}
-              disabled={!activeFormats.canUndo}
-              buttonTitle="Undo (Ctrl+Z)"
-              onErixClick={this.handleUndo}
-            >
-              <erix-icon name="undo" size={18}></erix-icon>
-            </erix-button>
-            <erix-button
-              active={false}
-              disabled={!activeFormats.canRedo}
-              buttonTitle="Redo (Ctrl+Y)"
-              onErixClick={this.handleRedo}
-            >
-              <erix-icon name="redo" size={18}></erix-icon>
-            </erix-button>
-          </div>
+          {this.renderItems()}
 
-          <erix-divider></erix-divider>
+          {/* Spacer to push theme toggle to the right */}
+          {this.showThemeToggle && <div class="toolbar-spacer"></div>}
 
-          {/* Heading Group */}
-          <div class="toolbar-group">
-            <select
-              class="toolbar-select"
-              onChange={this.handleHeadingChange}
-              title="Text Style"
-            >
-              <option value="p" selected={activeFormats.headingLevel === null}>
-                Paragraph
-              </option>
-              <option value="1" selected={activeFormats.headingLevel === 1}>
-                Heading 1
-              </option>
-              <option value="2" selected={activeFormats.headingLevel === 2}>
-                Heading 2
-              </option>
-              <option value="3" selected={activeFormats.headingLevel === 3}>
-                Heading 3
-              </option>
-              <option value="4" selected={activeFormats.headingLevel === 4}>
-                Heading 4
-              </option>
-              <option value="5" selected={activeFormats.headingLevel === 5}>
-                Heading 5
-              </option>
-              <option value="6" selected={activeFormats.headingLevel === 6}>
-                Heading 6
-              </option>
-            </select>
-          </div>
-
-          <erix-divider></erix-divider>
-
-          {/* Font Group */}
-          <div class="toolbar-group">
-            <select
-              class="toolbar-select font-family-select"
-              onChange={this.handleFontFamilyChange}
-              title="Font Family"
-            >
-              <option value="" selected={activeFormats.fontFamily === ''}>Font</option>
-              <option value="Inter, system-ui, sans-serif" selected={activeFormats.fontFamily === 'Inter, system-ui, sans-serif'}>Inter</option>
-              <option value="Roboto, sans-serif" selected={activeFormats.fontFamily === 'Roboto, sans-serif'}>Roboto</option>
-              <option value="Playfair Display, serif" selected={activeFormats.fontFamily === 'Playfair Display, serif'}>Serif</option>
-              <option value="Fira Code, monospace" selected={activeFormats.fontFamily === 'Fira Code, monospace'}>Monospace</option>
-              <option value="cursive" selected={activeFormats.fontFamily === 'cursive'}>Cursive</option>
-            </select>
-
-            <select
-              class="toolbar-select font-size-select"
-              onChange={this.handleFontSizeChange}
-              title="Font Size"
-            >
-              <option value="" selected={activeFormats.fontSize === ''}>Size</option>
-              {[10, 11, 12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72].map(size => (
-                <option value={`${size}px`} selected={activeFormats.fontSize === `${size}px`}>{size}</option>
-              ))}
-            </select>
-          </div>
-
-          <erix-divider></erix-divider>
-
-          {/* Alignment Group */}
-          <div class="toolbar-group">
-            <div class="toolbar-dropdown-container alignment-dropdown-container">
-              <button
-                class={{ 'toolbar-btn': true, 'active': this.isAlignmentMenuOpen }}
-                onClick={() => this.isAlignmentMenuOpen = !this.isAlignmentMenuOpen}
-                title="Text Alignment"
+          {/* Theme Toggle - always at the end if enabled */}
+          {this.showThemeToggle && (
+            <div class="toolbar-group">
+              <erix-button
+                buttonTitle={this.theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+                onErixClick={this.handleThemeToggle}
               >
-                <erix-icon name={this.getAlignmentIcon(activeFormats.textAlign) as any} size={18}></erix-icon>
-              </button>
-              {this.isAlignmentMenuOpen && (
-                <div class="toolbar-dropdown-menu alignment-menu">
-                  <button
-                    class={{ 'dropdown-item': true, 'active': activeFormats.textAlign === 'left' }}
-                    onClick={() => this.handleAlignmentChange('left')}
-                    title="Align Left"
-                  >
-                    <erix-icon name="textAlignLeft" size={18}></erix-icon>
-                  </button>
-                  <button
-                    class={{ 'dropdown-item': true, 'active': activeFormats.textAlign === 'center' }}
-                    onClick={() => this.handleAlignmentChange('center')}
-                    title="Align Center"
-                  >
-                    <erix-icon name="textAlignCenter" size={18}></erix-icon>
-                  </button>
-                  <button
-                    class={{ 'dropdown-item': true, 'active': activeFormats.textAlign === 'right' }}
-                    onClick={() => this.handleAlignmentChange('right')}
-                    title="Align Right"
-                  >
-                    <erix-icon name="textAlignRight" size={18}></erix-icon>
-                  </button>
-                  <button
-                    class={{ 'dropdown-item': true, 'active': activeFormats.textAlign === 'justify' }}
-                    onClick={() => this.handleAlignmentChange('justify')}
-                    title="Justify"
-                  >
-                    <erix-icon name="textAlignJustify" size={18}></erix-icon>
-                  </button>
-                </div>
-              )}
+                <erix-icon
+                  name={this.theme === 'light' ? 'darkMode' : 'lightMode'}
+                  size={20}
+                ></erix-icon>
+              </erix-button>
             </div>
-
-            <div class="toolbar-dropdown-container line-spacing-dropdown-container">
-              <button
-                class={{ 'toolbar-btn': true, 'active': this.isLineSpacingMenuOpen }}
-                onClick={() => this.isLineSpacingMenuOpen = !this.isLineSpacingMenuOpen}
-                title="Line Spacing"
-              >
-                <erix-icon name="textLineSpacing" size={18}></erix-icon>
-              </button>
-              {this.isLineSpacingMenuOpen && (
-                <div class="toolbar-dropdown-menu line-spacing-menu">
-                  {['1', '1.15', '1.5', '2', '2.5', '3'].map(spacing => (
-                    <button
-                      class={{ 'dropdown-item spacing-item': true, 'active': activeFormats.lineSpacing === spacing }}
-                      onClick={() => this.handleLineSpacingChange(spacing)}
-                    >
-                      <span class="spacing-check">{activeFormats.lineSpacing === spacing ? '✓' : ''}</span>
-                      <span class="spacing-value">{spacing}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <erix-divider></erix-divider>
-
-          {/* Format Group: Bold, Italic, Underline, etc. */}
-          <div class="toolbar-group">
-            <erix-button
-              active={activeFormats.bold}
-              buttonTitle="Bold (Ctrl+B)"
-              onErixClick={this.handleBold}
-            >
-              <erix-icon name="formatBold" size={18}></erix-icon>
-            </erix-button>
-            <erix-button
-              active={activeFormats.italic}
-              buttonTitle="Italic (Ctrl+I)"
-              onErixClick={this.handleItalic}
-            >
-              <erix-icon name="formatItalic" size={18}></erix-icon>
-            </erix-button>
-            <erix-button
-              active={activeFormats.underline}
-              buttonTitle="Underline (Ctrl+U)"
-              onErixClick={this.handleUnderline}
-            >
-              <erix-icon name="formatUnderline" size={18}></erix-icon>
-            </erix-button>
-            <erix-button
-              active={activeFormats.strikethrough}
-              buttonTitle="Strikethrough"
-              onErixClick={this.handleStrikethrough}
-            >
-              <erix-icon name="formatStrikethrough" size={18}></erix-icon>
-            </erix-button>
-            <erix-button
-              active={activeFormats.superscript}
-              buttonTitle="Superscript"
-              onErixClick={this.handleSuperscript}
-            >
-              <erix-icon name="superScript" size={18}></erix-icon>
-            </erix-button>
-            <erix-button
-              active={activeFormats.subscript}
-              buttonTitle="Subscript"
-              onErixClick={this.handleSubscript}
-            >
-              <erix-icon name="subScript" size={18}></erix-icon>
-            </erix-button>
-          </div>
-
-          <erix-divider></erix-divider>
-
-          {/* Text Case Group */}
-          <div class="toolbar-group">
-            <erix-button
-              buttonTitle="Convert to Uppercase"
-              onErixClick={this.handleUpperCase}
-            >
-              <erix-icon name="upperCase" size={18}></erix-icon>
-            </erix-button>
-            <erix-button
-              buttonTitle="Convert to Lowercase"
-              onErixClick={this.handleLowerCase}
-            >
-              <erix-icon name="lowerCase" size={18}></erix-icon>
-            </erix-button>
-          </div>
-
-          <erix-divider></erix-divider>
-
-          {/* List Group */}
-          <div class="toolbar-group">
-            <erix-button
-              active={activeFormats.bulletList}
-              buttonTitle="Bullet List"
-              onErixClick={this.handleBulletList}
-            >
-              <erix-icon name="bulletList" size={18}></erix-icon>
-            </erix-button>
-            <erix-button
-              active={activeFormats.orderedList}
-              buttonTitle="Numbered List"
-              onErixClick={this.handleOrderedList}
-            >
-              <erix-icon name="numberList" size={18}></erix-icon>
-            </erix-button>
-          </div>
-
-          <erix-divider></erix-divider>
-
-          {/* Utility Group */}
-          <div class="toolbar-group">
-            <erix-button
-              buttonTitle="Insert Page Break"
-              onErixClick={this.handlePageBreak}
-            >
-              <erix-icon name="pageBreak" size={18}></erix-icon>
-            </erix-button>
-            <erix-button
-              buttonTitle="Print Document (Ctrl+P)"
-              onErixClick={this.handlePrint}
-            >
-              <erix-icon name="print" size={18}></erix-icon>
-            </erix-button>
-          </div>
-
-          <div class="toolbar-spacer"></div>
-
-          {/* Theme Toggle */}
-          <div class="toolbar-group">
-            <erix-button
-              buttonTitle={this.theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-              onErixClick={this.handleThemeToggle}
-            >
-              <erix-icon
-                name={this.theme === 'light' ? 'darkMode' : 'lightMode'}
-                size={20}
-              ></erix-icon>
-            </erix-button>
-          </div>
+          )}
         </div>
       </Host>
     );

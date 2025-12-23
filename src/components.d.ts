@@ -8,14 +8,14 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { ButtonSize, ButtonVariant } from "./components/ui/erix-button/erix-button.types";
 import { DividerOrientation, DividerSize } from "./components/ui/erix-divider/erix-divider";
 import { DropdownPosition } from "./components/ui/erix-dropdown/erix-dropdown";
-import { EditorConfig, ErixEditorAPI, ErixPluginConfig } from "./api/index";
+import { EditorConfig, ErixEditorAPI, ErixPluginConfig, ToolbarItem } from "./api/index";
 import { IconName } from "./components/ui/erix-icon/icons";
 import { SelectOption, SelectWidth } from "./components/ui/erix-select/erix-select";
 import { EditorView } from "prosemirror-view";
 export { ButtonSize, ButtonVariant } from "./components/ui/erix-button/erix-button.types";
 export { DividerOrientation, DividerSize } from "./components/ui/erix-divider/erix-divider";
 export { DropdownPosition } from "./components/ui/erix-dropdown/erix-dropdown";
-export { EditorConfig, ErixEditorAPI, ErixPluginConfig } from "./api/index";
+export { EditorConfig, ErixEditorAPI, ErixPluginConfig, ToolbarItem } from "./api/index";
 export { IconName } from "./components/ui/erix-icon/icons";
 export { SelectOption, SelectWidth } from "./components/ui/erix-select/erix-select";
 export { EditorView } from "prosemirror-view";
@@ -213,10 +213,20 @@ export namespace Components {
     }
     /**
      * @component ErixToolbar
-     * The main toolbar component for the editor.
-     * Provides all formatting controls and delegates commands to the editor view.
+     * Dynamic toolbar that renders plugins based on configuration.
+     * Only shows plugins that are configured - no static buttons.
      */
     interface ErixToolbar {
+        /**
+          * Toolbar items to display. Array of plugin IDs. Use '|' for separator (only shown between different groups). Example: ['bold', 'italic', '|', 'bullet-list', 'ordered-list']
+          * @default []
+         */
+        "items": ToolbarItem[];
+        /**
+          * Show theme toggle in toolbar
+          * @default true
+         */
+        "showThemeToggle": boolean;
         /**
           * Current theme
           * @default 'light'
@@ -357,8 +367,8 @@ declare global {
     }
     /**
      * @component ErixToolbar
-     * The main toolbar component for the editor.
-     * Provides all formatting controls and delegates commands to the editor view.
+     * Dynamic toolbar that renders plugins based on configuration.
+     * Only shows plugins that are configured - no static buttons.
      */
     interface HTMLErixToolbarElement extends Components.ErixToolbar, HTMLStencilElement {
         addEventListener<K extends keyof HTMLErixToolbarElementEventMap>(type: K, listener: (this: HTMLErixToolbarElement, ev: ErixToolbarCustomEvent<HTMLErixToolbarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -581,14 +591,24 @@ declare namespace LocalJSX {
     }
     /**
      * @component ErixToolbar
-     * The main toolbar component for the editor.
-     * Provides all formatting controls and delegates commands to the editor view.
+     * Dynamic toolbar that renders plugins based on configuration.
+     * Only shows plugins that are configured - no static buttons.
      */
     interface ErixToolbar {
+        /**
+          * Toolbar items to display. Array of plugin IDs. Use '|' for separator (only shown between different groups). Example: ['bold', 'italic', '|', 'bullet-list', 'ordered-list']
+          * @default []
+         */
+        "items"?: ToolbarItem[];
         /**
           * Event emitted when theme toggle is requested
          */
         "onThemeToggle"?: (event: ErixToolbarCustomEvent<void>) => void;
+        /**
+          * Show theme toggle in toolbar
+          * @default true
+         */
+        "showThemeToggle"?: boolean;
         /**
           * Current theme
           * @default 'light'
@@ -670,8 +690,8 @@ declare module "@stencil/core" {
             "erix-select": LocalJSX.ErixSelect & JSXBase.HTMLAttributes<HTMLErixSelectElement>;
             /**
              * @component ErixToolbar
-             * The main toolbar component for the editor.
-             * Provides all formatting controls and delegates commands to the editor view.
+             * Dynamic toolbar that renders plugins based on configuration.
+             * Only shows plugins that are configured - no static buttons.
              */
             "erix-toolbar": LocalJSX.ErixToolbar & JSXBase.HTMLAttributes<HTMLErixToolbarElement>;
         }

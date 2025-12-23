@@ -273,12 +273,15 @@ export class ErixEditor {
     return (
       <Host data-theme={this.theme}>
         <div class="editor-wrapper">
-          {/* Toolbar Component */}
+          {/* Toolbar Component - renders plugins based on config */}
           <erix-toolbar
             ref={el => (this.toolbarRef = el)}
             view={this.editorView}
             theme={this.theme}
+            items={this.config?.toolbar?.items || ['undo', 'redo', 'bold', 'italic', 'underline', 'bullet-list','ordered-list', 'print', ]}
+            showThemeToggle={true}
             onThemeToggle={this.handleThemeToggle}
+            
           ></erix-toolbar>
 
           {/* Editor Content Area */}

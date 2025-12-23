@@ -16,6 +16,7 @@ export function serializeToJSON(doc: ProseMirrorNode): EditorDocumentJSON {
 }
 
 /**
+ * 
  * Parse JSON to ProseMirror document.
  * @param json - JSON document
  * @param schema - Editor schema
