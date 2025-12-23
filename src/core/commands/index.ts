@@ -1,16 +1,9 @@
 /**
- * Erix Editor Core
- * Main entry point for the editor core module.
- * Exports schema, plugins, and commands.
+ * Commands Module
+ * Exports all editor commands organized by category.
  */
 
-// Schema
-export { editorSchema, type TextAlignment } from './schema/index';
-
-// Plugins
-export { editorPlugins, createEditorPlugins } from './plugins/index';
-
-// Commands - Text Format
+// Text Format Commands
 export {
   toggleBold,
   toggleItalic,
@@ -26,9 +19,9 @@ export {
   isSubscriptActive,
   isMarkActive,
   setTextCase,
-} from './commands/index';
+} from './text-format';
 
-// Commands - List
+// List Commands
 export {
   toggleBulletList,
   toggleOrderedList,
@@ -36,36 +29,36 @@ export {
   isInOrderedList,
   increaseIndent,
   decreaseIndent,
-} from './commands/index';
+} from './list';
 
-// Commands - Heading
+// Heading Commands
 export {
   setHeading,
   setParagraph,
   getCurrentHeadingLevel,
-} from './commands/index';
+} from './heading';
 
-// Commands - Font
+// Font Commands
 export {
   setFontFamily,
   setFontSize,
   getActiveFontFamily,
   getActiveFontSize,
-} from './commands/index';
+} from './font';
 
-// Commands - Alignment
+// Alignment Commands
 export {
   setTextAlignment,
   getActiveAlignment,
   setTextLineSpacing,
   getActiveLineSpacing,
-} from './commands/index';
+} from './alignment';
 
-// Commands - Document
+// Document Commands
 export {
   printDocument,
   insertPageBreak,
-} from './commands/index';
+} from './document';
 
-// Commands - History
-export { undo, redo } from './commands/index';
+// History Commands
+export { undo, redo } from './history';

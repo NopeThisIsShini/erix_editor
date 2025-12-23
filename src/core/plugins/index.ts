@@ -8,8 +8,8 @@ import { keymap } from 'prosemirror-keymap';
 import { baseKeymap, toggleMark } from 'prosemirror-commands';
 import { splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 import { Plugin } from 'prosemirror-state';
-import { editorSchema } from '@src/core/schema';
-import { insertPageBreak, printDocument } from '@src/core/commands';
+import { editorSchema } from '../schema/index';
+import { insertPageBreak, printDocument } from '../commands/index';
 
 /**
  * Keyboard shortcuts for formatting marks
