@@ -1,0 +1,54 @@
+@import '../../../styles/theme.css';
+
+:host {
+  display: inline-flex;
+  align-items: center;
+}
+
+.erix-divider {
+  background-color: var(--editor-border);
+}
+
+/* Orientation variants */
+.erix-divider--vertical {
+  width: 1px;
+  height: 24px;
+  margin: 0 8px;
+}
+
+.erix-divider--horizontal {
+  width: 100%;
+  height: 1px;
+  margin: 8px 0;
+}
+
+/* Size variants */
+.erix-divider--sm {
+  height: 16px;
+  margin: 0 4px;
+}
+
+.erix-divider--md {
+  height: 24px;
+  margin: 0 8px;
+}
+
+.erix-divider--lg {
+  height: 32px;
+  margin: 0 12px;
+}
+
+.erix-divider--horizontal.erix-divider--sm {
+  height: 1px;
+  margin: 4px 0;
+}
+
+.erix-divider--horizontal.erix-divider--md {
+  height: 1px;
+  margin: 8px 0;
+}
+
+.erix-divider--horizontal.erix-divider--lg {
+  height: 1px;
+  margin: 12px 0;
+}

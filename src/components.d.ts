@@ -5,9 +5,98 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { IconName } from "./components/erix-icon/icons";
-export { IconName } from "./components/erix-icon/icons";
+import { ButtonSize, ButtonVariant } from "./components/ui/erix-button/erix-button.types";
+import { DividerOrientation, DividerSize } from "./components/ui/erix-divider/erix-divider";
+import { DropdownPosition } from "./components/ui/erix-dropdown/erix-dropdown";
+import { IconName } from "./components/ui/erix-icon/icons";
+import { SelectOption, SelectWidth } from "./components/ui/erix-select/erix-select";
+import { EditorView } from "prosemirror-view";
+export { ButtonSize, ButtonVariant } from "./components/ui/erix-button/erix-button.types";
+export { DividerOrientation, DividerSize } from "./components/ui/erix-divider/erix-divider";
+export { DropdownPosition } from "./components/ui/erix-dropdown/erix-dropdown";
+export { IconName } from "./components/ui/erix-icon/icons";
+export { SelectOption, SelectWidth } from "./components/ui/erix-select/erix-select";
+export { EditorView } from "prosemirror-view";
 export namespace Components {
+    /**
+     * @component ErixButton
+     * A reusable button component for the editor toolbar and UI.
+     */
+    interface ErixButton {
+        /**
+          * Whether the button is in an active/pressed state
+          * @default false
+         */
+        "active": boolean;
+        /**
+          * Tooltip text for the button
+          * @default ''
+         */
+        "buttonTitle": string;
+        /**
+          * Whether the button is disabled
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * The size of the button
+          * @default 'md'
+         */
+        "size": ButtonSize;
+        /**
+          * The visual style variant of the button
+          * @default 'default'
+         */
+        "variant": ButtonVariant;
+    }
+    /**
+     * @component ErixDivider
+     * A visual separator for toolbar groups and sections.
+     */
+    interface ErixDivider {
+        /**
+          * The orientation of the divider
+          * @default 'vertical'
+         */
+        "orientation": DividerOrientation;
+        /**
+          * The size of the divider
+          * @default 'md'
+         */
+        "size": DividerSize;
+    }
+    /**
+     * @component ErixDropdown
+     * A reusable dropdown component for the editor toolbar.
+     * Provides a trigger button and a menu that opens on click.
+     */
+    interface ErixDropdown {
+        /**
+          * Whether to use extended menu style (for text-based options)
+          * @default false
+         */
+        "extended": boolean;
+        /**
+          * Whether the dropdown menu is currently open
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Position of the dropdown menu relative to the trigger
+          * @default 'left'
+         */
+        "position": DropdownPosition;
+        /**
+          * Whether the trigger should show active state when open
+          * @default true
+         */
+        "showActiveState": boolean;
+        /**
+          * Tooltip text for the trigger button
+          * @default ''
+         */
+        "triggerTitle": string;
+    }
     /**
      * @component ErixEditor
      * A rich text editor component with built-in toolbar.
@@ -35,8 +124,113 @@ export namespace Components {
          */
         "size": number;
     }
+    /**
+     * @component ErixSelect
+     * A reusable select/dropdown component for the editor toolbar.
+     */
+    interface ErixSelect {
+        /**
+          * Whether the select is disabled
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Array of options for the select
+          * @default []
+         */
+        "options": SelectOption[];
+        /**
+          * Tooltip text for the select
+          * @default ''
+         */
+        "selectTitle": string;
+        /**
+          * The currently selected value
+          * @default ''
+         */
+        "value": string;
+        /**
+          * Width variant
+          * @default 'md'
+         */
+        "width": SelectWidth;
+    }
+    /**
+     * @component ErixToolbar
+     * The main toolbar component for the editor.
+     * Provides all formatting controls and delegates commands to the editor view.
+     */
+    interface ErixToolbar {
+        /**
+          * Current theme
+          * @default 'light'
+         */
+        "theme": 'light' | 'dark' | string;
+        /**
+          * Call this method from the parent to refresh the toolbar state
+         */
+        "updateActiveFormats": () => Promise<void>;
+        /**
+          * Reference to the ProseMirror EditorView
+         */
+        "view"?: EditorView;
+    }
+}
+export interface ErixButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLErixButtonElement;
+}
+export interface ErixSelectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLErixSelectElement;
+}
+export interface ErixToolbarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLErixToolbarElement;
 }
 declare global {
+    interface HTMLErixButtonElementEventMap {
+        "erixClick": MouseEvent;
+    }
+    /**
+     * @component ErixButton
+     * A reusable button component for the editor toolbar and UI.
+     */
+    interface HTMLErixButtonElement extends Components.ErixButton, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLErixButtonElementEventMap>(type: K, listener: (this: HTMLErixButtonElement, ev: ErixButtonCustomEvent<HTMLErixButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLErixButtonElementEventMap>(type: K, listener: (this: HTMLErixButtonElement, ev: ErixButtonCustomEvent<HTMLErixButtonElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLErixButtonElement: {
+        prototype: HTMLErixButtonElement;
+        new (): HTMLErixButtonElement;
+    };
+    /**
+     * @component ErixDivider
+     * A visual separator for toolbar groups and sections.
+     */
+    interface HTMLErixDividerElement extends Components.ErixDivider, HTMLStencilElement {
+    }
+    var HTMLErixDividerElement: {
+        prototype: HTMLErixDividerElement;
+        new (): HTMLErixDividerElement;
+    };
+    /**
+     * @component ErixDropdown
+     * A reusable dropdown component for the editor toolbar.
+     * Provides a trigger button and a menu that opens on click.
+     */
+    interface HTMLErixDropdownElement extends Components.ErixDropdown, HTMLStencilElement {
+    }
+    var HTMLErixDropdownElement: {
+        prototype: HTMLErixDropdownElement;
+        new (): HTMLErixDropdownElement;
+    };
     /**
      * @component ErixEditor
      * A rich text editor component with built-in toolbar.
@@ -53,12 +247,143 @@ declare global {
         prototype: HTMLErixIconElement;
         new (): HTMLErixIconElement;
     };
+    interface HTMLErixSelectElementEventMap {
+        "erixChange": string;
+    }
+    /**
+     * @component ErixSelect
+     * A reusable select/dropdown component for the editor toolbar.
+     */
+    interface HTMLErixSelectElement extends Components.ErixSelect, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLErixSelectElementEventMap>(type: K, listener: (this: HTMLErixSelectElement, ev: ErixSelectCustomEvent<HTMLErixSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLErixSelectElementEventMap>(type: K, listener: (this: HTMLErixSelectElement, ev: ErixSelectCustomEvent<HTMLErixSelectElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLErixSelectElement: {
+        prototype: HTMLErixSelectElement;
+        new (): HTMLErixSelectElement;
+    };
+    interface HTMLErixToolbarElementEventMap {
+        "themeToggle": void;
+    }
+    /**
+     * @component ErixToolbar
+     * The main toolbar component for the editor.
+     * Provides all formatting controls and delegates commands to the editor view.
+     */
+    interface HTMLErixToolbarElement extends Components.ErixToolbar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLErixToolbarElementEventMap>(type: K, listener: (this: HTMLErixToolbarElement, ev: ErixToolbarCustomEvent<HTMLErixToolbarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLErixToolbarElementEventMap>(type: K, listener: (this: HTMLErixToolbarElement, ev: ErixToolbarCustomEvent<HTMLErixToolbarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLErixToolbarElement: {
+        prototype: HTMLErixToolbarElement;
+        new (): HTMLErixToolbarElement;
+    };
     interface HTMLElementTagNameMap {
+        "erix-button": HTMLErixButtonElement;
+        "erix-divider": HTMLErixDividerElement;
+        "erix-dropdown": HTMLErixDropdownElement;
         "erix-editor": HTMLErixEditorElement;
         "erix-icon": HTMLErixIconElement;
+        "erix-select": HTMLErixSelectElement;
+        "erix-toolbar": HTMLErixToolbarElement;
     }
 }
 declare namespace LocalJSX {
+    /**
+     * @component ErixButton
+     * A reusable button component for the editor toolbar and UI.
+     */
+    interface ErixButton {
+        /**
+          * Whether the button is in an active/pressed state
+          * @default false
+         */
+        "active"?: boolean;
+        /**
+          * Tooltip text for the button
+          * @default ''
+         */
+        "buttonTitle"?: string;
+        /**
+          * Whether the button is disabled
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Emitted when the button is clicked
+         */
+        "onErixClick"?: (event: ErixButtonCustomEvent<MouseEvent>) => void;
+        /**
+          * The size of the button
+          * @default 'md'
+         */
+        "size"?: ButtonSize;
+        /**
+          * The visual style variant of the button
+          * @default 'default'
+         */
+        "variant"?: ButtonVariant;
+    }
+    /**
+     * @component ErixDivider
+     * A visual separator for toolbar groups and sections.
+     */
+    interface ErixDivider {
+        /**
+          * The orientation of the divider
+          * @default 'vertical'
+         */
+        "orientation"?: DividerOrientation;
+        /**
+          * The size of the divider
+          * @default 'md'
+         */
+        "size"?: DividerSize;
+    }
+    /**
+     * @component ErixDropdown
+     * A reusable dropdown component for the editor toolbar.
+     * Provides a trigger button and a menu that opens on click.
+     */
+    interface ErixDropdown {
+        /**
+          * Whether to use extended menu style (for text-based options)
+          * @default false
+         */
+        "extended"?: boolean;
+        /**
+          * Whether the dropdown menu is currently open
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Position of the dropdown menu relative to the trigger
+          * @default 'left'
+         */
+        "position"?: DropdownPosition;
+        /**
+          * Whether the trigger should show active state when open
+          * @default true
+         */
+        "showActiveState"?: boolean;
+        /**
+          * Tooltip text for the trigger button
+          * @default ''
+         */
+        "triggerTitle"?: string;
+    }
     /**
      * @component ErixEditor
      * A rich text editor component with built-in toolbar.
@@ -86,9 +411,69 @@ declare namespace LocalJSX {
          */
         "size"?: number;
     }
+    /**
+     * @component ErixSelect
+     * A reusable select/dropdown component for the editor toolbar.
+     */
+    interface ErixSelect {
+        /**
+          * Whether the select is disabled
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Emitted when the selection changes
+         */
+        "onErixChange"?: (event: ErixSelectCustomEvent<string>) => void;
+        /**
+          * Array of options for the select
+          * @default []
+         */
+        "options"?: SelectOption[];
+        /**
+          * Tooltip text for the select
+          * @default ''
+         */
+        "selectTitle"?: string;
+        /**
+          * The currently selected value
+          * @default ''
+         */
+        "value"?: string;
+        /**
+          * Width variant
+          * @default 'md'
+         */
+        "width"?: SelectWidth;
+    }
+    /**
+     * @component ErixToolbar
+     * The main toolbar component for the editor.
+     * Provides all formatting controls and delegates commands to the editor view.
+     */
+    interface ErixToolbar {
+        /**
+          * Event emitted when theme toggle is requested
+         */
+        "onThemeToggle"?: (event: ErixToolbarCustomEvent<void>) => void;
+        /**
+          * Current theme
+          * @default 'light'
+         */
+        "theme"?: 'light' | 'dark' | string;
+        /**
+          * Reference to the ProseMirror EditorView
+         */
+        "view"?: EditorView;
+    }
     interface IntrinsicElements {
+        "erix-button": ErixButton;
+        "erix-divider": ErixDivider;
+        "erix-dropdown": ErixDropdown;
         "erix-editor": ErixEditor;
         "erix-icon": ErixIcon;
+        "erix-select": ErixSelect;
+        "erix-toolbar": ErixToolbar;
     }
 }
 export { LocalJSX as JSX };
@@ -96,11 +481,38 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             /**
+             * @component ErixButton
+             * A reusable button component for the editor toolbar and UI.
+             */
+            "erix-button": LocalJSX.ErixButton & JSXBase.HTMLAttributes<HTMLErixButtonElement>;
+            /**
+             * @component ErixDivider
+             * A visual separator for toolbar groups and sections.
+             */
+            "erix-divider": LocalJSX.ErixDivider & JSXBase.HTMLAttributes<HTMLErixDividerElement>;
+            /**
+             * @component ErixDropdown
+             * A reusable dropdown component for the editor toolbar.
+             * Provides a trigger button and a menu that opens on click.
+             */
+            "erix-dropdown": LocalJSX.ErixDropdown & JSXBase.HTMLAttributes<HTMLErixDropdownElement>;
+            /**
              * @component ErixEditor
              * A rich text editor component with built-in toolbar.
              */
             "erix-editor": LocalJSX.ErixEditor & JSXBase.HTMLAttributes<HTMLErixEditorElement>;
             "erix-icon": LocalJSX.ErixIcon & JSXBase.HTMLAttributes<HTMLErixIconElement>;
+            /**
+             * @component ErixSelect
+             * A reusable select/dropdown component for the editor toolbar.
+             */
+            "erix-select": LocalJSX.ErixSelect & JSXBase.HTMLAttributes<HTMLErixSelectElement>;
+            /**
+             * @component ErixToolbar
+             * The main toolbar component for the editor.
+             * Provides all formatting controls and delegates commands to the editor view.
+             */
+            "erix-toolbar": LocalJSX.ErixToolbar & JSXBase.HTMLAttributes<HTMLErixToolbarElement>;
         }
     }
 }

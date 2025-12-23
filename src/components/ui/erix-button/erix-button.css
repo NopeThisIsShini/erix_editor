@@ -1,0 +1,88 @@
+@import '../../../styles/theme.css';
+
+:host {
+  display: inline-flex;
+}
+
+.erix-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--editor-text);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+  font-family: inherit;
+}
+
+/* Sizes */
+.erix-button--sm {
+  width: 28px;
+  height: 28px;
+}
+
+.erix-button--md {
+  width: 32px;
+  height: 32px;
+}
+
+.erix-button--lg {
+  width: 36px;
+  height: 36px;
+}
+
+/* Variants */
+.erix-button--default:hover,
+.erix-button--ghost:hover {
+  background-color: var(--editor-border);
+}
+
+.erix-button--outline {
+  border: 1px solid var(--editor-border);
+}
+
+.erix-button--outline:hover {
+  border-color: var(--editor-muted-text);
+  background-color: var(--editor-surface);
+}
+
+/* Active state */
+.erix-button.active {
+  background-color: var(--editor-active-bg);
+  color: var(--editor-accent);
+  position: relative;
+}
+
+.erix-button.active::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1.5px solid var(--editor-accent);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* Focus state */
+.erix-button:focus {
+  outline: 2px solid var(--editor-accent);
+  outline-offset: 1px;
+}
+
+.erix-button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.erix-button:focus-visible {
+  outline: 2px solid var(--editor-accent);
+  outline-offset: 1px;
+}
+
+/* Disabled state */
+.erix-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}

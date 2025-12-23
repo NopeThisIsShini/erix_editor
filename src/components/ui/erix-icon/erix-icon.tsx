@@ -1,5 +1,5 @@
 import { Component, Host, h, Prop, Watch, State } from '@stencil/core';
-import { ICONS, IconName } from '@src/components/erix-icon/icons';
+import { ICONS, IconName } from './icons';
 import { sanitizeSvg } from '@src/utils/svg-sanitizer';
 
 @Component({
