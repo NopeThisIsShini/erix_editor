@@ -8,5 +8,5 @@
  * to consume components of this package as outlined in the `README.md`.
  */
 
-export { format } from '@src/utils/utils';
+export { format } from '@src/utils';
 export type * from '@src/components.d.ts';

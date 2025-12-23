@@ -1,7 +1,11 @@
 /**
- * A lightweight, framework-agnostic SVG sanitizer for Stencil.js components.
- * Prevents XSS by filtering out dangerous elements and attributes.
+ * DOM Utilities
+ * A collection of framework-agnostic DOM manipulation utilities.
  */
+
+// =============================================================================
+// SVG SANITIZER
+// =============================================================================
 
 const ALLOWED_ELEMENTS = new Set([
   'svg',
@@ -37,6 +41,7 @@ const ALLOWED_ATTRIBUTES = new Set([
 
 /**
  * Sanitizes a raw SVG string.
+ * Prevents XSS by filtering out dangerous elements and attributes.
  * @param svgContent The raw SVG string to sanitize.
  * @returns A sanitized SVG string.
  */
@@ -102,4 +107,19 @@ export function sanitizeSvg(svgContent: string): string {
 
   const serializer = new XMLSerializer();
   return serializer.serializeToString(sanitizedRoot);
+}
+
+// =============================================================================
+// STRING UTILITIES
+// =============================================================================
+
+/**
+ * Formats multiple string parts into a single string with spaces.
+ * @param first First part of the string.
+ * @param middle Middle part of the string.
+ * @param last Last part of the string.
+ * @returns Formatted string.
+ */
+export function format(first?: string, middle?: string, last?: string): string {
+  return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
 }
