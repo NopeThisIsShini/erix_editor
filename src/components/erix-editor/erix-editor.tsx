@@ -230,6 +230,47 @@ export class ErixEditor {
       this._api.setContent(this.content, 'html');
     }
 
+    // Subscribe to content changes and emit DOM event
+    this._api.on('change', ({ content }) => {
+      this.el.dispatchEvent(
+        new CustomEvent('erix-content-change', {
+          bubbles: true,
+          composed: true,
+          detail: { content },
+        })
+      );
+    });
+
+    // Subscribe to selection changes and emit DOM event
+    this._api.on('selectionChange', ({ selection }) => {
+      this.el.dispatchEvent(
+        new CustomEvent('erix-selection-change', {
+          bubbles: true,
+          composed: true,
+          detail: { selection },
+        })
+      );
+    });
+
+    // Subscribe to focus/blur and emit DOM events
+    this._api.on('focus', () => {
+      this.el.dispatchEvent(
+        new CustomEvent('erix-focus', {
+          bubbles: true,
+          composed: true,
+        })
+      );
+    });
+
+    this._api.on('blur', () => {
+      this.el.dispatchEvent(
+        new CustomEvent('erix-blur', {
+          bubbles: true,
+          composed: true,
+        })
+      );
+    });
+
     // Emit ready event
     this.el.dispatchEvent(
       new CustomEvent('erix-ready', {
