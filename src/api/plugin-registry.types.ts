@@ -105,9 +105,10 @@ export interface ErixPluginConfig {
   /**
    * Execute function - called when plugin is invoked.
    * @param context - Plugin execution context
-   * @returns true if the command was executed, false otherwise
+   * @returns true if the command was executed, false otherwise.
+   *          Can be async for operations like file import/export.
    */
-  execute: (context: PluginContext) => boolean;
+  execute: (context: PluginContext) => boolean | Promise<boolean>;
 
   /**
    * Optional: Check if plugin is currently active/enabled.

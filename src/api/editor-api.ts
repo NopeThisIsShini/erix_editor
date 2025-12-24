@@ -261,6 +261,109 @@ export class ErixEditorAPI {
   }
 
   // ===========================================================================
+  // IMPORT METHODS
+  // ===========================================================================
+
+  /**
+   * Import content from a Word document (.docx file).
+   * Opens a file picker dialog and imports the selected document.
+   * 
+   * @param options - Import options
+   * @returns Promise resolving to import result, or null if cancelled
+   * 
+   * @example
+   * ```typescript
+   * const result = await editor.openWordImportDialog();
+   * if (result) {
+   *   console.log('Imported document:', result.metadata.title);
+   * }
+   * ```
+   */
+  async openWordImportDialog(options?: {
+    preserveStyles?: boolean;
+    preserveLists?: boolean;
+  }): Promise<{ html: string; text: string; metadata: Record<string, unknown> } | null> {
+    this.ensureNotDestroyed();
+    
+    const { openWordFileDialog } = await import('./serializers/word-importer');
+    const result = await openWordFileDialog(options);
+    
+    if (result) {
+      // Set the content in the editor
+      this.setContent(result.html, 'html');
+      
+      return {
+        html: result.html,
+        text: result.text,
+        metadata: result.metadata as Record<string, unknown>,
+      };
+    }
+    
+    return null;
+  }
+
+  /**
+   * Import content from a Word document File or Blob.
+   * 
+   * @param file - The Word document file (.docx)
+   * @param options - Import options
+   * @returns Promise resolving to import result
+   * 
+   * @example
+   * ```typescript
+   * const fileInput = document.querySelector('input[type="file"]');
+   * const file = fileInput.files[0];
+   * const result = await editor.importFromWordFile(file);
+   * ```
+   */
+  async importFromWordFile(
+    file: File | Blob,
+    options?: {
+      preserveStyles?: boolean;
+      preserveLists?: boolean;
+    }
+  ): Promise<{ html: string; text: string; metadata: Record<string, unknown> }> {
+    this.ensureNotDestroyed();
+    
+    const { parseWordDocument } = await import('./serializers/word-importer');
+    const result = await parseWordDocument(file, options);
+    
+    // Set the content in the editor
+    this.setContent(result.html, 'html');
+    
+    return {
+      html: result.html,
+      text: result.text,
+      metadata: result.metadata as Record<string, unknown>,
+    };
+  }
+
+  /**
+   * Parse a Word document without setting it as editor content.
+   * Useful for previewing or processing documents before importing.
+   * 
+   * @param file - The Word document file (.docx)
+   * @param options - Import options
+   * @returns Promise resolving to parsed content
+   */
+  async parseWordDocument(
+    file: File | Blob,
+    options?: {
+      preserveStyles?: boolean;
+      preserveLists?: boolean;
+    }
+  ): Promise<{ html: string; text: string; metadata: Record<string, unknown> }> {
+    const { parseWordDocument } = await import('./serializers/word-importer');
+    const result = await parseWordDocument(file, options);
+    
+    return {
+      html: result.html,
+      text: result.text,
+      metadata: result.metadata as Record<string, unknown>,
+    };
+  }
+
+  // ===========================================================================
   // FOCUS METHODS
   // ===========================================================================
 

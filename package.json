@@ -67,9 +67,12 @@
     "web-component",
     "react",
     "angular",
-    "vue"
+    "vue",
+    "word-import",
+    "docx"
   ],
   "dependencies": {
+    "jszip": "^3.10.1",
     "prosemirror-commands": "^1.7.1",
     "prosemirror-history": "^1.5.0",
     "prosemirror-keymap": "^1.2.3",

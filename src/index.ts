@@ -75,6 +75,23 @@ export type {
 export { format, sanitizeSvg } from '@src/utils';
 
 // =============================================================================
+// WORD IMPORT
+// =============================================================================
+
+export {
+  parseWordDocument,
+  parseWordToNode,
+  isValidWordDocument,
+  openWordFileDialog,
+} from '@src/api';
+
+export type {
+  WordImportOptions,
+  WordImportResult,
+  WordDocumentMetadata,
+} from '@src/api';
+
+// =============================================================================
 // COMPONENT TYPES
 // =============================================================================
 

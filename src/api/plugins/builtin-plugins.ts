@@ -246,6 +246,42 @@ export function createBuiltinPlugins(
       execute: () => redoFn(),
       canExecute: () => canRedoFn(),
     },
+
+    // =========================================================================
+    // IMPORT PLUGINS
+    // =========================================================================
+    {
+      id: 'import-word',
+      label: 'Import from Word',
+      description: 'Import content from a Microsoft Word document (.docx)',
+      icon: 'importFromWord',
+      group: 'tools',
+      priority: 10,
+      showInToolbar: false,
+      execute: async () => {
+        try {
+          // Dynamically import to avoid loading when not needed
+          const { openWordFileDialog } = await import('../serializers/word-importer');
+          const result = await openWordFileDialog();
+          
+          if (result) {
+            // Content will be set via the API by the caller
+            // This plugin just handles the file picker
+            // Store result in a custom event for the API to handle
+            const event = new CustomEvent('erix-word-import', {
+              detail: { result },
+              bubbles: true,
+            });
+            document.dispatchEvent(event);
+            return true;
+          }
+          return false;
+        } catch (error) {
+          console.error('[ImportWord] Failed to import Word document:', error);
+          return false;
+        }
+      },
+    },
   ];
 }
 
@@ -286,4 +322,5 @@ export const ALL_BUILTIN_PLUGINS = [
   'align-justify',
   'undo',
   'redo',
+  'import-word',
 ];

@@ -275,7 +275,7 @@ export class PluginRegistry {
    * Execute a plugin.
    * @param id - Plugin identifier
    * @param context - Execution context
-   * @returns true if executed successfully
+   * @returns true if executed successfully (for async plugins, returns true if started)
    */
   execute(id: PluginId, context: PluginContext): boolean {
     const plugin = this.plugins.get(id);
@@ -295,7 +295,18 @@ export class PluginRegistry {
     }
 
     try {
-      return plugin.execute(context);
+      const result = plugin.execute(context);
+      
+      // Handle async execute functions
+      if (result instanceof Promise) {
+        // For async plugins, we return true immediately and handle errors in the background
+        result.catch((error) => {
+          console.error(`[PluginRegistry] Async plugin "${id}" execution failed:`, error);
+        });
+        return true;
+      }
+      
+      return result;
     } catch (error) {
       console.error(`[PluginRegistry] Error executing plugin "${id}":`, error);
       return false;

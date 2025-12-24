@@ -34,7 +34,7 @@ export interface ToolbarPluginDef {
   icon: string;
   group: string;
   shortcut?: string;
-  execute: (view: EditorView) => void;
+  execute: (view: EditorView) => void | Promise<void>;
   isActive?: (view: EditorView) => boolean;
   isDisabled?: (view: EditorView) => boolean;
   type?: 'button' | 'dropdown' | 'select';
@@ -170,6 +170,31 @@ const BUILTIN_PLUGINS: Record<string, ToolbarPluginDef> = {
     shortcut: 'Ctrl+P',
     execute: () => { printDocument(); },
   },
+  'import-word': {
+    id: 'import-word',
+    label: 'Import from Word',
+    icon: 'importFromWord',
+    group: 'tools',
+    execute: async (view) => {
+      try {
+        const { openWordFileDialog, parseFromHTML } = await import('@src/api/serializers');
+        const result = await openWordFileDialog();
+        
+        if (result && view) {
+          const schema = view.state.schema;
+          const doc = parseFromHTML(result.html, schema);
+          
+          // Replace content
+          const tr = view.state.tr.replaceWith(0, view.state.doc.content.size, doc.content);
+          view.dispatch(tr);
+          view.focus();
+        }
+      } catch (error) {
+        console.error('[import-word] Failed:', error);
+        alert('Failed to import Word document. Error: ' + (error as Error).message);
+      }
+    },
+  },
 };
 
 /**
@@ -263,9 +288,15 @@ export class ErixToolbar {
     return BUILTIN_PLUGINS[id] || null;
   }
 
-  private handlePluginClick = (plugin: ToolbarPluginDef) => {
+  private handlePluginClick = async (plugin: ToolbarPluginDef) => {
     if (!this.view) return;
-    plugin.execute(this.view);
+    
+    const result = plugin.execute(this.view);
+    // Handle async execute functions
+    if (result instanceof Promise) {
+      await result;
+    }
+    
     this.updateActiveFormats();
   };
 

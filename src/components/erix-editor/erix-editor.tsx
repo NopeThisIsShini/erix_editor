@@ -319,7 +319,7 @@ export class ErixEditor {
             ref={el => (this.toolbarRef = el)}
             view={this.editorView}
             theme={this.theme}
-            items={this.config?.toolbar?.items || ['undo', 'redo', 'bold', 'italic', 'underline', 'bullet-list','ordered-list', 'print', ]}
+            items={this.config?.toolbar?.items || ['undo', 'redo', 'bold', 'italic', 'underline', 'bullet-list', 'ordered-list', 'print', 'import-word']}
             showThemeToggle={true}
             onThemeToggle={this.handleThemeToggle}
             

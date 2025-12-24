@@ -59,3 +59,17 @@ export type {
 
 // Default configuration
 export { DEFAULT_EDITOR_CONFIG } from './plugin-registry.types';
+
+// Word document import utilities
+export {
+  parseWordDocument,
+  parseWordToNode,
+  isValidWordDocument,
+  openWordFileDialog,
+} from './serializers/word-importer';
+
+export type {
+  WordImportOptions,
+  WordImportResult,
+  WordDocumentMetadata,
+} from './serializers/word-importer';
