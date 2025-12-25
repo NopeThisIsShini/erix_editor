@@ -70,11 +70,18 @@
 
 /* Paragraphs */
 .editor-canvas .ProseMirror p {
-  margin: 0 0 1em 0;
+  margin: 0 0 0.5em 0;
 }
 
 .editor-canvas .ProseMirror p:last-child {
   margin-bottom: 0;
+}
+
+/* Empty paragraphs (used as line breaks in Word) - minimal height */
+.editor-canvas .ProseMirror p:empty,
+.editor-canvas .ProseMirror p br:only-child {
+  min-height: 1em;
+  margin-bottom: 0.25em;
 }
 
 /* Headings */
@@ -138,8 +145,8 @@
   margin: 0;
 }
 
-.editor-canvas .ProseMirror li > ul,
-.editor-canvas .ProseMirror li > ol {
+.editor-canvas .ProseMirror li>ul,
+.editor-canvas .ProseMirror li>ol {
   margin: 0.25em 0;
 }
 
@@ -222,6 +229,59 @@
   text-decoration: none;
 }
 
+/* Tables */
+.editor-canvas .ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  table-layout: fixed;
+}
+
+.editor-canvas .ProseMirror table td,
+.editor-canvas .ProseMirror table th {
+  border: 1px solid var(--editor-border);
+  padding: 8px 12px;
+  vertical-align: top;
+  min-width: 50px;
+}
+
+.editor-canvas .ProseMirror table th {
+  background-color: var(--editor-surface);
+  font-weight: 600;
+  text-align: left;
+}
+
+.editor-canvas .ProseMirror table tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+:host([data-theme='dark']) .editor-canvas .ProseMirror table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Bordered boxes (from Word) */
+.editor-canvas .ProseMirror div[data-bordered-box],
+.editor-canvas .ProseMirror div[style*="border"] {
+  margin: 1em 0;
+  padding: 12px 16px;
+}
+
+.editor-canvas .ProseMirror div[data-bordered-box] p:last-child,
+.editor-canvas .ProseMirror div[style*="border"] p:last-child {
+  margin-bottom: 0;
+}
+
+/* Images */
+.editor-canvas .ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+}
+
+.editor-canvas .ProseMirror img.ProseMirror-selectednode {
+  outline: 2px solid var(--editor-accent);
+}
+
 /* Selection */
 .editor-canvas .ProseMirror ::selection {
   background: rgba(59, 130, 246, 0.3);
@@ -278,6 +338,7 @@
 
 /* Print Styles */
 @media print {
+
   :host,
   .editor-wrapper,
   .editor-content,

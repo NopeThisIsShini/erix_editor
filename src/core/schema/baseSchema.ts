@@ -151,6 +151,279 @@ const additionalNodes: { [key: string]: NodeSpec } = {
       return ['div', { 'data-type': 'page-break', 'class': 'page-break' }, ['span', 'PAGE BREAK']];
     },
   },
+  image: {
+    inline: true,
+    group: 'inline',
+    draggable: true,
+    attrs: {
+      src: { default: '' },
+      alt: { default: '' },
+      title: { default: '' },
+      width: { default: null },
+      height: { default: null },
+    },
+    parseDOM: [
+      {
+        tag: 'img[src]',
+        getAttrs(dom) {
+          const img = dom as HTMLImageElement;
+          return {
+            src: img.getAttribute('src') || '',
+            alt: img.getAttribute('alt') || '',
+            title: img.getAttribute('title') || '',
+            width: img.getAttribute('width') || img.style.width || null,
+            height: img.getAttribute('height') || img.style.height || null,
+          };
+        },
+      },
+    ],
+    toDOM(node) {
+      const attrs: Record<string, string> = { src: node.attrs.src };
+      if (node.attrs.alt) attrs.alt = node.attrs.alt;
+      if (node.attrs.title) attrs.title = node.attrs.title;
+      if (node.attrs.width) attrs.width = node.attrs.width;
+      if (node.attrs.height) attrs.height = node.attrs.height;
+      return ['img', attrs];
+    },
+  },
+  // Table nodes with border support
+  table: {
+    content: 'table_row+',
+    group: 'block',
+    tableRole: 'table',
+    isolating: true,
+    attrs: {
+      border: { default: null },
+      borderColor: { default: null },
+      borderStyle: { default: null },
+      width: { default: null },
+      cellpadding: { default: null },
+      cellspacing: { default: null },
+    },
+    parseDOM: [
+      {
+        tag: 'table',
+        getAttrs(dom) {
+          const table = dom as HTMLTableElement;
+          const style = table.style;
+          return {
+            border: table.getAttribute('border') || style.borderWidth || null,
+            borderColor: style.borderColor || null,
+            borderStyle: style.borderStyle || null,
+            width: table.getAttribute('width') || style.width || null,
+            cellpadding: table.getAttribute('cellpadding') || null,
+            cellspacing: table.getAttribute('cellspacing') || null,
+          };
+        },
+      },
+    ],
+    toDOM(node) {
+      const styles: string[] = [];
+      const attrs: Record<string, string> = {};
+
+      if (node.attrs.border) {
+        styles.push(`border: ${node.attrs.border}px solid ${node.attrs.borderColor || '#000'}`);
+      }
+      if (node.attrs.width) {
+        styles.push(`width: ${node.attrs.width}`);
+      }
+      if (styles.length > 0) {
+        attrs.style = styles.join('; ');
+      }
+
+      return ['table', attrs, ['tbody', 0]];
+    },
+  },
+  table_row: {
+    content: '(table_cell | table_header)+',
+    tableRole: 'row',
+    parseDOM: [{ tag: 'tr' }],
+    toDOM() {
+      return ['tr', 0];
+    },
+  },
+  table_cell: {
+    content: 'block+',
+    tableRole: 'cell',
+    isolating: true,
+    attrs: {
+      colspan: { default: 1 },
+      rowspan: { default: 1 },
+      border: { default: null },
+      borderColor: { default: null },
+      backgroundColor: { default: null },
+      width: { default: null },
+      textAlign: { default: null },
+      verticalAlign: { default: null },
+    },
+    parseDOM: [
+      {
+        tag: 'td',
+        getAttrs(dom) {
+          const cell = dom as HTMLTableCellElement;
+          const style = cell.style;
+          return {
+            colspan: cell.colSpan || 1,
+            rowspan: cell.rowSpan || 1,
+            border: style.border || style.borderWidth || null,
+            borderColor: style.borderColor || null,
+            backgroundColor: style.backgroundColor || null,
+            width: cell.getAttribute('width') || style.width || null,
+            textAlign: style.textAlign || null,
+            verticalAlign: style.verticalAlign || cell.getAttribute('valign') || null,
+          };
+        },
+      },
+    ],
+    toDOM(node) {
+      const attrs: Record<string, string> = {};
+      const styles: string[] = [];
+
+      if (node.attrs.colspan !== 1) attrs.colspan = String(node.attrs.colspan);
+      if (node.attrs.rowspan !== 1) attrs.rowspan = String(node.attrs.rowspan);
+
+      if (node.attrs.border) {
+        styles.push(`border: ${node.attrs.border}`);
+      }
+      if (node.attrs.borderColor) {
+        styles.push(`border-color: ${node.attrs.borderColor}`);
+      }
+      if (node.attrs.backgroundColor) {
+        styles.push(`background-color: ${node.attrs.backgroundColor}`);
+      }
+      if (node.attrs.width) {
+        styles.push(`width: ${node.attrs.width}`);
+      }
+      if (node.attrs.textAlign) {
+        styles.push(`text-align: ${node.attrs.textAlign}`);
+      }
+      if (node.attrs.verticalAlign) {
+        styles.push(`vertical-align: ${node.attrs.verticalAlign}`);
+      }
+
+      if (styles.length > 0) {
+        attrs.style = styles.join('; ');
+      }
+
+      return ['td', attrs, 0];
+    },
+  },
+  table_header: {
+    content: 'block+',
+    tableRole: 'header_cell',
+    isolating: true,
+    attrs: {
+      colspan: { default: 1 },
+      rowspan: { default: 1 },
+      border: { default: null },
+      borderColor: { default: null },
+      backgroundColor: { default: null },
+      width: { default: null },
+      textAlign: { default: null },
+    },
+    parseDOM: [
+      {
+        tag: 'th',
+        getAttrs(dom) {
+          const cell = dom as HTMLTableCellElement;
+          const style = cell.style;
+          return {
+            colspan: cell.colSpan || 1,
+            rowspan: cell.rowSpan || 1,
+            border: style.border || style.borderWidth || null,
+            borderColor: style.borderColor || null,
+            backgroundColor: style.backgroundColor || null,
+            width: cell.getAttribute('width') || style.width || null,
+            textAlign: style.textAlign || null,
+          };
+        },
+      },
+    ],
+    toDOM(node) {
+      const attrs: Record<string, string> = {};
+      const styles: string[] = [];
+
+      if (node.attrs.colspan !== 1) attrs.colspan = String(node.attrs.colspan);
+      if (node.attrs.rowspan !== 1) attrs.rowspan = String(node.attrs.rowspan);
+
+      if (node.attrs.border) {
+        styles.push(`border: ${node.attrs.border}`);
+      }
+      if (node.attrs.borderColor) {
+        styles.push(`border-color: ${node.attrs.borderColor}`);
+      }
+      if (node.attrs.backgroundColor) {
+        styles.push(`background-color: ${node.attrs.backgroundColor}`);
+      }
+      if (node.attrs.width) {
+        styles.push(`width: ${node.attrs.width}`);
+      }
+      if (node.attrs.textAlign) {
+        styles.push(`text-align: ${node.attrs.textAlign}`);
+      }
+
+      if (styles.length > 0) {
+        attrs.style = styles.join('; ');
+      }
+
+      return ['th', attrs, 0];
+    },
+  },
+  // Bordered box/container for Word border boxes
+  bordered_box: {
+    content: 'block+',
+    group: 'block',
+    defining: true,
+    attrs: {
+      border: { default: '1px solid #000' },
+      padding: { default: '8px' },
+      backgroundColor: { default: null },
+    },
+    parseDOM: [
+      {
+        tag: 'div[data-bordered-box]',
+      },
+      {
+        // Parse divs/paragraphs with border styles
+        tag: 'div',
+        getAttrs(dom) {
+          const el = dom as HTMLElement;
+          const style = el.style;
+          if (style.border || style.borderWidth || style.borderStyle) {
+            return {
+              border: style.border || `${style.borderWidth || '1px'} ${style.borderStyle || 'solid'} ${style.borderColor || '#000'}`,
+              padding: style.padding || '8px',
+              backgroundColor: style.backgroundColor || null,
+            };
+          }
+          return false;
+        },
+      },
+      {
+        tag: 'p',
+        getAttrs(dom) {
+          const el = dom as HTMLElement;
+          const style = el.style;
+          if (style.border || style.borderWidth || style.borderStyle) {
+            return {
+              border: style.border || `${style.borderWidth || '1px'} ${style.borderStyle || 'solid'} ${style.borderColor || '#000'}`,
+              padding: style.padding || '8px',
+              backgroundColor: style.backgroundColor || null,
+            };
+          }
+          return false;
+        },
+      },
+    ],
+    toDOM(node) {
+      const styles: string[] = [];
+      if (node.attrs.border) styles.push(`border: ${node.attrs.border}`);
+      if (node.attrs.padding) styles.push(`padding: ${node.attrs.padding}`);
+      if (node.attrs.backgroundColor) styles.push(`background-color: ${node.attrs.backgroundColor}`);
+
+      return ['div', { 'data-bordered-box': 'true', style: styles.join('; ') }, 0];
+    },
+  },
 };
 
 // ============================================================================
@@ -204,6 +477,93 @@ const extendedMarks: { [key: string]: MarkSpec } = {
     parseDOM: [{ tag: 'sub' }, { style: 'vertical-align=sub' }],
     toDOM() {
       return ['sub', 0];
+    },
+  },
+  textColor: {
+    attrs: { color: { default: '' } },
+    parseDOM: [
+      {
+        style: 'color',
+        getAttrs: (value: string) => {
+          if (!value || value === 'inherit' || value === 'initial' || value === 'transparent') {
+            return false;
+          }
+          return { color: value };
+        },
+      },
+    ],
+    toDOM(mark) {
+      return ['span', { style: `color: ${mark.attrs.color}` }, 0];
+    },
+  },
+  backgroundColor: {
+    attrs: { color: { default: '' } },
+    parseDOM: [
+      {
+        style: 'background-color',
+        getAttrs: (value: string) => {
+          if (!value || value === 'inherit' || value === 'initial' || value === 'transparent') {
+            return false;
+          }
+          return { color: value };
+        },
+      },
+      {
+        style: 'background',
+        getAttrs: (value: string) => {
+          // Extract color from background shorthand (e.g., "rgb(255,0,0) none")
+          const colorMatch = value.match(/^(#[0-9a-fA-F]{3,6}|rgba?\([^)]+\)|[a-zA-Z]+)/);
+          if (!colorMatch || colorMatch[1] === 'none' || colorMatch[1] === 'transparent') {
+            return false;
+          }
+          return { color: colorMatch[1] };
+        },
+      },
+    ],
+    toDOM(mark) {
+      return ['span', { style: `background-color: ${mark.attrs.color}` }, 0];
+    },
+  },
+  highlight: {
+    attrs: { color: { default: 'yellow' } },
+    parseDOM: [
+      { tag: 'mark' },
+      {
+        tag: 'span[data-highlight]',
+        getAttrs: (dom: HTMLElement) => {
+          return { color: dom.getAttribute('data-highlight') || 'yellow' };
+        },
+      },
+    ],
+    toDOM(mark) {
+      return ['mark', { style: `background-color: ${mark.attrs.color}` }, 0];
+    },
+  },
+  link: {
+    attrs: {
+      href: { default: '' },
+      title: { default: null },
+      target: { default: '_blank' },
+    },
+    inclusive: false,
+    parseDOM: [
+      {
+        tag: 'a[href]',
+        getAttrs(dom) {
+          const a = dom as HTMLAnchorElement;
+          return {
+            href: a.getAttribute('href') || '',
+            title: a.getAttribute('title') || null,
+            target: a.getAttribute('target') || '_blank',
+          };
+        },
+      },
+    ],
+    toDOM(mark) {
+      const attrs: Record<string, string> = { href: mark.attrs.href };
+      if (mark.attrs.title) attrs.title = mark.attrs.title;
+      if (mark.attrs.target) attrs.target = mark.attrs.target;
+      return ['a', attrs, 0];
     },
   },
 };

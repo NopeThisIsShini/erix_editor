@@ -11,9 +11,11 @@ import { Plugin } from 'prosemirror-state';
 import { editorSchema } from '../schema/index';
 import { insertPageBreak, printDocument } from '../commands/index';
 import { createPlaceholderPlugin } from './placeholder';
+import { createClipboardPastePlugin } from './clipboard-paste';
 
 // Re-export placeholder utilities for external API usage
 export { placeholderPluginKey, updatePlaceholder } from './placeholder';
+export { clipboardPastePluginKey, transformWordHTML } from './clipboard-paste';
 
 /**
  * Keyboard shortcuts for formatting marks
@@ -69,6 +71,9 @@ export function createEditorPlugins(options: EditorPluginsOptions = {}): Plugin[
   const { placeholder = 'Start typing...' } = options;
 
   return [
+    // Clipboard paste plugin for Word/RTF formatting
+    createClipboardPastePlugin(),
+
     // Placeholder plugin
     createPlaceholderPlugin(placeholder),
 
