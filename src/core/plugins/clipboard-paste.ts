@@ -626,6 +626,27 @@ function cleanElement(element: Element, doc: Document): Element | DocumentFragme
         }
     }
 
+    // Ensure list items, table cells, and blockquotes have proper block content
+    // ProseMirror requires block+ content in li, td, th, and blockquote
+    if (newTagName === 'li' || newTagName === 'td' || newTagName === 'th' || newTagName === 'blockquote') {
+        const hasBlockContent = Array.from(newElement.childNodes).some(child => {
+            if (child.nodeType === Node.ELEMENT_NODE) {
+                const childTag = (child as Element).tagName.toLowerCase();
+                return ['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'blockquote', 'pre', 'table'].includes(childTag);
+            }
+            return false;
+        });
+
+        if (!hasBlockContent && newElement.hasChildNodes()) {
+            // Wrap all inline content in a paragraph
+            const wrapper = doc.createElement('p');
+            while (newElement.firstChild) {
+                wrapper.appendChild(newElement.firstChild);
+            }
+            newElement.appendChild(wrapper);
+        }
+    }
+
     // Don't return empty block elements
     const isBlock = ['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'blockquote'].includes(newTagName);
     if (isBlock && !newElement.hasChildNodes()) {
@@ -636,6 +657,17 @@ function cleanElement(element: Element, doc: Document): Element | DocumentFragme
     const isInline = ['span', 'strong', 'em', 'u', 's', 'sup', 'sub'].includes(newTagName);
     if (isInline && !newElement.textContent?.trim() && !newElement.hasChildNodes()) {
         return null;
+    }
+
+    // Unwrap spans that have no styling purpose (no style attribute)
+    // This cleans up unnecessary wrapper elements that could interfere with ProseMirror
+    if (newTagName === 'span' && !newElement.hasAttribute('style') && newElement.hasChildNodes()) {
+        // Return children as a fragment
+        const fragment = doc.createDocumentFragment();
+        while (newElement.firstChild) {
+            fragment.appendChild(newElement.firstChild);
+        }
+        return fragment;
     }
 
     return newElement;
@@ -814,13 +846,18 @@ function convertWordLists(container: HTMLElement, doc: Document): void {
 
             const li = doc.createElement('li');
 
-            // Move content to li
+            // Create a paragraph wrapper for the list item content
+            // ProseMirror's list_item schema expects block+ content
+            const contentWrapper = doc.createElement('p');
+
+            // Move content to the paragraph wrapper
             while (p.firstChild) {
-                li.appendChild(p.firstChild);
+                contentWrapper.appendChild(p.firstChild);
             }
 
-            // Skip empty items
-            if (li.textContent?.trim() || li.querySelector('img, table')) {
+            // Only add if there's actual content
+            if (contentWrapper.textContent?.trim() || contentWrapper.querySelector('img, table, br')) {
+                li.appendChild(contentWrapper);
                 list.appendChild(li);
             }
 
@@ -920,6 +957,15 @@ function removeEmptyElements(container: HTMLElement): void {
 }
 
 /**
+ * Block-level element tags for whitespace normalization
+ */
+const BLOCK_TAGS = new Set([
+    'p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'li', 'blockquote', 'pre', 'table', 'tr', 'td', 'th',
+    'ul', 'ol', 'article', 'section', 'header', 'footer', 'nav', 'aside'
+]);
+
+/**
  * Normalizes whitespace in text nodes
  */
 function normalizeWhitespace(container: HTMLElement): void {
@@ -941,10 +987,11 @@ function normalizeWhitespace(container: HTMLElement): void {
         text = text.replace(/[ \t]+/g, ' ');
 
         // Remove leading/trailing whitespace from block-level element text
+        // Use tag-based detection instead of getComputedStyle (which fails on detached documents)
         const parent = node.parentElement;
         if (parent) {
-            const display = window.getComputedStyle(parent).display;
-            if (display === 'block' || display === 'list-item') {
+            const isBlockElement = BLOCK_TAGS.has(parent.tagName.toLowerCase());
+            if (isBlockElement) {
                 if (node === parent.firstChild) {
                     text = text.replace(/^\s+/, '');
                 }
@@ -956,6 +1003,89 @@ function normalizeWhitespace(container: HTMLElement): void {
 
         node.textContent = text;
     });
+}
+
+/**
+ * Wraps orphaned inline content at the root level in paragraphs.
+ * ProseMirror expects block-level content at the document root.
+ */
+function wrapOrphanedInlineContent(container: HTMLElement, doc: Document): void {
+    const blockElements = new Set([
+        'p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+        'ul', 'ol', 'li', 'blockquote', 'pre', 'table',
+        'thead', 'tbody', 'tfoot', 'tr', 'hr', 'br'
+    ]);
+
+    const children = Array.from(container.childNodes);
+    let currentParagraph: HTMLParagraphElement | null = null;
+    const nodesToProcess: { node: Node; needsWrap: boolean }[] = [];
+
+    // First pass: identify nodes that need wrapping
+    for (const child of children) {
+        if (child.nodeType === Node.TEXT_NODE) {
+            const text = child.textContent || '';
+            // Skip whitespace-only text nodes at root level
+            if (!text.trim()) {
+                nodesToProcess.push({ node: child, needsWrap: false });
+                continue;
+            }
+            nodesToProcess.push({ node: child, needsWrap: true });
+        } else if (child.nodeType === Node.ELEMENT_NODE) {
+            const element = child as Element;
+            const tagName = element.tagName.toLowerCase();
+            if (blockElements.has(tagName)) {
+                nodesToProcess.push({ node: child, needsWrap: false });
+            } else {
+                // Inline element at root - needs wrapping
+                nodesToProcess.push({ node: child, needsWrap: true });
+            }
+        }
+    }
+
+    // Second pass: wrap inline content in paragraphs
+    const newChildren: Node[] = [];
+    currentParagraph = null;
+
+    for (const { node, needsWrap } of nodesToProcess) {
+        if (needsWrap) {
+            if (!currentParagraph) {
+                currentParagraph = doc.createElement('p');
+            }
+            currentParagraph.appendChild(node);
+        } else {
+            // Block element or whitespace - close current paragraph
+            if (currentParagraph) {
+                if (currentParagraph.textContent?.trim()) {
+                    newChildren.push(currentParagraph);
+                }
+                currentParagraph = null;
+            }
+            // Keep block elements
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                newChildren.push(node);
+            }
+        }
+    }
+
+    // Don't forget the last paragraph
+    if (currentParagraph && currentParagraph.textContent?.trim()) {
+        newChildren.push(currentParagraph);
+    }
+
+    // Clear container and add processed children
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+    for (const child of newChildren) {
+        container.appendChild(child);
+    }
+
+    // If container is empty, add an empty paragraph
+    if (!container.hasChildNodes()) {
+        const emptyP = doc.createElement('p');
+        emptyP.appendChild(doc.createElement('br'));
+        container.appendChild(emptyP);
+    }
 }
 
 // ============================================================================
@@ -999,6 +1129,10 @@ export function transformWordHTML(html: string): string {
     // Stage 5: Final cleanup
     removeEmptyElements(output);
     normalizeWhitespace(output);
+
+    // Stage 6: Wrap orphaned inline content in paragraphs
+    // ProseMirror expects block-level content at the document root
+    wrapOrphanedInlineContent(output, outputDoc);
 
     return output.innerHTML;
 }

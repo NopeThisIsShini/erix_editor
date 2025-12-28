@@ -51,6 +51,11 @@
   font-size: 16px;
   line-height: 1.6;
   color: var(--editor-text);
+  /* CRITICAL: ProseMirror requires this for proper content editing */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  -webkit-font-variant-ligatures: none;
+  font-variant-ligatures: none;
 }
 
 .editor-canvas .ProseMirror:focus {
