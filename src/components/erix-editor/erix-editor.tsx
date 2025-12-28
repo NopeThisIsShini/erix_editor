@@ -105,6 +105,11 @@ export class ErixEditor {
   @State() private editorView?: EditorView;
 
   /**
+   * Current zoom level for the editor (percentage)
+   */
+  @State() private zoomLevel: number = 100;
+
+  /**
    * The public API instance.
    */
   private _api?: ErixEditorAPI;
@@ -306,11 +311,21 @@ export class ErixEditor {
     this.theme = this.theme === 'light' ? 'dark' : 'light';
   };
 
+  private handleZoomChange = (event: CustomEvent<number>) => {
+    this.zoomLevel = event.detail;
+  };
+
   // ===========================================================================
   // RENDER
   // ===========================================================================
 
   render() {
+    // Dynamic zoom style for the editor canvas
+    const canvasZoomStyle = {
+      transform: `scale(${this.zoomLevel / 100})`,
+      transformOrigin: 'top center',
+    };
+
     return (
       <Host data-theme={this.theme}>
         <div class="editor-wrapper">
@@ -348,16 +363,24 @@ export class ErixEditor {
               'print',
               'import-word'
             ]}
-            showThemeToggle={true}
-            onThemeToggle={this.handleThemeToggle}
+            showThemeToggle={false}
           ></erix-toolbar>
 
           {/* Editor Content Area */}
           <div class="editor-content">
-            <div class="editor-canvas" ref={el => (this.editorContainer = el)}></div>
+            <div class="editor-canvas" style={canvasZoomStyle} ref={el => (this.editorContainer = el)}></div>
           </div>
+
+          {/* Status Bar at the bottom - Word-like with zoom and theme toggle */}
+          <erix-status-bar
+            theme={this.theme}
+            zoom={this.zoomLevel}
+            onThemeToggle={this.handleThemeToggle}
+            onZoomChange={this.handleZoomChange}
+          ></erix-status-bar>
         </div>
       </Host>
     );
   }
 }
+

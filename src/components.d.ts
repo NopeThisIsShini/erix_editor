@@ -212,6 +212,38 @@ export namespace Components {
         "width": SelectWidth;
     }
     /**
+     * @component ErixStatusBar
+     * A Word-like status bar component positioned at the bottom of the editor.
+     * Includes zoom controls and theme toggle.
+     */
+    interface ErixStatusBar {
+        /**
+          * Maximum zoom level
+          * @default 200
+         */
+        "maxZoom": number;
+        /**
+          * Minimum zoom level
+          * @default 50
+         */
+        "minZoom": number;
+        /**
+          * Current theme
+          * @default 'light'
+         */
+        "theme": 'light' | 'dark' | string;
+        /**
+          * Current zoom level (percentage, e.g., 100 = 100%)
+          * @default 100
+         */
+        "zoom": number;
+        /**
+          * Zoom step for +/- buttons
+          * @default 10
+         */
+        "zoomStep": number;
+    }
+    /**
      * @component ErixToolbar
      * Dynamic toolbar that renders plugins based on configuration.
      * Only shows plugins that are configured - no static buttons.
@@ -249,6 +281,10 @@ export interface ErixButtonCustomEvent<T> extends CustomEvent<T> {
 export interface ErixSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLErixSelectElement;
+}
+export interface ErixStatusBarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLErixStatusBarElement;
 }
 export interface ErixToolbarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -362,6 +398,29 @@ declare global {
         prototype: HTMLErixSelectElement;
         new (): HTMLErixSelectElement;
     };
+    interface HTMLErixStatusBarElementEventMap {
+        "themeToggle": void;
+        "zoomChange": number;
+    }
+    /**
+     * @component ErixStatusBar
+     * A Word-like status bar component positioned at the bottom of the editor.
+     * Includes zoom controls and theme toggle.
+     */
+    interface HTMLErixStatusBarElement extends Components.ErixStatusBar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLErixStatusBarElementEventMap>(type: K, listener: (this: HTMLErixStatusBarElement, ev: ErixStatusBarCustomEvent<HTMLErixStatusBarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLErixStatusBarElementEventMap>(type: K, listener: (this: HTMLErixStatusBarElement, ev: ErixStatusBarCustomEvent<HTMLErixStatusBarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLErixStatusBarElement: {
+        prototype: HTMLErixStatusBarElement;
+        new (): HTMLErixStatusBarElement;
+    };
     interface HTMLErixToolbarElementEventMap {
         "themeToggle": void;
     }
@@ -391,6 +450,7 @@ declare global {
         "erix-editor": HTMLErixEditorElement;
         "erix-icon": HTMLErixIconElement;
         "erix-select": HTMLErixSelectElement;
+        "erix-status-bar": HTMLErixStatusBarElement;
         "erix-toolbar": HTMLErixToolbarElement;
     }
 }
@@ -590,6 +650,46 @@ declare namespace LocalJSX {
         "width"?: SelectWidth;
     }
     /**
+     * @component ErixStatusBar
+     * A Word-like status bar component positioned at the bottom of the editor.
+     * Includes zoom controls and theme toggle.
+     */
+    interface ErixStatusBar {
+        /**
+          * Maximum zoom level
+          * @default 200
+         */
+        "maxZoom"?: number;
+        /**
+          * Minimum zoom level
+          * @default 50
+         */
+        "minZoom"?: number;
+        /**
+          * Event emitted when theme toggle is requested
+         */
+        "onThemeToggle"?: (event: ErixStatusBarCustomEvent<void>) => void;
+        /**
+          * Event emitted when zoom level changes
+         */
+        "onZoomChange"?: (event: ErixStatusBarCustomEvent<number>) => void;
+        /**
+          * Current theme
+          * @default 'light'
+         */
+        "theme"?: 'light' | 'dark' | string;
+        /**
+          * Current zoom level (percentage, e.g., 100 = 100%)
+          * @default 100
+         */
+        "zoom"?: number;
+        /**
+          * Zoom step for +/- buttons
+          * @default 10
+         */
+        "zoomStep"?: number;
+    }
+    /**
      * @component ErixToolbar
      * Dynamic toolbar that renders plugins based on configuration.
      * Only shows plugins that are configured - no static buttons.
@@ -626,6 +726,7 @@ declare namespace LocalJSX {
         "erix-editor": ErixEditor;
         "erix-icon": ErixIcon;
         "erix-select": ErixSelect;
+        "erix-status-bar": ErixStatusBar;
         "erix-toolbar": ErixToolbar;
     }
 }
@@ -688,6 +789,12 @@ declare module "@stencil/core" {
              * A reusable select/dropdown component for the editor toolbar.
              */
             "erix-select": LocalJSX.ErixSelect & JSXBase.HTMLAttributes<HTMLErixSelectElement>;
+            /**
+             * @component ErixStatusBar
+             * A Word-like status bar component positioned at the bottom of the editor.
+             * Includes zoom controls and theme toggle.
+             */
+            "erix-status-bar": LocalJSX.ErixStatusBar & JSXBase.HTMLAttributes<HTMLErixStatusBarElement>;
             /**
              * @component ErixToolbar
              * Dynamic toolbar that renders plugins based on configuration.

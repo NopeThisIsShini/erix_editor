@@ -42,6 +42,7 @@
   max-width: 800px;
   background-color: var(--editor-bg);
   margin: 0 auto;
+  transition: transform 0.15s ease;
 }
 
 /* Main editor area */
