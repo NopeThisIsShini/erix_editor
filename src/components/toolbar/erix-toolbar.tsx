@@ -20,10 +20,17 @@ import {
   printDocument,
   insertPageBreak,
   setTextCase,
+  setTextAlignment,
+  getActiveAlignment,
+  setFontSize,
+  getActiveFontSize,
+  setFontFamily,
+  getActiveFontFamily,
   undo,
   redo,
 } from '@src/core';
 import type { ToolbarItem } from '@src/api';
+import type { SelectOption } from '../ui/erix-select/erix-select';
 
 /**
  * Plugin definition for toolbar items
@@ -161,6 +168,92 @@ const BUILTIN_PLUGINS: Record<string, ToolbarPluginDef> = {
     execute: (view) => { insertPageBreak(view.state, view.dispatch); view.focus(); },
   },
 
+  // Alignment
+  'align-left': {
+    id: 'align-left',
+    label: 'Align Left',
+    icon: 'textAlignLeft',
+    group: 'alignment',
+    execute: (view) => { setTextAlignment('left')(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => getActiveAlignment(view.state) === 'left',
+  },
+  'align-center': {
+    id: 'align-center',
+    label: 'Align Center',
+    icon: 'textAlignCenter',
+    group: 'alignment',
+    execute: (view) => { setTextAlignment('center')(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => getActiveAlignment(view.state) === 'center',
+  },
+  'align-right': {
+    id: 'align-right',
+    label: 'Align Right',
+    icon: 'textAlignRight',
+    group: 'alignment',
+    execute: (view) => { setTextAlignment('right')(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => getActiveAlignment(view.state) === 'right',
+  },
+  'align-justify': {
+    id: 'align-justify',
+    label: 'Justify',
+    icon: 'textAlignJustify',
+    group: 'alignment',
+    execute: (view) => { setTextAlignment('justify')(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => getActiveAlignment(view.state) === 'justify',
+  },
+
+  // Font Family
+  'font-family': {
+    id: 'font-family',
+    label: 'Font Family',
+    icon: 'fontFamily',
+    group: 'font',
+    type: 'select',
+    options: [
+      { value: '', label: 'Font' },
+      { value: 'Arial, sans-serif', label: 'Arial' },
+      { value: '"Times New Roman", serif', label: 'Times New Roman' },
+      { value: 'Georgia, serif', label: 'Georgia' },
+      { value: '"Courier New", monospace', label: 'Courier New' },
+      { value: 'Verdana, sans-serif', label: 'Verdana' },
+      { value: 'Tahoma, sans-serif', label: 'Tahoma' },
+      { value: '"Trebuchet MS", sans-serif', label: 'Trebuchet MS' },
+      { value: 'Impact, sans-serif', label: 'Impact' },
+      { value: '"Comic Sans MS", cursive', label: 'Comic Sans MS' },
+      { value: '"Lucida Console", monospace', label: 'Lucida Console' },
+    ],
+    execute: (view) => { /* Handled by select change */ view.focus(); },
+  },
+
+  // Font Size
+  'font-size': {
+    id: 'font-size',
+    label: 'Font Size',
+    icon: 'fontSize',
+    group: 'font',
+    type: 'select',
+    options: [
+      { value: '', label: 'Size' },
+      { value: '8pt', label: '8' },
+      { value: '9pt', label: '9' },
+      { value: '10pt', label: '10' },
+      { value: '11pt', label: '11' },
+      { value: '12pt', label: '12' },
+      { value: '14pt', label: '14' },
+      { value: '16pt', label: '16' },
+      { value: '18pt', label: '18' },
+      { value: '20pt', label: '20' },
+      { value: '22pt', label: '22' },
+      { value: '24pt', label: '24' },
+      { value: '26pt', label: '26' },
+      { value: '28pt', label: '28' },
+      { value: '36pt', label: '36' },
+      { value: '48pt', label: '48' },
+      { value: '72pt', label: '72' },
+    ],
+    execute: (view) => { /* Handled by select change */ view.focus(); },
+  },
+
   // Tools
   'print': {
     id: 'print',
@@ -179,11 +272,11 @@ const BUILTIN_PLUGINS: Record<string, ToolbarPluginDef> = {
       try {
         const { openWordFileDialog, parseFromHTML } = await import('@src/api/serializers');
         const result = await openWordFileDialog();
-        
+
         if (result && view) {
           const schema = view.state.schema;
           const doc = parseFromHTML(result.html, schema);
-          
+
           // Replace content
           const tr = view.state.tr.replaceWith(0, view.state.doc.content.size, doc.content);
           view.dispatch(tr);
@@ -261,7 +354,7 @@ export class ErixToolbar {
   @Listen('mousedown', { target: 'document' })
   handleDocumentClick(event: MouseEvent) {
     const path = event.composedPath();
-    
+
     if (this.activeDropdown) {
       const el = this.el.shadowRoot?.querySelector(`.dropdown-${this.activeDropdown}`);
       if (el && !path.includes(el)) {
@@ -290,13 +383,31 @@ export class ErixToolbar {
 
   private handlePluginClick = async (plugin: ToolbarPluginDef) => {
     if (!this.view) return;
-    
+
     const result = plugin.execute(this.view);
     // Handle async execute functions
     if (result instanceof Promise) {
       await result;
     }
-    
+
+    this.updateActiveFormats();
+  };
+
+  private handleFontSizeChange = (event: CustomEvent<string>) => {
+    if (!this.view) return;
+    const size = event.detail;
+    if (size) {
+      setFontSize(size)(this.view.state, this.view.dispatch);
+      this.view.focus();
+      this.updateActiveFormats();
+    }
+  };
+
+  private handleFontFamilyChange = (event: CustomEvent<string>) => {
+    if (!this.view) return;
+    const family = event.detail;
+    setFontFamily(family)(this.view.state, this.view.dispatch);
+    this.view.focus();
     this.updateActiveFormats();
   };
 
@@ -320,6 +431,49 @@ export class ErixToolbar {
       >
         <erix-icon name={plugin.icon as any} size={18}></erix-icon>
       </erix-button>
+    );
+  }
+
+  /**
+   * Render a select-type plugin (dropdown) using erix-select component
+   */
+  private renderSelectPlugin(plugin: ToolbarPluginDef) {
+    if (!this.view || !plugin.options) return null;
+
+    // Determine current value and handler based on plugin type
+    let currentValue = '';
+    let changeHandler: (event: CustomEvent<string>) => void;
+    let width: 'sm' | 'md' | 'lg' = 'md';
+
+    if (plugin.id === 'font-size') {
+      currentValue = getActiveFontSize(this.view.state) || '';
+      changeHandler = this.handleFontSizeChange;
+      width = 'sm';
+    } else if (plugin.id === 'font-family') {
+      currentValue = getActiveFontFamily(this.view.state) || '';
+      changeHandler = this.handleFontFamilyChange;
+      width = 'lg';
+    } else {
+      // Generic fallback
+      currentValue = '';
+      changeHandler = () => { };
+    }
+
+    // Convert options to SelectOption format
+    const selectOptions: SelectOption[] = plugin.options.map(opt => ({
+      value: opt.value,
+      label: opt.label,
+    }));
+
+    return (
+      <erix-select
+        key={plugin.id}
+        options={selectOptions}
+        value={currentValue}
+        selectTitle={plugin.label}
+        width={width}
+        onErixChange={changeHandler}
+      />
     );
   }
 
@@ -371,7 +525,12 @@ export class ErixToolbar {
           elements.push(<erix-divider key={`divider-${elements.length}`}></erix-divider>);
         }
 
-        currentGroupItems.push(this.renderPluginButton(plugin));
+        // Render based on plugin type
+        if (plugin.type === 'select') {
+          currentGroupItems.push(this.renderSelectPlugin(plugin));
+        } else {
+          currentGroupItems.push(this.renderPluginButton(plugin));
+        }
         lastGroup = plugin.group;
       }
     }
