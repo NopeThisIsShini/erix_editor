@@ -24,7 +24,7 @@
   width: 100%;
   height: 100%;
   border: 1px solid var(--editor-border);
-  border-radius: var(--editor-radius);
+  /* border-radius: var(--editor-radius); */
   overflow: hidden;
   background-color: var(--editor-bg);
 }
