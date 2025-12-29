@@ -70,8 +70,7 @@
   color: var(--editor-muted-text);
   pointer-events: none;
   height: 0;
-  font-style: italic;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 /* Paragraphs */
@@ -354,7 +353,6 @@
     overflow: visible !important;
     background-color: white !important;
     border: none !important;
-    padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
     max-width: none !important;
@@ -383,5 +381,11 @@
   .editor-canvas .ProseMirror .page-break span,
   .editor-canvas .ProseMirror .page-break::before {
     display: none !important;
+  }
+
+  /* Hide placeholder in print */
+  .editor-canvas .ProseMirror .is-editor-empty::before {
+    display: none !important;
+    content: none !important;
   }
 }
