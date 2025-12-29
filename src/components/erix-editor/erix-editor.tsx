@@ -323,7 +323,7 @@ export class ErixEditor {
     // Dynamic zoom style for the editor canvas
     const canvasZoomStyle = {
       transform: `scale(${this.zoomLevel / 100})`,
-      transformOrigin: 'top center',
+      transformOrigin: 'center',
     };
 
     return (
