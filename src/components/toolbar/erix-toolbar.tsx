@@ -28,6 +28,7 @@ import {
   getActiveFontFamily,
   undo,
   redo,
+  insertTable,
 } from '@src/core';
 import type { ToolbarItem } from '@src/api';
 import type { SelectOption } from '../ui/erix-select/erix-select';
@@ -288,6 +289,14 @@ const BUILTIN_PLUGINS: Record<string, ToolbarPluginDef> = {
       }
     },
   },
+  'table': {
+    id: 'table',
+    label: 'Insert Table',
+    icon: 'table',
+    group: 'insert',
+    type: 'dropdown',
+    execute: () => { },
+  },
 };
 
 /**
@@ -411,6 +420,13 @@ export class ErixToolbar {
     this.updateActiveFormats();
   };
 
+  private handleInsertTable = (rows: number, cols: number) => {
+    if (!this.view) return;
+    this.view.focus();
+    insertTable(rows, cols)(this.view.state, this.view.dispatch);
+    this.updateActiveFormats();
+  };
+
   /**
    * Render a single plugin button
    */
@@ -478,6 +494,32 @@ export class ErixToolbar {
   }
 
   /**
+   * Render a dropdown-type plugin (e.g. Table Picker)
+   */
+  private renderDropdownPlugin(plugin: ToolbarPluginDef) {
+    if (!this.view) return null;
+
+    if (plugin.id === 'table') {
+      return (
+        <erix-dropdown key={plugin.id} triggerTitle={plugin.label}>
+          <div slot="trigger">
+            <erix-icon name="table" size={18}></erix-icon>
+          </div>
+          <div slot="menu">
+            <erix-table-picker
+              onSelectGrid={(e: CustomEvent<{ rows: number; cols: number }>) => {
+                this.handleInsertTable(e.detail.rows, e.detail.cols);
+              }}
+            ></erix-table-picker>
+          </div>
+        </erix-dropdown>
+      );
+    }
+
+    return null;
+  }
+
+  /**
    * Render toolbar items dynamically
    */
   private renderItems() {
@@ -528,6 +570,8 @@ export class ErixToolbar {
         // Render based on plugin type
         if (plugin.type === 'select') {
           currentGroupItems.push(this.renderSelectPlugin(plugin));
+        } else if (plugin.type === 'dropdown') {
+          currentGroupItems.push(this.renderDropdownPlugin(plugin));
         } else {
           currentGroupItems.push(this.renderPluginButton(plugin));
         }

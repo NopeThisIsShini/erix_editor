@@ -219,7 +219,9 @@ const additionalNodes: { [key: string]: NodeSpec } = {
     ],
     toDOM(node) {
       const styles: string[] = [];
-      const attrs: Record<string, string> = {};
+      const attrs: Record<string, string> = { 
+        style: 'table-layout: fixed; border-collapse: collapse; width: 100%;' 
+      };
 
       if (node.attrs.border) {
         styles.push(`border: ${node.attrs.border}px solid ${node.attrs.borderColor || '#000'}`);
@@ -228,7 +230,7 @@ const additionalNodes: { [key: string]: NodeSpec } = {
         styles.push(`width: ${node.attrs.width}`);
       }
       if (styles.length > 0) {
-        attrs.style = styles.join('; ');
+        attrs.style = (attrs.style || '') + styles.join('; ');
       }
 
       return ['table', attrs, ['tbody', 0]];
@@ -249,10 +251,10 @@ const additionalNodes: { [key: string]: NodeSpec } = {
     attrs: {
       colspan: { default: 1 },
       rowspan: { default: 1 },
+      colwidth: { default: null },
       border: { default: null },
       borderColor: { default: null },
       backgroundColor: { default: null },
-      width: { default: null },
       textAlign: { default: null },
       verticalAlign: { default: null },
     },
@@ -262,13 +264,14 @@ const additionalNodes: { [key: string]: NodeSpec } = {
         getAttrs(dom) {
           const cell = dom as HTMLTableCellElement;
           const style = cell.style;
+          const colwidth = cell.getAttribute('data-colwidth');
           return {
             colspan: cell.colSpan || 1,
             rowspan: cell.rowSpan || 1,
+            colwidth: colwidth ? colwidth.split(',').map(Number) : null,
             border: style.border || style.borderWidth || null,
             borderColor: style.borderColor || null,
             backgroundColor: style.backgroundColor || null,
-            width: cell.getAttribute('width') || style.width || null,
             textAlign: style.textAlign || null,
             verticalAlign: style.verticalAlign || cell.getAttribute('valign') || null,
           };
@@ -281,6 +284,7 @@ const additionalNodes: { [key: string]: NodeSpec } = {
 
       if (node.attrs.colspan !== 1) attrs.colspan = String(node.attrs.colspan);
       if (node.attrs.rowspan !== 1) attrs.rowspan = String(node.attrs.rowspan);
+      if (node.attrs.colwidth) attrs['data-colwidth'] = node.attrs.colwidth.join(',');
 
       if (node.attrs.border) {
         styles.push(`border: ${node.attrs.border}`);
@@ -290,9 +294,6 @@ const additionalNodes: { [key: string]: NodeSpec } = {
       }
       if (node.attrs.backgroundColor) {
         styles.push(`background-color: ${node.attrs.backgroundColor}`);
-      }
-      if (node.attrs.width) {
-        styles.push(`width: ${node.attrs.width}`);
       }
       if (node.attrs.textAlign) {
         styles.push(`text-align: ${node.attrs.textAlign}`);
@@ -315,10 +316,10 @@ const additionalNodes: { [key: string]: NodeSpec } = {
     attrs: {
       colspan: { default: 1 },
       rowspan: { default: 1 },
+      colwidth: { default: null },
       border: { default: null },
       borderColor: { default: null },
       backgroundColor: { default: null },
-      width: { default: null },
       textAlign: { default: null },
     },
     parseDOM: [
@@ -327,13 +328,14 @@ const additionalNodes: { [key: string]: NodeSpec } = {
         getAttrs(dom) {
           const cell = dom as HTMLTableCellElement;
           const style = cell.style;
+          const colwidth = cell.getAttribute('data-colwidth');
           return {
             colspan: cell.colSpan || 1,
             rowspan: cell.rowSpan || 1,
+            colwidth: colwidth ? colwidth.split(',').map(Number) : null,
             border: style.border || style.borderWidth || null,
             borderColor: style.borderColor || null,
             backgroundColor: style.backgroundColor || null,
-            width: cell.getAttribute('width') || style.width || null,
             textAlign: style.textAlign || null,
           };
         },
@@ -345,6 +347,7 @@ const additionalNodes: { [key: string]: NodeSpec } = {
 
       if (node.attrs.colspan !== 1) attrs.colspan = String(node.attrs.colspan);
       if (node.attrs.rowspan !== 1) attrs.rowspan = String(node.attrs.rowspan);
+      if (node.attrs.colwidth) attrs['data-colwidth'] = node.attrs.colwidth.join(',');
 
       if (node.attrs.border) {
         styles.push(`border: ${node.attrs.border}`);
@@ -354,9 +357,6 @@ const additionalNodes: { [key: string]: NodeSpec } = {
       }
       if (node.attrs.backgroundColor) {
         styles.push(`background-color: ${node.attrs.backgroundColor}`);
-      }
-      if (node.attrs.width) {
-        styles.push(`width: ${node.attrs.width}`);
       }
       if (node.attrs.textAlign) {
         styles.push(`text-align: ${node.attrs.textAlign}`);

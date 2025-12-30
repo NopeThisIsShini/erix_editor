@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  user-select: none;
+}
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: var(--editor-surface, #ffffff);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--editor-border, #e2e8f0);
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--editor-border, #e2e8f0);
+  margin: 0 4px;
+}
+
+[data-theme='dark'] .table-toolbar {
+  background: #1e1e1e;
+  border-color: #333;
+}
+
+[data-theme='dark'] .toolbar-divider {
+  background-color: #333;
+}

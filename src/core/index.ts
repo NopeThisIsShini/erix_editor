@@ -69,3 +69,6 @@ export {
 
 // Commands - History
 export { undo, redo } from './commands/index';
+
+// Table Commands
+export * from './commands/table';

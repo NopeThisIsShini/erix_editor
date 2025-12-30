@@ -9,9 +9,20 @@ import { baseKeymap, toggleMark } from 'prosemirror-commands';
 import { splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 import { Plugin } from 'prosemirror-state';
 import { editorSchema } from '../schema/index';
-import { insertPageBreak, printDocument } from '../commands/index';
+import { insertPageBreak, printDocument, onTab, exitTableUp, exitTableDown } from '../commands/index';
 import { createPlaceholderPlugin } from './placeholder';
 import { createClipboardPastePlugin } from './clipboard-paste';
+import { 
+  columnResizing, 
+  tableEditing, 
+  addRowBefore, 
+  addRowAfter, 
+  addColumnBefore, 
+  addColumnAfter, 
+  deleteRow, 
+  deleteColumn 
+} from 'prosemirror-tables';
+import { createTableToolbarPlugin } from './table-toolbar';
 
 // Re-export placeholder utilities for external API usage
 export { placeholderPluginKey, updatePlaceholder } from './placeholder';
@@ -42,6 +53,22 @@ const listKeymap = {
   'Enter': splitListItem(editorSchema.nodes.list_item),
   'Tab': sinkListItem(editorSchema.nodes.list_item),
   'Shift-Tab': liftListItem(editorSchema.nodes.list_item),
+};
+
+/**
+ * Keyboard shortcuts for table operations
+ */
+const tableKeymap = {
+  'Tab': onTab(1),
+  'Shift-Tab': onTab(-1),
+  'ArrowUp': exitTableUp,
+  'ArrowDown': exitTableDown,
+  'Mod-Alt-ArrowUp': addRowBefore,
+  'Mod-Alt-ArrowDown': addRowAfter,
+  'Mod-Alt-ArrowLeft': addColumnBefore,
+  'Mod-Alt-ArrowRight': addColumnAfter,
+  'Mod-Backspace': deleteRow,
+  'Mod-Shift-Backspace': deleteColumn,
 };
 
 /**
@@ -80,8 +107,14 @@ export function createEditorPlugins(options: EditorPluginsOptions = {}): Plugin[
     // History plugin (undo/redo stack)
     history(),
 
+    // Table plugins
+    columnResizing({ handleWidth: 12 }),
+    tableEditing(),
+    createTableToolbarPlugin(),
+
     // Custom keymaps (order: most specific to least specific)
     keymap(historyKeymap),
+    keymap(tableKeymap),
     keymap(markKeymap),
     keymap(docKeymap),
     keymap(listKeymap),

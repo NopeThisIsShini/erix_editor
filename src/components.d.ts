@@ -243,6 +243,20 @@ export namespace Components {
          */
         "zoomStep": number;
     }
+    interface ErixTablePicker {
+        /**
+          * @default 10
+         */
+        "cols": number;
+        /**
+          * @default 10
+         */
+        "rows": number;
+    }
+    interface ErixTableToolbar {
+        "update": () => Promise<void>;
+        "view"?: EditorView;
+    }
     /**
      * @component ErixToolbar
      * Dynamic toolbar that renders plugins based on configuration.
@@ -285,6 +299,10 @@ export interface ErixSelectCustomEvent<T> extends CustomEvent<T> {
 export interface ErixStatusBarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLErixStatusBarElement;
+}
+export interface ErixTablePickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLErixTablePickerElement;
 }
 export interface ErixToolbarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -421,6 +439,29 @@ declare global {
         prototype: HTMLErixStatusBarElement;
         new (): HTMLErixStatusBarElement;
     };
+    interface HTMLErixTablePickerElementEventMap {
+        "selectGrid": { rows: number; cols: number };
+    }
+    interface HTMLErixTablePickerElement extends Components.ErixTablePicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLErixTablePickerElementEventMap>(type: K, listener: (this: HTMLErixTablePickerElement, ev: ErixTablePickerCustomEvent<HTMLErixTablePickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLErixTablePickerElementEventMap>(type: K, listener: (this: HTMLErixTablePickerElement, ev: ErixTablePickerCustomEvent<HTMLErixTablePickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLErixTablePickerElement: {
+        prototype: HTMLErixTablePickerElement;
+        new (): HTMLErixTablePickerElement;
+    };
+    interface HTMLErixTableToolbarElement extends Components.ErixTableToolbar, HTMLStencilElement {
+    }
+    var HTMLErixTableToolbarElement: {
+        prototype: HTMLErixTableToolbarElement;
+        new (): HTMLErixTableToolbarElement;
+    };
     interface HTMLErixToolbarElementEventMap {
         "themeToggle": void;
     }
@@ -451,6 +492,8 @@ declare global {
         "erix-icon": HTMLErixIconElement;
         "erix-select": HTMLErixSelectElement;
         "erix-status-bar": HTMLErixStatusBarElement;
+        "erix-table-picker": HTMLErixTablePickerElement;
+        "erix-table-toolbar": HTMLErixTableToolbarElement;
         "erix-toolbar": HTMLErixToolbarElement;
     }
 }
@@ -689,6 +732,20 @@ declare namespace LocalJSX {
          */
         "zoomStep"?: number;
     }
+    interface ErixTablePicker {
+        /**
+          * @default 10
+         */
+        "cols"?: number;
+        "onSelectGrid"?: (event: ErixTablePickerCustomEvent<{ rows: number; cols: number }>) => void;
+        /**
+          * @default 10
+         */
+        "rows"?: number;
+    }
+    interface ErixTableToolbar {
+        "view"?: EditorView;
+    }
     /**
      * @component ErixToolbar
      * Dynamic toolbar that renders plugins based on configuration.
@@ -727,6 +784,8 @@ declare namespace LocalJSX {
         "erix-icon": ErixIcon;
         "erix-select": ErixSelect;
         "erix-status-bar": ErixStatusBar;
+        "erix-table-picker": ErixTablePicker;
+        "erix-table-toolbar": ErixTableToolbar;
         "erix-toolbar": ErixToolbar;
     }
 }
@@ -795,6 +854,8 @@ declare module "@stencil/core" {
              * Includes zoom controls and theme toggle.
              */
             "erix-status-bar": LocalJSX.ErixStatusBar & JSXBase.HTMLAttributes<HTMLErixStatusBarElement>;
+            "erix-table-picker": LocalJSX.ErixTablePicker & JSXBase.HTMLAttributes<HTMLErixTablePickerElement>;
+            "erix-table-toolbar": LocalJSX.ErixTableToolbar & JSXBase.HTMLAttributes<HTMLErixTableToolbarElement>;
             /**
              * @component ErixToolbar
              * Dynamic toolbar that renders plugins based on configuration.

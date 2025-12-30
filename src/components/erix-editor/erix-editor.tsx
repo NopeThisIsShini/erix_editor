@@ -359,6 +359,8 @@ export class ErixEditor {
               'bullet-list',
               'ordered-list',
               '|',
+              'table',
+              '|',
               'page-break',
               'print',
               'import-word'
