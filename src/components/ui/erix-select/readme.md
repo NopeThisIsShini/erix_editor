@@ -1,9 +1,8 @@
 # erix-select
 
-
+A styled select/dropdown component for choosing from a list of options.
 
 <!-- Auto Generated Below -->
-
 
 ## Properties
 
@@ -15,14 +14,26 @@
 | `value`       | `value`        | The currently selected value    | `string`                         | `''`    |
 | `width`       | `width`        | Width variant                   | `"auto" \| "lg" \| "md" \| "sm"` | `'md'`  |
 
-
 ## Events
 
 | Event        | Description                        | Type                  |
 | ------------ | ---------------------------------- | --------------------- |
 | `erixChange` | Emitted when the selection changes | `CustomEvent<string>` |
 
+## Dependencies
 
-----------------------------------------------
+### Used by
 
-*Built with [StencilJS](https://stenciljs.com/)*
+- [erix-toolbar](../../toolbar)
+
+### Graph
+
+```mermaid
+graph TD;
+  erix-toolbar --> erix-select
+  style erix-select fill:#f9f,stroke:#333,stroke-width:4px
+```
+
+---
+
+_Built with [StencilJS](https://stenciljs.com/)_
