@@ -6,8 +6,8 @@ import { Component, Host, h, State, Event, EventEmitter, Prop } from '@stencil/c
   shadow: true,
 })
 export class ErixTablePicker {
-  @Prop() rows: number = 10;
-  @Prop() cols: number = 10;
+  @Prop() rows: number = 8;
+  @Prop() cols: number = 8;
 
   @State() hoveredRow: number = 0;
   @State() hoveredCol: number = 0;

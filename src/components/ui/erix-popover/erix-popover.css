@@ -1,0 +1,6 @@
+/* erix-popover.css - Smart Popover Component */
+/* Minimal styles since portal content is styled inline */
+
+:host {
+  display: none;
+}

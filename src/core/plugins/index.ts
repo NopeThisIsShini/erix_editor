@@ -1,8 +1,3 @@
-/**
- * Erix Editor Plugins
- * Configures keyboard shortcuts and history for the editor.
- */
-
 import { history, undo, redo } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
 import { baseKeymap, toggleMark } from 'prosemirror-commands';

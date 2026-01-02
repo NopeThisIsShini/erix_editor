@@ -46,7 +46,7 @@ export interface ToolbarPluginDef {
   isActive?: (view: EditorView) => boolean;
   isDisabled?: (view: EditorView) => boolean;
   type?: 'button' | 'dropdown' | 'select';
-  options?: { value: string; label: string }[];
+  options?: { value: string; label: string, icon?: string }[];
 }
 
 /**
@@ -212,16 +212,16 @@ const BUILTIN_PLUGINS: Record<string, ToolbarPluginDef> = {
     type: 'select',
     options: [
       { value: '', label: 'Font' },
-      { value: 'Arial, sans-serif', label: 'Arial' },
-      { value: '"Times New Roman", serif', label: 'Times New Roman' },
-      { value: 'Georgia, serif', label: 'Georgia' },
-      { value: '"Courier New", monospace', label: 'Courier New' },
-      { value: 'Verdana, sans-serif', label: 'Verdana' },
-      { value: 'Tahoma, sans-serif', label: 'Tahoma' },
-      { value: '"Trebuchet MS", sans-serif', label: 'Trebuchet MS' },
-      { value: 'Impact, sans-serif', label: 'Impact' },
-      { value: '"Comic Sans MS", cursive', label: 'Comic Sans MS' },
-      { value: '"Lucida Console", monospace', label: 'Lucida Console' },
+      { value: 'Arial, sans-serif', label: 'Arial', icon: 'A' },
+      { value: '"Times New Roman", serif', label: 'Times New Roman', icon: 'T' },
+      { value: 'Georgia, serif', label: 'Georgia', icon: 'G' },
+      { value: '"Courier New", monospace', label: 'Courier New', icon: 'C' },
+      { value: 'Verdana, sans-serif', label: 'Verdana', icon: 'V' },
+      { value: 'Tahoma, sans-serif', label: 'Tahoma', icon: 'T' },
+      { value: '"Trebuchet MS", sans-serif', label: 'Trebuchet MS', icon: 'T' },
+      { value: 'Impact, sans-serif', label: 'Impact', icon: 'I' },
+      { value: '"Comic Sans MS", cursive', label: 'Comic Sans MS', icon: 'C' },
+      { value: '"Lucida Console", monospace', label: 'Lucida Console', icon: 'L' },
     ],
     execute: (view) => { /* Handled by select change */ view.focus(); },
   },

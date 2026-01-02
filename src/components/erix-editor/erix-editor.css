@@ -51,13 +51,13 @@
 
 /* Main editor area - Professional Document Layout */
 .editor-canvas .ProseMirror {
-  min-height: 200px;
+  height: 100%;
   outline: none;
   font-size: 16px;
   line-height: 1.6;
   color: var(--editor-text);
   /* Industry standard 1-inch margins (2.54cm) for the editor UI */
-  padding: 2.54cm;
+  padding: 0.54cm;
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
@@ -285,7 +285,7 @@
   table-layout: auto;
   width: 100%; /* Default to 100%, but easily overridden by content/inline-styles */
   max-width: 100%; /* Safety to prevent horizontal overflow */
-  margin: 1.5em 0;
+  margin: 1em 0;
   box-sizing: border-box;
   display: table;
 }
@@ -301,7 +301,7 @@
   box-sizing: border-box;
   position: relative;
   border: 1px solid var(--editor-border);
-  padding: 8px 12px;
+  padding: 4px 6px;
   min-width: 1em; /* Ensure cells stay visible */
   word-wrap: break-word;
   word-break: break-word;
@@ -312,6 +312,13 @@
   font-weight: bold;
   text-align: left;
   background-color: var(--editor-surface);
+}
+
+/* Fix excessive height in table cells: Remove margins from paragraphs inside cells */
+.editor-canvas .ProseMirror td p,
+.editor-canvas .ProseMirror th p {
+  margin: 0;
+  line-height: 1.4;
 }
 
 /* Ensure empty cells are clickable and visible */

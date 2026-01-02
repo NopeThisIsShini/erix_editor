@@ -1,69 +1,143 @@
-/* Note: Theme CSS variables are inherited from parent erix-editor component */
+/* erix-select.css - Modern Select Component */
+/* Uses only CSS variables from the theming system - no static colors */
 
 :host {
   display: inline-flex;
+  position: relative;
+  font-family: inherit;
 }
 
 .erix-select {
+  user-select: none;
+  width: 100%;
+}
+
+.erix-select__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 32px;
-  padding: 4px 28px 4px 10px;
-  font-family: inherit;
-  font-size: 13px;
-  color: var(--editor-text);
+  padding: 0 10px;
   background-color: var(--editor-bg);
   border: 1px solid var(--editor-border);
   border-radius: 4px;
   cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-:host([data-theme="dark"]) .erix-select,
-:host-context([data-theme="dark"]) .erix-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+.erix-select--open .erix-select__trigger {
+  border-color: var(--editor-accent);
 }
 
-.erix-select:hover {
+.erix-select__trigger:hover {
   border-color: var(--editor-muted-text);
 }
 
-.erix-select:focus {
-  outline: 2px solid var(--editor-accent);
-  outline-offset: 1px;
-  border-color: var(--editor-accent);
-}
-
-.erix-select:focus:not(:focus-visible) {
-  outline: none;
-}
-
-.erix-select:focus-visible {
-  outline: 2px solid var(--editor-accent);
-  outline-offset: 1px;
-  border-color: var(--editor-accent);
-}
-
-.erix-select:disabled {
+.erix-select--disabled .erix-select__trigger {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
+.erix-select__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--editor-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.erix-select__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 100%;
+  max-width: 220px;
+  background-color: var(--editor-bg);
+  border: 1px solid var(--editor-border);
+  border-radius: 6px;
+  box-shadow: var(--editor-shadow, 0 4px 12px rgba(0, 0, 0, 0.08));
+  z-index: 1000;
+  overflow: hidden;
+  animation: erix-select-fade-in 0.15s ease-out;
+}
+
+@keyframes erix-select-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.erix-select__options {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+/* Custom Scrollbar - Uses theme variables */
+.erix-select__options::-webkit-scrollbar {
+  width: 4px;
+}
+
+.erix-select__options::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.erix-select__options::-webkit-scrollbar-thumb {
+  background: var(--editor-border);
+  border-radius: 4px;
+}
+
+.erix-select__options::-webkit-scrollbar-thumb:hover {
+  background: var(--editor-muted-text);
+}
+
+.erix-select__option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+  font-size: 13px;
+  color: var(--editor-text);
+}
+
+.erix-select__option:hover {
+  background-color: var(--editor-hover-bg);
+}
+
+.erix-select__option--selected {
+  background-color: var(--editor-hover-bg);
+  font-weight: 600;
+}
+
+.erix-select__option-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  width: 18px;
+  color: var(--editor-muted-text);
+}
+
+.erix-select__option-label {
+  flex: 1;
+}
+
+.erix-select--disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 /* Width variants */
-.erix-select--sm {
-  width: 70px;
-}
-
-.erix-select--md {
-  width: 100px;
-}
-
-.erix-select--lg {
-  width: 140px;
-}
-
-.erix-select--auto {
-  width: auto;
-}
+.erix-select--sm { min-width: 70px; }
+.erix-select--md { min-width: 100px; }
+.erix-select--lg { min-width: 140px; }
+.erix-select--auto { width: auto; }

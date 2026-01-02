@@ -1,62 +1,46 @@
+/* erix-table-picker.css */
+/* Uses only CSS variables from the theming system */
+
 :host {
   display: block;
   user-select: none;
 }
 
 .table-picker {
-  padding: 12px;
-  background: var(--editor-surface, #ffffff);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border: 1px solid var(--editor-border, #e2e8f0);
+  padding: 8px;
+  background: var(--editor-surface);
 }
 
 .picker-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 4px;
-  margin-bottom: 12px;
+  gap: 2px;
+  margin-bottom: 6px;
 }
 
 .picker-cell {
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--editor-border, #cbd5e1);
-  border-radius: 3px;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--editor-border);
+  border-radius: 2px;
   background-color: transparent;
-  transition: all 0.1s ease;
+  transition: background-color 0.08s ease, border-color 0.08s ease;
   cursor: pointer;
 }
 
+.picker-cell:hover {
+  border-color: var(--editor-muted-text);
+}
+
 .picker-cell.highlighted {
-  background-color: var(--editor-accent-soft, #e0f2fe);
-  border-color: var(--editor-accent, #3b82f6);
+  background-color: var(--editor-hover-bg);
+  border-color: var(--editor-accent);
 }
 
 .picker-footer {
   text-align: center;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--editor-text, #1e293b);
-  border-top: 1px solid var(--editor-border, #f1f5f9);
-  padding-top: 8px;
-}
-
-[data-theme='dark'] .table-picker {
-  background: #1e1e1e;
-  border-color: #333;
-}
-
-[data-theme='dark'] .picker-cell {
-  border-color: #444;
-}
-
-[data-theme='dark'] .picker-cell.highlighted {
-  background-color: rgba(59, 130, 246, 0.2);
-  border-color: #3b82f6;
-}
-
-[data-theme='dark'] .picker-footer {
-  color: #e2e8f0;
-  border-color: #333;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--editor-muted-text);
+  padding-top: 4px;
+  border-top: 1px solid var(--editor-border);
 }

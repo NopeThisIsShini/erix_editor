@@ -5,66 +5,74 @@ import { isInTable } from 'prosemirror-tables';
 export const tableToolbarKey = new PluginKey('table-toolbar');
 
 class TableToolbarView {
-  dom: HTMLElement;
+  popover: any;
   toolbar: any;
+  currentAnchorRect: DOMRect | null = null;
 
   constructor(view: EditorView) {
-    this.dom = document.createElement('div');
-    this.dom.style.position = 'absolute';
-    this.dom.style.zIndex = '100';
-    this.dom.style.display = 'none';
-    this.dom.style.pointerEvents = 'auto';
-    
-    // Create the stencil component
+    // Create the popover component
+    this.popover = document.createElement('erix-popover');
+    this.popover.placement = 'top';
+    this.popover.offset = 10;
+    this.popover.autoFlip = true;
+
+    // Create the toolbar inside the popover
     this.toolbar = document.createElement('erix-table-toolbar');
     this.toolbar.view = view;
-    this.dom.appendChild(this.toolbar);
+    this.popover.appendChild(this.toolbar);
 
-    // Append to editor's parent or body
-    view.dom.parentNode?.appendChild(this.dom);
+    // Append to body for proper fixed positioning
+    document.body.appendChild(this.popover);
 
     this.update(view, null);
   }
 
   update(view: EditorView, lastState: any) {
     const state = view.state;
-    
-    // Don't update if nothing changed and we're not in a table
+
+    // Don't update if nothing changed
     if (lastState && lastState.doc.eq(state.doc) && lastState.selection.eq(state.selection)) {
       return;
     }
 
     if (!isInTable(state)) {
-      this.dom.style.display = 'none';
+      this.popover.open = false;
+      this.currentAnchorRect = null;
       return;
     }
 
-    // Position the toolbar
+    // Get selection coordinates
     const { from, to } = state.selection;
     const start = view.coordsAtPos(from);
     const end = view.coordsAtPos(to);
-    
-    // Find the table element to center the toolbar
-    const parentBox = (view.dom.parentNode as HTMLElement).getBoundingClientRect();
 
-    // Center above the selection or the table
-    const left = (start.left + end.left) / 2 - parentBox.left;
-    const top = start.top - parentBox.top - 10; // 10px above
+    // Create an anchor rect from the selection
+    const anchorRect = new DOMRect(
+      Math.min(start.left, end.left),
+      Math.min(start.top, end.top),
+      Math.abs(end.left - start.left) || 1, // Ensure minimum width
+      Math.abs(end.bottom - start.top) || 1  // Ensure minimum height
+    );
 
-    this.dom.style.display = 'block';
-    this.dom.style.left = `${left}px`;
-    this.dom.style.top = `${top}px`;
-    this.dom.style.transform = 'translate(-50%, -100%)';
-    
+    // Update popover position
+    this.popover.anchorRect = anchorRect;
+    this.popover.open = true;
+    this.currentAnchorRect = anchorRect;
+
     // Update toolbar view reference and force re-render
     this.toolbar.view = view;
     if (this.toolbar.update) {
       this.toolbar.update();
     }
+
+    // Trigger popover position recalculation
+    if (this.popover.updatePosition) {
+      this.popover.updatePosition();
+    }
   }
 
   destroy() {
-    this.dom.remove();
+    this.popover.remove();
   }
 }
 

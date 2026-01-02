@@ -10,6 +10,7 @@ import { DividerOrientation, DividerSize } from "./components/ui/erix-divider/er
 import { DropdownPosition } from "./components/ui/erix-dropdown/erix-dropdown";
 import { EditorConfig, ErixEditorAPI, ErixPluginConfig, ToolbarItem } from "./api/index";
 import { IconName } from "./components/ui/erix-icon/icons";
+import { PopoverPlacement } from "./components/ui/erix-popover/erix-popover";
 import { SelectOption, SelectWidth } from "./components/ui/erix-select/erix-select";
 import { EditorView } from "prosemirror-view";
 export { ButtonSize, ButtonVariant } from "./components/ui/erix-button/erix-button.types";
@@ -17,6 +18,7 @@ export { DividerOrientation, DividerSize } from "./components/ui/erix-divider/er
 export { DropdownPosition } from "./components/ui/erix-dropdown/erix-dropdown";
 export { EditorConfig, ErixEditorAPI, ErixPluginConfig, ToolbarItem } from "./api/index";
 export { IconName } from "./components/ui/erix-icon/icons";
+export { PopoverPlacement } from "./components/ui/erix-popover/erix-popover";
 export { SelectOption, SelectWidth } from "./components/ui/erix-select/erix-select";
 export { EditorView } from "prosemirror-view";
 export namespace Components {
@@ -181,6 +183,50 @@ export namespace Components {
         "size": number;
     }
     /**
+     * @component ErixPopover
+     * A smart popover component with auto-positioning.
+     * Appends content to body for proper positioning.
+     * Automatically flips position when there's not enough space.
+     */
+    interface ErixPopover {
+        /**
+          * Anchor element or bounding rect to position relative to
+         */
+        "anchorRect"?: DOMRect;
+        /**
+          * Whether to auto-flip when there's not enough space
+          * @default true
+         */
+        "autoFlip": boolean;
+        /**
+          * Close the popover
+         */
+        "hide": () => Promise<void>;
+        /**
+          * Offset distance from the trigger (in pixels)
+          * @default 8
+         */
+        "offset": number;
+        /**
+          * Whether the popover is visible
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Preferred placement of the popover
+          * @default 'top'
+         */
+        "placement": PopoverPlacement;
+        /**
+          * Open the popover at a specific anchor rect
+         */
+        "show": (anchorRect?: DOMRect) => Promise<void>;
+        /**
+          * Manually trigger a position update
+         */
+        "updatePosition": () => Promise<void>;
+    }
+    /**
      * @component ErixSelect
      * A reusable select/dropdown component for the editor toolbar.
      */
@@ -245,11 +291,11 @@ export namespace Components {
     }
     interface ErixTablePicker {
         /**
-          * @default 10
+          * @default 8
          */
         "cols": number;
         /**
-          * @default 10
+          * @default 8
          */
         "rows": number;
     }
@@ -395,6 +441,18 @@ declare global {
         prototype: HTMLErixIconElement;
         new (): HTMLErixIconElement;
     };
+    /**
+     * @component ErixPopover
+     * A smart popover component with auto-positioning.
+     * Appends content to body for proper positioning.
+     * Automatically flips position when there's not enough space.
+     */
+    interface HTMLErixPopoverElement extends Components.ErixPopover, HTMLStencilElement {
+    }
+    var HTMLErixPopoverElement: {
+        prototype: HTMLErixPopoverElement;
+        new (): HTMLErixPopoverElement;
+    };
     interface HTMLErixSelectElementEventMap {
         "erixChange": string;
     }
@@ -490,6 +548,7 @@ declare global {
         "erix-dropdown": HTMLErixDropdownElement;
         "erix-editor": HTMLErixEditorElement;
         "erix-icon": HTMLErixIconElement;
+        "erix-popover": HTMLErixPopoverElement;
         "erix-select": HTMLErixSelectElement;
         "erix-status-bar": HTMLErixStatusBarElement;
         "erix-table-picker": HTMLErixTablePickerElement;
@@ -658,6 +717,38 @@ declare namespace LocalJSX {
         "size"?: number;
     }
     /**
+     * @component ErixPopover
+     * A smart popover component with auto-positioning.
+     * Appends content to body for proper positioning.
+     * Automatically flips position when there's not enough space.
+     */
+    interface ErixPopover {
+        /**
+          * Anchor element or bounding rect to position relative to
+         */
+        "anchorRect"?: DOMRect;
+        /**
+          * Whether to auto-flip when there's not enough space
+          * @default true
+         */
+        "autoFlip"?: boolean;
+        /**
+          * Offset distance from the trigger (in pixels)
+          * @default 8
+         */
+        "offset"?: number;
+        /**
+          * Whether the popover is visible
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Preferred placement of the popover
+          * @default 'top'
+         */
+        "placement"?: PopoverPlacement;
+    }
+    /**
      * @component ErixSelect
      * A reusable select/dropdown component for the editor toolbar.
      */
@@ -734,12 +825,12 @@ declare namespace LocalJSX {
     }
     interface ErixTablePicker {
         /**
-          * @default 10
+          * @default 8
          */
         "cols"?: number;
         "onSelectGrid"?: (event: ErixTablePickerCustomEvent<{ rows: number; cols: number }>) => void;
         /**
-          * @default 10
+          * @default 8
          */
         "rows"?: number;
     }
@@ -782,6 +873,7 @@ declare namespace LocalJSX {
         "erix-dropdown": ErixDropdown;
         "erix-editor": ErixEditor;
         "erix-icon": ErixIcon;
+        "erix-popover": ErixPopover;
         "erix-select": ErixSelect;
         "erix-status-bar": ErixStatusBar;
         "erix-table-picker": ErixTablePicker;
@@ -843,6 +935,13 @@ declare module "@stencil/core" {
              */
             "erix-editor": LocalJSX.ErixEditor & JSXBase.HTMLAttributes<HTMLErixEditorElement>;
             "erix-icon": LocalJSX.ErixIcon & JSXBase.HTMLAttributes<HTMLErixIconElement>;
+            /**
+             * @component ErixPopover
+             * A smart popover component with auto-positioning.
+             * Appends content to body for proper positioning.
+             * Automatically flips position when there's not enough space.
+             */
+            "erix-popover": LocalJSX.ErixPopover & JSXBase.HTMLAttributes<HTMLErixPopoverElement>;
             /**
              * @component ErixSelect
              * A reusable select/dropdown component for the editor toolbar.
