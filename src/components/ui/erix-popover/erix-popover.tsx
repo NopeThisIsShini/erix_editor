@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, State, Element, Method, Watch } from '@stencil/core';
+import { Component, Host, h, Prop, Element, Method, Watch } from '@stencil/core';
 
 export type PopoverPlacement = 
   | 'top' 
@@ -56,10 +56,7 @@ export class ErixPopover {
    */
   @Prop() anchorRect?: DOMRect;
 
-  /**
-   * The computed/actual placement after auto-flip
-   */
-  @State() private actualPlacement: PopoverPlacement = 'top';
+
 
   componentWillLoad() {
     // Create portal element that will be appended to body
@@ -202,7 +199,7 @@ export class ErixPopover {
     
     this.contentEl.style.top = `${pos.top}px`;
     this.contentEl.style.left = `${pos.left}px`;
-    this.actualPlacement = placement;
+
   }
 
   private getOptimalPlacement(
