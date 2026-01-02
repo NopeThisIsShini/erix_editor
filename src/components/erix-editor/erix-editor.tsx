@@ -105,9 +105,14 @@ export class ErixEditor {
   @State() private editorView?: EditorView;
 
   /**
-   * Current zoom level for the editor (percentage)
+   * Word count for status bar
    */
-  @State() private zoomLevel: number = 100;
+  @State() private wordCount: number = 0;
+
+  /**
+   * Character count for status bar
+   */
+  @State() private characterCount: number = 0;
 
   /**
    * The public API instance.
@@ -220,6 +225,9 @@ export class ErixEditor {
         if (this.toolbarRef) {
           this.toolbarRef.updateActiveFormats();
         }
+
+        // Update word/character counts
+        this.updateCounts(newState);
       },
     });
 
@@ -311,20 +319,33 @@ export class ErixEditor {
     this.theme = this.theme === 'light' ? 'dark' : 'light';
   };
 
-  private handleZoomChange = (event: CustomEvent<number>) => {
-    this.zoomLevel = event.detail;
-  };
+  private updateCounts(state: EditorState) {
+    // Extract text content from the document
+    let text = '';
+    state.doc.descendants(node => {
+      if (node.isText) {
+        text += node.text;
+      } else if (node.isBlock && text.length > 0 && !text.endsWith('\n')) {
+        text += ' '; // Add space between blocks for word counting
+      }
+    });
+
+    // Character count (excluding extra spaces added for blocks)
+    this.characterCount = text.replace(/\s+/g, ' ').trim().length;
+
+    // Word count
+    const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+    this.wordCount = words.length;
+  }
+
+
 
   // ===========================================================================
   // RENDER
   // ===========================================================================
 
   render() {
-    // Dynamic zoom style for the editor canvas
-    const canvasZoomStyle = {
-      transform: `scale(${this.zoomLevel / 100})`,
-      transformOrigin: 'center',
-    };
+
 
     return (
       <Host data-theme={this.theme}>
@@ -368,17 +389,15 @@ export class ErixEditor {
             showThemeToggle={false}
           ></erix-toolbar>
 
-          {/* Editor Content Area */}
           <div class="editor-content">
-            <div class="editor-canvas" style={canvasZoomStyle} ref={el => (this.editorContainer = el)}></div>
+            <div class="editor-canvas" ref={el => (this.editorContainer = el)}></div>
           </div>
 
-          {/* Status Bar at the bottom - Word-like with zoom and theme toggle */}
           <erix-status-bar
             theme={this.theme}
-            zoom={this.zoomLevel}
+            wordCount={this.wordCount}
+            characterCount={this.characterCount}
             onThemeToggle={this.handleThemeToggle}
-            onZoomChange={this.handleZoomChange}
           ></erix-status-bar>
         </div>
       </Host>

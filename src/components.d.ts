@@ -260,34 +260,24 @@ export namespace Components {
     /**
      * @component ErixStatusBar
      * A Word-like status bar component positioned at the bottom of the editor.
-     * Includes zoom controls and theme toggle.
+     * Displays word/character count and theme toggle.
      */
     interface ErixStatusBar {
         /**
-          * Maximum zoom level
-          * @default 200
+          * Character count
+          * @default 0
          */
-        "maxZoom": number;
-        /**
-          * Minimum zoom level
-          * @default 50
-         */
-        "minZoom": number;
+        "characterCount": number;
         /**
           * Current theme
           * @default 'light'
          */
         "theme": 'light' | 'dark' | string;
         /**
-          * Current zoom level (percentage, e.g., 100 = 100%)
-          * @default 100
+          * Word count
+          * @default 0
          */
-        "zoom": number;
-        /**
-          * Zoom step for +/- buttons
-          * @default 10
-         */
-        "zoomStep": number;
+        "wordCount": number;
     }
     interface ErixTablePicker {
         /**
@@ -476,12 +466,11 @@ declare global {
     };
     interface HTMLErixStatusBarElementEventMap {
         "themeToggle": void;
-        "zoomChange": number;
     }
     /**
      * @component ErixStatusBar
      * A Word-like status bar component positioned at the bottom of the editor.
-     * Includes zoom controls and theme toggle.
+     * Displays word/character count and theme toggle.
      */
     interface HTMLErixStatusBarElement extends Components.ErixStatusBar, HTMLStencilElement {
         addEventListener<K extends keyof HTMLErixStatusBarElementEventMap>(type: K, listener: (this: HTMLErixStatusBarElement, ev: ErixStatusBarCustomEvent<HTMLErixStatusBarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -786,42 +775,28 @@ declare namespace LocalJSX {
     /**
      * @component ErixStatusBar
      * A Word-like status bar component positioned at the bottom of the editor.
-     * Includes zoom controls and theme toggle.
+     * Displays word/character count and theme toggle.
      */
     interface ErixStatusBar {
         /**
-          * Maximum zoom level
-          * @default 200
+          * Character count
+          * @default 0
          */
-        "maxZoom"?: number;
-        /**
-          * Minimum zoom level
-          * @default 50
-         */
-        "minZoom"?: number;
+        "characterCount"?: number;
         /**
           * Event emitted when theme toggle is requested
          */
         "onThemeToggle"?: (event: ErixStatusBarCustomEvent<void>) => void;
-        /**
-          * Event emitted when zoom level changes
-         */
-        "onZoomChange"?: (event: ErixStatusBarCustomEvent<number>) => void;
         /**
           * Current theme
           * @default 'light'
          */
         "theme"?: 'light' | 'dark' | string;
         /**
-          * Current zoom level (percentage, e.g., 100 = 100%)
-          * @default 100
+          * Word count
+          * @default 0
          */
-        "zoom"?: number;
-        /**
-          * Zoom step for +/- buttons
-          * @default 10
-         */
-        "zoomStep"?: number;
+        "wordCount"?: number;
     }
     interface ErixTablePicker {
         /**
@@ -950,7 +925,7 @@ declare module "@stencil/core" {
             /**
              * @component ErixStatusBar
              * A Word-like status bar component positioned at the bottom of the editor.
-             * Includes zoom controls and theme toggle.
+             * Displays word/character count and theme toggle.
              */
             "erix-status-bar": LocalJSX.ErixStatusBar & JSXBase.HTMLAttributes<HTMLErixStatusBarElement>;
             "erix-table-picker": LocalJSX.ErixTablePicker & JSXBase.HTMLAttributes<HTMLErixTablePickerElement>;

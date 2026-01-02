@@ -1,9 +1,9 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 /**
  * @component ErixStatusBar
  * A Word-like status bar component positioned at the bottom of the editor.
- * Includes zoom controls and theme toggle.
+ * Displays word/character count and theme toggle.
  */
 @Component({
     tag: 'erix-status-bar',
@@ -17,125 +17,36 @@ export class ErixStatusBar {
     @Prop() theme: 'light' | 'dark' | string = 'light';
 
     /**
-     * Current zoom level (percentage, e.g., 100 = 100%)
+     * Word count
      */
-    @Prop({ mutable: true }) zoom: number = 100;
+    @Prop() wordCount: number = 0;
 
     /**
-     * Minimum zoom level
+     * Character count
      */
-    @Prop() minZoom: number = 50;
-
-    /**
-     * Maximum zoom level
-     */
-    @Prop() maxZoom: number = 200;
-
-    /**
-     * Zoom step for +/- buttons
-     */
-    @Prop() zoomStep: number = 10;
+    @Prop() characterCount: number = 0;
 
     /**
      * Event emitted when theme toggle is requested
      */
     @Event() themeToggle: EventEmitter<void>;
 
-    /**
-     * Event emitted when zoom level changes
-     */
-    @Event() zoomChange: EventEmitter<number>;
-
-    /**
-     * Internal state for slider value
-     */
-    @State() private sliderValue: number = 100;
-
-    componentWillLoad() {
-        this.sliderValue = this.zoom;
-    }
-
     private handleThemeToggle = () => {
         this.themeToggle.emit();
     };
-
-    private handleZoomIn = () => {
-        const newZoom = Math.min(this.zoom + this.zoomStep, this.maxZoom);
-        this.updateZoom(newZoom);
-    };
-
-    private handleZoomOut = () => {
-        const newZoom = Math.max(this.zoom - this.zoomStep, this.minZoom);
-        this.updateZoom(newZoom);
-    };
-
-    private handleSliderChange = (event: Event) => {
-        const target = event.target as HTMLInputElement;
-        const newZoom = parseInt(target.value, 10);
-        this.updateZoom(newZoom);
-    };
-
-    private updateZoom(value: number) {
-        this.zoom = value;
-        this.sliderValue = value;
-        this.zoomChange.emit(value);
-    }
 
     render() {
         return (
             <Host data-theme={this.theme}>
                 <div class="status-bar">
-                    {/* Left section - can be extended with page info, word count, etc. */}
+                    {/* Left section - Word and character count */}
                     <div class="status-bar__left">
-                        <span class="status-text">Ready</span>
+                        <span class="status-text">Words: {this.wordCount}</span>
+                        <span class="status-text">Characters: {this.characterCount}</span>
                     </div>
 
-                    {/* Right section - Zoom controls and theme toggle */}
+                    {/* Right section - Theme toggle */}
                     <div class="status-bar__right">
-                        {/* Zoom controls */}
-                        <div class="zoom-controls">
-                            {/* Zoom out button */}
-                            <button
-                                class="zoom-btn"
-                                title="Zoom Out"
-                                onClick={this.handleZoomOut}
-                                disabled={this.zoom <= this.minZoom}
-                            >
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                </svg>
-                            </button>
-
-                            {/* Zoom slider */}
-                            <input
-                                type="range"
-                                class="zoom-slider"
-                                min={this.minZoom}
-                                max={this.maxZoom}
-                                value={this.sliderValue}
-                                onInput={this.handleSliderChange}
-                                title={`Zoom: ${this.zoom}%`}
-                            />
-
-                            {/* Zoom in button */}
-                            <button
-                                class="zoom-btn"
-                                title="Zoom In"
-                                onClick={this.handleZoomIn}
-                                disabled={this.zoom >= this.maxZoom}
-                            >
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                </svg>
-                            </button>
-
-                            {/* Zoom percentage display */}
-                            <span class="zoom-value">{this.zoom}%</span>
-                        </div>
-
-                        {/* Divider */}
-                        <div class="status-divider"></div>
-
                         {/* Theme toggle */}
                         <button
                             class="theme-btn"
@@ -158,3 +69,5 @@ export class ErixStatusBar {
         );
     }
 }
+
+
