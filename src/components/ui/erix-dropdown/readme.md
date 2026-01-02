@@ -4,6 +4,7 @@ A dropdown menu component with customizable trigger and menu positioning.
 
 <!-- Auto Generated Below -->
 
+
 ## Properties
 
 | Property          | Attribute           | Description                                                 | Type                | Default  |
@@ -14,20 +15,20 @@ A dropdown menu component with customizable trigger and menu positioning.
 | `showActiveState` | `show-active-state` | Whether the trigger should show active state when open      | `boolean`           | `true`   |
 | `triggerTitle`    | `trigger-title`     | Tooltip text for the trigger button                         | `string`            | `''`     |
 
+
 ## Dependencies
 
 ### Used by
 
-- [erix-toolbar](../../toolbar)
+ - [erix-toolbar](../../toolbar)
 
 ### Graph
-
 ```mermaid
 graph TD;
   erix-toolbar --> erix-dropdown
   style erix-dropdown fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
----
+----------------------------------------------
 
-_Built with [StencilJS](https://stenciljs.com/)_
+*Built with [StencilJS](https://stenciljs.com/)*

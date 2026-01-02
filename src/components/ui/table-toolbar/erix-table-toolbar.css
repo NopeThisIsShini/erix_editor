@@ -1,5 +1,5 @@
 /* erix-table-toolbar.css */
-/* Uses only CSS variables from the theming system */
+/* Professional floating table toolbar following the common editor style pattern */
 
 :host {
   display: block;
@@ -9,15 +9,18 @@
 .table-toolbar {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   padding: 4px;
-  background: var(--editor-surface);
+  background-color: var(--editor-surface);
+  border: 1px solid var(--editor-border);
   border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .toolbar-divider {
   width: 1px;
-  height: 18px;
+  height: 20px;
   background-color: var(--editor-border);
   margin: 0 4px;
 }
+

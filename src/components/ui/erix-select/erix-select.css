@@ -1,5 +1,5 @@
-/* erix-select.css - Modern Select Component */
-/* Uses only CSS variables from the theming system - no static colors */
+/* erix-select.css - Supreme Modern Select Component */
+/* Consistent with the toolbar's hover and active design patterns */
 
 :host {
   display: inline-flex;
@@ -12,54 +12,98 @@
   width: 100%;
 }
 
+/* Trigger area - the main container of the select */
 .erix-select__trigger {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 8px;
   height: 32px;
   padding: 0 10px;
-  background-color: var(--editor-bg);
-  border: 1px solid var(--editor-border);
+  /* background-color: var(--editor-bg); */
+  border: 0 solid var(--editor-border);
   border-radius: 4px;
   cursor: pointer;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  transition: all 0.15s ease;
+  color: var(--editor-text);
 }
 
-.erix-select--open .erix-select__trigger {
-  border-color: var(--editor-accent);
-}
-
+/* Hover state - matches toolbar button hover */
 .erix-select__trigger:hover {
-  border-color: var(--editor-muted-text);
+  background-color: var(--editor-border);
+}
+
+/* Open/Active state - matches toolbar button active */
+.erix-select--open .erix-select__trigger {
+  background-color: var(--editor-active-bg);
+  color: var(--editor-accent);
 }
 
 .erix-select--disabled .erix-select__trigger {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .erix-select__label {
   font-size: 13px;
   font-weight: 500;
-  color: var(--editor-text);
+  color: inherit;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
 }
 
+/* Dropdown arrow indicator */
+.erix-select__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.erix-select--open .erix-select__arrow {
+  transform: rotate(180deg);
+}
+
+/* Icon-only mode styling */
+.erix-select--icon-only .erix-select__trigger {
+  padding: 0 6px;
+  width: auto;
+  min-width: unset;
+}
+
+.erix-select--icon-only .erix-select__label {
+  display: none;
+}
+
+.erix-select--icon-only erix-icon {
+  color: inherit;
+}
+
+/* Dropdown menu styling */
 .erix-select__dropdown {
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
   min-width: 100%;
-  max-width: 220px;
+  max-width: 250px;
   background-color: var(--editor-bg);
   border: 1px solid var(--editor-border);
   border-radius: 6px;
-  box-shadow: var(--editor-shadow, 0 4px 12px rgba(0, 0, 0, 0.08));
+  box-shadow: var(--editor-shadow, 0 4px 12px rgba(0, 0, 0, 0.1));
   z-index: 1000;
   overflow: hidden;
   animation: erix-select-fade-in 0.15s ease-out;
+}
+
+.erix-select--icon-only .erix-select__dropdown {
+  min-width: 160px;
 }
 
 @keyframes erix-select-fade-in {
@@ -74,12 +118,12 @@
 }
 
 .erix-select__options {
-  max-height: 220px;
+  max-height: 250px;
   overflow-y: auto;
   padding: 4px;
 }
 
-/* Custom Scrollbar - Uses theme variables */
+/* Custom Scrollbar */
 .erix-select__options::-webkit-scrollbar {
   width: 4px;
 }
@@ -101,7 +145,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 8px;
+  padding: 8px 10px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.12s ease;
@@ -116,6 +160,7 @@
 .erix-select__option--selected {
   background-color: var(--editor-hover-bg);
   font-weight: 600;
+  color: var(--editor-accent);
 }
 
 .erix-select__option-icon {
@@ -131,13 +176,8 @@
   flex: 1;
 }
 
-.erix-select--disabled {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
 /* Width variants */
 .erix-select--sm { min-width: 70px; }
 .erix-select--md { min-width: 100px; }
 .erix-select--lg { min-width: 140px; }
-.erix-select--auto { width: auto; }
+.erix-select--auto { width: auto; min-width: auto; }

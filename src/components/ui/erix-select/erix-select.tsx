@@ -47,6 +47,16 @@ export class ErixSelect {
   @Prop() width: SelectWidth = 'md';
 
   /**
+   * Icon-only mode - displays only an icon in the trigger (for compact toolbars)
+   */
+  @Prop() iconOnly: boolean = false;
+
+  /**
+   * Icon name to display in the trigger (used with iconOnly mode)
+   */
+  @Prop() triggerIcon?: string;
+
+  /**
    * Emitted when the selection changes
    */
   @Event() erixChange: EventEmitter<string>;
@@ -80,6 +90,7 @@ export class ErixSelect {
       'erix-select': true,
       'erix-select--open': this.isOpen,
       'erix-select--disabled': this.disabled,
+      'erix-select--icon-only': this.iconOnly,
       [`erix-select--${this.width}`]: true,
     };
 
@@ -87,7 +98,16 @@ export class ErixSelect {
       <Host>
         <div class={classes} title={this.selectTitle}>
           <div class="erix-select__trigger" onClick={this.toggleDropdown}>
-            <span class="erix-select__label">{displayLabel}</span>
+            {this.iconOnly && this.triggerIcon ? (
+              <erix-icon name={this.triggerIcon as any} size={18}></erix-icon>
+            ) : (
+              <span class="erix-select__label">{displayLabel}</span>
+            )}
+            <span class="erix-select__arrow">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </div>
 
           {this.isOpen && (

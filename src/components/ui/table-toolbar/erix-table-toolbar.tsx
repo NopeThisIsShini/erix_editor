@@ -11,18 +11,64 @@ export class ErixTableToolbar {
   @Prop() view?: EditorView;
   @State() private updateCounter: number = 0;
 
+  private rowOptions = [
+    { value: 'insert-above', label: 'Insert row above' },
+    { value: 'insert-below', label: 'Insert row below' },
+    { value: 'delete', label: 'Delete row' },
+  ];
+
+  private columnOptions = [
+    { value: 'insert-left', label: 'Insert column left' },
+    { value: 'insert-right', label: 'Insert column right' },
+    { value: 'delete', label: 'Delete column' },
+  ];
+
   @Method()
   async update() {
     this.updateCounter++;
   }
 
-  private exec = (cmd: any) => {
+  private execCommand = (cmd: any) => {
     if (!this.view) return;
     const { state, dispatch } = this.view;
     if (cmd(state, dispatch)) {
       this.view.focus();
       this.updateCounter++;
     }
+  };
+
+  private handleRowAction = (event: CustomEvent<string>) => {
+    const action = event.detail;
+    switch (action) {
+      case 'insert-above':
+        this.execCommand(tableCommands.addRowBefore);
+        break;
+      case 'insert-below':
+        this.execCommand(tableCommands.addRowAfter);
+        break;
+      case 'delete':
+        this.execCommand(tableCommands.deleteRow);
+        break;
+    }
+  };
+
+  private handleColumnAction = (event: CustomEvent<string>) => {
+    const action = event.detail;
+    switch (action) {
+      case 'insert-left':
+        this.execCommand(tableCommands.addColumnBefore);
+        break;
+      case 'insert-right':
+        this.execCommand(tableCommands.addColumnAfter);
+        break;
+      case 'delete':
+        this.execCommand(tableCommands.deleteColumn);
+        break;
+    }
+  };
+
+  private handleDeleteTable = () => {
+    this.execCommand(tableCommands.deleteTable);
   };
 
   render() {
@@ -34,77 +80,35 @@ export class ErixTableToolbar {
     return (
       <Host>
         <div class="table-toolbar" key={this.updateCounter}>
-          <erix-button 
-            buttonTitle="Add Column Before" 
-            disabled={!info.canAddColumnBefore}
-            onErixClick={() => this.exec(tableCommands.addColumnBefore)}
-          >
-            <erix-icon name="tableAddColumnBefore" size={18}></erix-icon>
-          </erix-button>
-          <erix-button 
-            buttonTitle="Add Column After" 
-            disabled={!info.canAddColumnAfter}
-            onErixClick={() => this.exec(tableCommands.addColumnAfter)}
-          >
-            <erix-icon name="tableAddColumnAfter" size={18}></erix-icon>
-          </erix-button>
-          <erix-button 
-            buttonTitle="Delete Column" 
-            disabled={!info.canDeleteColumn}
-            onErixClick={() => this.exec(tableCommands.deleteColumn)}
-          >
-            <erix-icon name="tableDeleteColumn" size={18}></erix-icon>
-          </erix-button>
+          {/* Row dropdown with icon-only trigger */}
+          <erix-select
+            iconOnly={true}
+            triggerIcon="row"
+            options={this.rowOptions}
+            selectTitle="Row"
+            width="auto"
+            onErixChange={this.handleRowAction}
+          ></erix-select>
+
+          {/* Column dropdown with icon-only trigger */}
+          <erix-select
+            iconOnly={true}
+            triggerIcon="column"
+            options={this.columnOptions}
+            selectTitle="Column"
+            width="auto"
+            onErixChange={this.handleColumnAction}
+          ></erix-select>
 
           <div class="toolbar-divider"></div>
 
-          <erix-button 
-            buttonTitle="Add Row Before" 
-            disabled={!info.canAddRowBefore}
-            onErixClick={() => this.exec(tableCommands.addRowBefore)}
-          >
-            <erix-icon name="tableAddRowBefore" size={18}></erix-icon>
-          </erix-button>
-          <erix-button 
-            buttonTitle="Add Row After" 
-            disabled={!info.canAddRowAfter}
-            onErixClick={() => this.exec(tableCommands.addRowAfter)}
-          >
-            <erix-icon name="tableAddRowAfter" size={18}></erix-icon>
-          </erix-button>
-          <erix-button 
-            buttonTitle="Delete Row" 
-            disabled={!info.canDeleteRow}
-            onErixClick={() => this.exec(tableCommands.deleteRow)}
-          >
-            <erix-icon name="tableDeleteRow" size={18}></erix-icon>
-          </erix-button>
-
-          <div class="toolbar-divider"></div>
-
-          <erix-button 
-            buttonTitle="Merge Cells" 
-            disabled={!info.canMerge} 
-            onErixClick={() => this.exec(tableCommands.mergeCells)}
-          >
-            <erix-icon name="tableMergeCells" size={18}></erix-icon>
-          </erix-button>
-          <erix-button 
-            buttonTitle="Split Cell" 
-            disabled={!info.canSplit} 
-            onErixClick={() => this.exec(tableCommands.splitCell)}
-          >
-            <erix-icon name="tableSplitCell" size={18}></erix-icon>
-          </erix-button>
-
-          <div class="toolbar-divider"></div>
-
-          <erix-button 
-            buttonTitle="Delete Table" 
+          {/* Delete table button - using erix-button for consistency */}
+          <erix-button
+            buttonTitle="Delete Table"
             disabled={!info.canDeleteTable}
-            onErixClick={() => this.exec(tableCommands.deleteTable)}
+            onErixClick={this.handleDeleteTable}
           >
-            <erix-icon name="tableDelete" size={18}></erix-icon>
+            <erix-icon name="delete" size={18}></erix-icon>
           </erix-button>
         </div>
       </Host>

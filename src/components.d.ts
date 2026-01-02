@@ -104,69 +104,22 @@ export namespace Components {
     /**
      * @component ErixEditor
      * A rich text editor component with built-in toolbar and plugin system.
-     * @example ```html
-     * <erix-editor theme="light" placeholder="Start typing..."></erix-editor>
-     * ```
-     * @example ```typescript
-     * // Access the public API
-     * const editor = document.querySelector('erix-editor');
-     * const api = await editor.getAPI();
-     * // Configure plugins
-     * editor.config = {
-     *   plugins: {
-     *     builtin: ['bold', 'italic', 'underline', 'undo', 'redo'],
-     *     disabled: ['strikethrough'],
-     *     custom: [myCustomPlugin]
-     *   },
-     *   toolbar: {
-     *     items: ['undo', 'redo', '|', 'bold', 'italic', 'underline']
-     *   }
-     * };
-     * // Use the API
-     * api.setContent('<p>Hello World</p>', 'html');
-     * api.on('change', ({ content }) => console.log(content));
-     * // Register custom plugin
-     * api.registerPlugin({
-     *   id: 'my-plugin',
-     *   label: 'My Plugin',
-     *   execute: (ctx) => { console.log('Executed!'); return true; }
-     * });
-     * ```
      */
     interface ErixEditor {
-        /**
-          * Editor configuration object. Use this to configure plugins, toolbar, and other settings.
-         */
         "config"?: EditorConfig;
-        /**
-          * Initial content (HTML string).
-         */
         "content"?: string;
-        /**
-          * Disabled plugin IDs. Shorthand for config.plugins.disabled
-         */
         "disabledPlugins"?: string[];
-        /**
-          * Get the public API instance.
-          * @returns The ErixEditorAPI instance
-         */
         "getAPI": () => Promise<ErixEditorAPI>;
         /**
-          * Placeholder text when editor is empty.
           * @default 'Start typing...'
          */
         "placeholder": string;
-        /**
-          * Custom plugins to register. Shorthand for config.plugins.custom
-         */
         "plugins"?: ErixPluginConfig[];
         /**
-          * Whether the editor is read-only.
           * @default false
          */
         "readonly": boolean;
         /**
-          * The editor theme.
           * @default 'light'
          */
         "theme": 'light' | 'dark' | string;
@@ -237,6 +190,11 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * Icon-only mode - displays only an icon in the trigger (for compact toolbars)
+          * @default false
+         */
+        "iconOnly": boolean;
+        /**
           * Array of options for the select
           * @default []
          */
@@ -246,6 +204,10 @@ export namespace Components {
           * @default ''
          */
         "selectTitle": string;
+        /**
+          * Icon name to display in the trigger (used with iconOnly mode)
+         */
+        "triggerIcon"?: string;
         /**
           * The currently selected value
           * @default ''
@@ -390,34 +352,6 @@ declare global {
     /**
      * @component ErixEditor
      * A rich text editor component with built-in toolbar and plugin system.
-     * @example ```html
-     * <erix-editor theme="light" placeholder="Start typing..."></erix-editor>
-     * ```
-     * @example ```typescript
-     * // Access the public API
-     * const editor = document.querySelector('erix-editor');
-     * const api = await editor.getAPI();
-     * // Configure plugins
-     * editor.config = {
-     *   plugins: {
-     *     builtin: ['bold', 'italic', 'underline', 'undo', 'redo'],
-     *     disabled: ['strikethrough'],
-     *     custom: [myCustomPlugin]
-     *   },
-     *   toolbar: {
-     *     items: ['undo', 'redo', '|', 'bold', 'italic', 'underline']
-     *   }
-     * };
-     * // Use the API
-     * api.setContent('<p>Hello World</p>', 'html');
-     * api.on('change', ({ content }) => console.log(content));
-     * // Register custom plugin
-     * api.registerPlugin({
-     *   id: 'my-plugin',
-     *   label: 'My Plugin',
-     *   execute: (ctx) => { console.log('Executed!'); return true; }
-     * });
-     * ```
      */
     interface HTMLErixEditorElement extends Components.ErixEditor, HTMLStencilElement {
     }
@@ -632,64 +566,21 @@ declare namespace LocalJSX {
     /**
      * @component ErixEditor
      * A rich text editor component with built-in toolbar and plugin system.
-     * @example ```html
-     * <erix-editor theme="light" placeholder="Start typing..."></erix-editor>
-     * ```
-     * @example ```typescript
-     * // Access the public API
-     * const editor = document.querySelector('erix-editor');
-     * const api = await editor.getAPI();
-     * // Configure plugins
-     * editor.config = {
-     *   plugins: {
-     *     builtin: ['bold', 'italic', 'underline', 'undo', 'redo'],
-     *     disabled: ['strikethrough'],
-     *     custom: [myCustomPlugin]
-     *   },
-     *   toolbar: {
-     *     items: ['undo', 'redo', '|', 'bold', 'italic', 'underline']
-     *   }
-     * };
-     * // Use the API
-     * api.setContent('<p>Hello World</p>', 'html');
-     * api.on('change', ({ content }) => console.log(content));
-     * // Register custom plugin
-     * api.registerPlugin({
-     *   id: 'my-plugin',
-     *   label: 'My Plugin',
-     *   execute: (ctx) => { console.log('Executed!'); return true; }
-     * });
-     * ```
      */
     interface ErixEditor {
-        /**
-          * Editor configuration object. Use this to configure plugins, toolbar, and other settings.
-         */
         "config"?: EditorConfig;
-        /**
-          * Initial content (HTML string).
-         */
         "content"?: string;
-        /**
-          * Disabled plugin IDs. Shorthand for config.plugins.disabled
-         */
         "disabledPlugins"?: string[];
         /**
-          * Placeholder text when editor is empty.
           * @default 'Start typing...'
          */
         "placeholder"?: string;
-        /**
-          * Custom plugins to register. Shorthand for config.plugins.custom
-         */
         "plugins"?: ErixPluginConfig[];
         /**
-          * Whether the editor is read-only.
           * @default false
          */
         "readonly"?: boolean;
         /**
-          * The editor theme.
           * @default 'light'
          */
         "theme"?: 'light' | 'dark' | string;
@@ -748,6 +639,11 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * Icon-only mode - displays only an icon in the trigger (for compact toolbars)
+          * @default false
+         */
+        "iconOnly"?: boolean;
+        /**
           * Emitted when the selection changes
          */
         "onErixChange"?: (event: ErixSelectCustomEvent<string>) => void;
@@ -761,6 +657,10 @@ declare namespace LocalJSX {
           * @default ''
          */
         "selectTitle"?: string;
+        /**
+          * Icon name to display in the trigger (used with iconOnly mode)
+         */
+        "triggerIcon"?: string;
         /**
           * The currently selected value
           * @default ''
@@ -879,34 +779,6 @@ declare module "@stencil/core" {
             /**
              * @component ErixEditor
              * A rich text editor component with built-in toolbar and plugin system.
-             * @example ```html
-             * <erix-editor theme="light" placeholder="Start typing..."></erix-editor>
-             * ```
-             * @example ```typescript
-             * // Access the public API
-             * const editor = document.querySelector('erix-editor');
-             * const api = await editor.getAPI();
-             * // Configure plugins
-             * editor.config = {
-             *   plugins: {
-             *     builtin: ['bold', 'italic', 'underline', 'undo', 'redo'],
-             *     disabled: ['strikethrough'],
-             *     custom: [myCustomPlugin]
-             *   },
-             *   toolbar: {
-             *     items: ['undo', 'redo', '|', 'bold', 'italic', 'underline']
-             *   }
-             * };
-             * // Use the API
-             * api.setContent('<p>Hello World</p>', 'html');
-             * api.on('change', ({ content }) => console.log(content));
-             * // Register custom plugin
-             * api.registerPlugin({
-             *   id: 'my-plugin',
-             *   label: 'My Plugin',
-             *   execute: (ctx) => { console.log('Executed!'); return true; }
-             * });
-             * ```
              */
             "erix-editor": LocalJSX.ErixEditor & JSXBase.HTMLAttributes<HTMLErixEditorElement>;
             "erix-icon": LocalJSX.ErixIcon & JSXBase.HTMLAttributes<HTMLErixIconElement>;
