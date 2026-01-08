@@ -1,0 +1,33 @@
+/* src/styles/toolbar.css */
+
+/* Core toolbar container style shared by all toolbars */
+.erix-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--editor-surface);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* Group container for organizing related buttons/tools */
+.erix-toolbar-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Spacer for pushing items to the opposite side */
+.erix-toolbar-spacer {
+  flex: 1;
+}
+
+/* Standard vertical divider for toolbars */
+.erix-toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--editor-border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}

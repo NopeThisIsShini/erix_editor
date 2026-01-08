@@ -534,7 +534,7 @@ export class ErixToolbar {
     const flushGroup = () => {
       if (currentGroupItems.length > 0) {
         elements.push(
-          <div class="toolbar-group" key={`group-${elements.length}`}>
+          <div class="erix-toolbar-group" key={`group-${elements.length}`}>
             {currentGroupItems}
           </div>
         );
@@ -592,11 +592,11 @@ export class ErixToolbar {
           {this.renderItems()}
 
           {/* Spacer to push theme toggle to the right */}
-          {this.showThemeToggle && <div class="toolbar-spacer"></div>}
+          {this.showThemeToggle && <div class="erix-toolbar-spacer"></div>}
 
           {/* Theme Toggle - always at the end if enabled */}
           {this.showThemeToggle && (
-            <div class="toolbar-group">
+            <div class="erix-toolbar-group">
               <erix-button
                 buttonTitle={this.theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
                 onErixClick={this.handleThemeToggle}

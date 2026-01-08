@@ -79,7 +79,7 @@ export class ErixTableToolbar {
 
     return (
       <Host>
-        <div class="table-toolbar" key={this.updateCounter}>
+        <div class="erix-toolbar" key={this.updateCounter}>
           {/* Row dropdown with icon-only trigger */}
           <erix-select
             iconOnly={true}
@@ -100,7 +100,7 @@ export class ErixTableToolbar {
             onErixChange={this.handleColumnAction}
           ></erix-select>
 
-          <div class="toolbar-divider"></div>
+          <div class="erix-toolbar-divider"></div>
 
           {/* Delete table button - using erix-button for consistency */}
           <erix-button

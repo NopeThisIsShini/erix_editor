@@ -20,10 +20,6 @@ class TableToolbarView {
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.12s ease;
-      background-color: var(--editor-surface, #ffffff);
-      border: 1px solid var(--editor-border, #e2e8f0);
-      border-radius: 6px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
     `;
 
     // Create the toolbar and append it directly (not cloned)
