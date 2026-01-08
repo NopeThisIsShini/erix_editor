@@ -29,6 +29,8 @@ export class ErixEditor {
   @Prop() config?: EditorConfig;
   @Prop() plugins?: ErixPluginConfig[];
   @Prop() disabledPlugins?: string[];
+  @Prop() defaultFontSize: string = '12pt';
+  @Prop() defaultFontFamily: string = 'Arial, sans-serif';
 
   // ===========================================================================
   // STATE
@@ -181,6 +183,8 @@ export class ErixEditor {
       theme: this.theme as 'light' | 'dark',
       placeholder: this.placeholder,
       readonly: this.readonly,
+      defaultFontSize: this.defaultFontSize,
+      defaultFontFamily: this.defaultFontFamily,
     };
 
     if (this.plugins || this.disabledPlugins) {
@@ -200,7 +204,13 @@ export class ErixEditor {
 
   render() {
     return (
-      <Host data-theme={this.theme}>
+      <Host 
+        data-theme={this.theme}
+        style={{
+          '--editor-default-size': this.defaultFontSize,
+          '--editor-default-font': this.defaultFontFamily,
+        }}
+      >
         <div class="editor-wrapper">
           <erix-toolbar
             ref={el => (this.toolbarRef = el)}

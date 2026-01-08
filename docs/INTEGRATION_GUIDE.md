@@ -24,7 +24,22 @@ npm install erix
 
   editor.config = {
     toolbar: {
-      items: ['undo', 'redo', 'bold', 'italic', 'underline', 'bullet-list', 'ordered-list'],
+      items: [
+        'undo',
+        'redo',
+        'bold',
+        'italic',
+        'underline',
+        'strikethrough',
+        'superscript',
+        'subscript',
+        'uppercase',
+        'lowercase',
+        'bullet-list',
+        'ordered-list',
+        'page-break',
+        'print',
+      ],
     },
     theme: 'light',
     placeholder: 'Start typing...',
@@ -172,6 +187,10 @@ editor.config = {
 
   // Initial content
   content: '<p>Hello World</p>',
+
+  // Default font settings
+  defaultFontSize: '12pt',
+  defaultFontFamily: 'Arial, sans-serif',
 };
 ```
 
@@ -179,22 +198,25 @@ editor.config = {
 
 ## Available Toolbar Items
 
-| Item ID         | Group      | Description   | Shortcut |
-| --------------- | ---------- | ------------- | -------- |
-| `undo`          | history    | Undo          | Ctrl+Z   |
-| `redo`          | history    | Redo          | Ctrl+Y   |
-| `bold`          | formatting | Bold          | Ctrl+B   |
-| `italic`        | formatting | Italic        | Ctrl+I   |
-| `underline`     | formatting | Underline     | Ctrl+U   |
-| `strikethrough` | formatting | Strikethrough | -        |
-| `superscript`   | formatting | Superscript   | -        |
-| `subscript`     | formatting | Subscript     | -        |
-| `uppercase`     | textcase   | Uppercase     | -        |
-| `lowercase`     | textcase   | Lowercase     | -        |
-| `bullet-list`   | lists      | Bullet list   | -        |
-| `ordered-list`  | lists      | Numbered list | -        |
-| `page-break`    | insert     | Page break    | -        |
-| `print`         | tools      | Print         | Ctrl+P   |
+| Item ID         | Group      | Description    | Shortcut |
+| --------------- | ---------- | -------------- | -------- |
+| `undo`          | history    | Undo           | Ctrl+Z   |
+| `redo`          | history    | Redo           | Ctrl+Y   |
+| `bold`          | formatting | Bold           | Ctrl+B   |
+| `italic`        | formatting | Italic         | Ctrl+I   |
+| `underline`     | formatting | Underline      | Ctrl+U   |
+| `strikethrough` | formatting | Strikethrough  | -        |
+| `superscript`   | formatting | Superscript    | -        |
+| `subscript`     | formatting | Subscript      | -        |
+| `uppercase`     | textcase   | Uppercase      | -        |
+| `lowercase`     | textcase   | Lowercase      | -        |
+| `bullet-list`   | lists      | Bullet list    | -        |
+| `ordered-list`  | lists      | Numbered list  | -        |
+| `page-break`    | insert     | Page break     | -        |
+| `print`         | tools      | Print          | Ctrl+P   |
+| `font-family`   | font       | Font selection | -        |
+| `font-size`     | font       | Size selection | -        |
+| `import-word`   | tools      | Import .docx   | -        |
 
 **Auto-grouping:** Dividers are automatically inserted between different groups.
 
@@ -236,8 +258,22 @@ editor.addEventListener('erix-ready', e => {
   api.canRedo();
 
   // Commands
+  api.bold();
+  api.italic();
+  api.setFontSize('14pt');
+  api.setTextAlignment('center');
+  api.setHeading(1);
   api.invokePlugin('bold');
   api.isPluginActive('bold');
+  api.registerPlugin({
+    id: 'my-command',
+    label: 'My Cmd',
+    execute: () => {
+      alert('Hi');
+      return true;
+    },
+  });
+  api.invokePlugin('my-command');
 
   // Events
   api.on('change', ({ content }) => console.log(content));

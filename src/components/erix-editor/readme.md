@@ -7,15 +7,17 @@ The main rich text editor component with built-in toolbar, status bar, and plugi
 
 ## Properties
 
-| Property          | Attribute     | Description | Type                 | Default             |
-| ----------------- | ------------- | ----------- | -------------------- | ------------------- |
-| `config`          | --            |             | `EditorConfig`       | `undefined`         |
-| `content`         | `content`     |             | `string`             | `undefined`         |
-| `disabledPlugins` | --            |             | `string[]`           | `undefined`         |
-| `placeholder`     | `placeholder` |             | `string`             | `'Start typing...'` |
-| `plugins`         | --            |             | `ErixPluginConfig[]` | `undefined`         |
-| `readonly`        | `readonly`    |             | `boolean`            | `false`             |
-| `theme`           | `theme`       |             | `string`             | `'light'`           |
+| Property            | Attribute             | Description | Type                 | Default               |
+| ------------------- | --------------------- | ----------- | -------------------- | --------------------- |
+| `config`            | --                    |             | `EditorConfig`       | `undefined`           |
+| `content`           | `content`             |             | `string`             | `undefined`           |
+| `defaultFontFamily` | `default-font-family` |             | `string`             | `'Arial, sans-serif'` |
+| `defaultFontSize`   | `default-font-size`   |             | `string`             | `'12pt'`              |
+| `disabledPlugins`   | --                    |             | `string[]`           | `undefined`           |
+| `placeholder`       | `placeholder`         |             | `string`             | `'Start typing...'`   |
+| `plugins`           | --                    |             | `ErixPluginConfig[]` | `undefined`           |
+| `readonly`          | `readonly`            |             | `boolean`            | `false`               |
+| `theme`             | `theme`               |             | `string`             | `'light'`             |
 
 
 ## Methods

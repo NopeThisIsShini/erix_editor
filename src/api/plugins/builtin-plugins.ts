@@ -248,6 +248,28 @@ export function createBuiltinPlugins(
     },
 
     // =========================================================================
+    // FONT PLUGINS
+    // =========================================================================
+    {
+      id: 'font-family',
+      label: 'Font Family',
+      icon: 'fontFamily',
+      group: 'font',
+      priority: 10,
+      showInToolbar: true,
+      execute: () => true, // Handled by UI component
+    },
+    {
+      id: 'font-size',
+      label: 'Font Size',
+      icon: 'fontSize',
+      group: 'font',
+      priority: 20,
+      showInToolbar: true,
+      execute: () => true, // Handled by UI component
+    },
+
+    // =========================================================================
     // IMPORT PLUGINS
     // =========================================================================
     {
@@ -322,5 +344,7 @@ export const ALL_BUILTIN_PLUGINS = [
   'align-justify',
   'undo',
   'redo',
+  'font-family',
+  'font-size',
   'import-word',
 ];

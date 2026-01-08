@@ -26,6 +26,7 @@ export type PluginGroup =
   | 'table'
   | 'history'
   | 'tools'
+  | 'font'
   | 'custom';
 
 /**
@@ -269,6 +270,10 @@ export interface EditorConfig {
   theme?: 'light' | 'dark';
   /** Language */
   language?: string;
+  /** Default font size (e.g., '12pt') */
+  defaultFontSize?: string;
+  /** Default font family (e.g., 'Arial, sans-serif') */
+  defaultFontFamily?: string;
 }
 
 /**
@@ -293,4 +298,6 @@ export const DEFAULT_EDITOR_CONFIG: EditorConfig = {
   placeholder: 'Start typing...',
   readonly: false,
   theme: 'light',
+  defaultFontSize: '12pt',
+  defaultFontFamily: 'Arial, sans-serif',
 };

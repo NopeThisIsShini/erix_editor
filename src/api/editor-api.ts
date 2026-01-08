@@ -68,6 +68,25 @@ import type {
   PluginGroup,
 } from './plugin-registry.types';
 
+import {
+  toggleBold,
+  toggleItalic,
+  toggleUnderline,
+  toggleStrikethrough,
+  toggleSuperscript,
+  toggleSubscript,
+  setTextAlignment,
+  setFontSize,
+  setFontFamily,
+  toggleBulletList,
+  toggleOrderedList,
+  increaseIndent,
+  decreaseIndent,
+  setHeading,
+  setParagraph,
+  setTextCase,
+} from '../core';
+
 // =============================================================================
 // EVENT EMITTER
 // =============================================================================
@@ -488,6 +507,149 @@ export class ErixEditorAPI {
   isMarkActive(markName: string): boolean {
     this.ensureNotDestroyed();
     return this.controller.isMarkActive(markName);
+  }
+
+  // ===========================================================================
+  // FORMATTING METHODS
+  // ===========================================================================
+
+  /** Toggle bold formatting */
+  bold(): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    toggleBold(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /** Toggle italic formatting */
+  italic(): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    toggleItalic(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /** Toggle underline formatting */
+  underline(): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    toggleUnderline(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /** Toggle strikethrough formatting */
+  strikethrough(): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    toggleStrikethrough(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /** Toggle superscript formatting */
+  superscript(): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    toggleSuperscript(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /** Toggle subscript formatting */
+  subscript(): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    toggleSubscript(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /**
+   * Set font size.
+   * @param size - Font size (e.g., '12pt', '16px')
+   */
+  setFontSize(size: string): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    setFontSize(size)(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /**
+   * Set font family.
+   * @param family - Font family (e.g., 'Arial, sans-serif')
+   */
+  setFontFamily(family: string): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    setFontFamily(family)(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /**
+   * Set text alignment.
+   * @param alignment - Alignment type
+   */
+  setTextAlignment(alignment: 'left' | 'center' | 'right' | 'justify'): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    setTextAlignment(alignment)(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /** Toggle bullet list */
+  toggleBulletList(): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    toggleBulletList(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /** Toggle ordered list */
+  toggleOrderedList(): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    toggleOrderedList(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /** Increase indentation */
+  indent(): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    increaseIndent(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /** Decrease indentation */
+  outdent(): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    decreaseIndent(view.state, view.dispatch);
+    view.focus();
+  }
+
+  /**
+   * Set heading level.
+   * @param level - Heading level (1-6, or 0 for paragraph)
+   */
+  setHeading(level: number): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    if (level === 0) {
+      setParagraph(view.state, view.dispatch);
+    } else {
+      setHeading(level)(view.state, view.dispatch);
+    }
+    view.focus();
+  }
+
+  /**
+   * Set text case.
+   * @param type - Case type
+   */
+  setTextCase(type: 'uppercase' | 'lowercase'): void {
+    this.ensureNotDestroyed();
+    const view = this.controller.getView();
+    setTextCase(type)(view.state, view.dispatch);
+    view.focus();
   }
 
   // ===========================================================================

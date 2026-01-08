@@ -53,7 +53,8 @@
 .editor-canvas .ProseMirror {
   height: 100%;
   outline: none;
-  font-size: 16px;
+  font-family: var(--editor-default-font, Arial, sans-serif);
+  font-size: var(--editor-default-size, 16px);
   line-height: 1.6;
   color: var(--editor-text);
   /* Industry standard 1-inch margins (2.54cm) for the editor UI */

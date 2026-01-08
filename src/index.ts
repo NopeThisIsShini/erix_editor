@@ -111,6 +111,10 @@ declare global {
     getAPI(): Promise<ErixEditorAPI>;
     /** Editor configuration */
     config?: EditorConfig;
+    /** Default font size */
+    defaultFontSize: string;
+    /** Default font family */
+    defaultFontFamily: string;
   }
 
   interface HTMLElementTagNameMap {

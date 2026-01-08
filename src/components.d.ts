@@ -108,6 +108,14 @@ export namespace Components {
     interface ErixEditor {
         "config"?: EditorConfig;
         "content"?: string;
+        /**
+          * @default 'Arial, sans-serif'
+         */
+        "defaultFontFamily": string;
+        /**
+          * @default '12pt'
+         */
+        "defaultFontSize": string;
         "disabledPlugins"?: string[];
         "getAPI": () => Promise<ErixEditorAPI>;
         /**
@@ -570,6 +578,14 @@ declare namespace LocalJSX {
     interface ErixEditor {
         "config"?: EditorConfig;
         "content"?: string;
+        /**
+          * @default 'Arial, sans-serif'
+         */
+        "defaultFontFamily"?: string;
+        /**
+          * @default '12pt'
+         */
+        "defaultFontSize"?: string;
         "disabledPlugins"?: string[];
         /**
           * @default 'Start typing...'
