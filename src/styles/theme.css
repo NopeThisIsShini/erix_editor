@@ -10,6 +10,8 @@
   --editor-accent: #3b82f6;
   --editor-accent-foreground: #ffffff;
   --editor-active-bg: rgba(59, 130, 246, 0.1);
+  --editor-selection: rgba(59, 130, 246, 0.3);
+  --editor-blockquote-border: #d1d5db;
   --editor-radius: 0.5rem;
   --editor-font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
@@ -23,6 +25,8 @@
   --editor-accent: #60a5fa;
   --editor-accent-foreground: #111827;
   --editor-active-bg: rgba(96, 165, 250, 0.2);
+  --editor-selection: rgba(96, 165, 250, 0.4);
+  --editor-blockquote-border: #4b5563;
 }
 
 /* Fallback for non-shadow environments or global usage */
@@ -35,6 +39,8 @@
   --editor-accent: #3b82f6;
   --editor-accent-foreground: #ffffff;
   --editor-active-bg: rgba(59, 130, 246, 0.1);
+  --editor-selection: rgba(59, 130, 246, 0.3);
+  --editor-blockquote-border: #d1d5db;
   --editor-radius: 0.5rem;
   --editor-font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
@@ -48,4 +54,26 @@
   --editor-accent: #60a5fa;
   --editor-accent-foreground: #111827;
   --editor-active-bg: rgba(96, 165, 250, 0.2);
+  --editor-selection: rgba(96, 165, 250, 0.4);
+  --editor-blockquote-border: #4b5563;
+}
+
+@media print {
+
+  :host,
+  :root,
+  [data-theme] {
+    --editor-bg: #ffffff !important;
+    --editor-surface: #ffffff !important;
+    --editor-text: #000000 !important;
+    --editor-muted-text: #374151 !important;
+    --editor-border: #d1d5db !important;
+    --editor-accent: #000000 !important;
+    --editor-accent-foreground: #ffffff !important;
+    --editor-active-bg: transparent !important;
+    --editor-selection: transparent !important;
+    --editor-blockquote-border: #000000 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
 }

@@ -177,14 +177,10 @@
 .editor-canvas .ProseMirror blockquote {
   margin: 1.5em 20px;
   padding: 8px 24px;
-  border-left: 4px solid #d1d5db; /* Grey line like in the image */
+  border-left: 4px solid var(--editor-blockquote-border);
   background-color: transparent;
   color: var(--editor-text);
   font-style: italic;
-}
-
-:host([data-theme='dark']) .editor-canvas .ProseMirror blockquote {
-  border-left-color: #4b5563;
 }
 
 /* Code Block */
@@ -288,26 +284,30 @@
 .editor-canvas .ProseMirror table {
   border-collapse: collapse;
   table-layout: auto;
-  width: 100%; /* Default to 100%, but easily overridden by content/inline-styles */
-  max-width: 100%; /* Safety to prevent horizontal overflow */
+  width: 100%;
+  /* Default to 100%, but easily overridden by content/inline-styles */
+  max-width: 100%;
+  /* Safety to prevent horizontal overflow */
   margin: 1em 0;
   box-sizing: border-box;
   display: table;
 }
 
 /* Ensure all content respects container boundary */
-.editor-canvas .ProseMirror > * {
+.editor-canvas .ProseMirror>* {
   max-width: 100%;
   box-sizing: border-box;
 }
 
-.editor-canvas .ProseMirror td, .editor-canvas .ProseMirror th {
+.editor-canvas .ProseMirror td,
+.editor-canvas .ProseMirror th {
   vertical-align: top;
   box-sizing: border-box;
   position: relative;
   border: 1px solid var(--editor-border);
   padding: 4px 6px;
-  min-width: 1em; /* Ensure cells stay visible */
+  min-width: 1em;
+  /* Ensure cells stay visible */
   word-wrap: break-word;
   word-break: break-word;
   overflow-wrap: break-word;
@@ -327,8 +327,9 @@
 }
 
 /* Ensure empty cells are clickable and visible */
-.editor-canvas .ProseMirror td > p:only-child:empty::before {
-  content: "\00a0"; /* Non-breaking space */
+.editor-canvas .ProseMirror td>p:only-child:empty::before {
+  content: "\00a0";
+  /* Non-breaking space */
 }
 
 /* Bordered boxes (from Word) */
@@ -356,11 +357,7 @@
 
 /* Selection */
 .editor-canvas .ProseMirror ::selection {
-  background: rgba(59, 130, 246, 0.3);
-}
-
-:host([data-theme='dark']) .editor-canvas .ProseMirror ::selection {
-  background: rgba(96, 165, 250, 0.4);
+  background: var(--editor-selection);
 }
 
 /* Page Break */
@@ -405,19 +402,22 @@
     size: auto;
   }
 
-  :host, .editor-wrapper, .editor-content, .editor-canvas {
+  :host,
+  .editor-wrapper,
+  .editor-content,
+  .editor-canvas {
     display: block !important;
     height: auto !important;
     padding: 0 !important;
     margin: 0 !important;
-    background-color: white !important;
+    background-color: var(--editor-bg) !important;
     width: 100% !important;
     border: none !important;
   }
 
   /* Reset container for print - the @page rule above handles the margins */
   .editor-canvas .ProseMirror {
-    color: black !important;
+    color: var(--editor-text) !important;
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
@@ -426,7 +426,8 @@
 
   /* Ensure tables and blocks respect their defined widths without overrides */
   .editor-canvas .ProseMirror table {
-    width: 100%; /* Default if not specified */
+    width: 100%;
+    /* Default if not specified */
     max-width: 100%;
     margin: 1em 0;
     table-layout: auto;
@@ -434,7 +435,10 @@
   }
 
   /* Hide UI-only elements */
-  erix-toolbar, .editor-canvas .ProseMirror .page-break span, .editor-canvas .ProseMirror .page-break::before {
+  erix-toolbar,
+  erix-status-bar,
+  .editor-canvas .ProseMirror .page-break span,
+  .editor-canvas .ProseMirror .page-break::before {
     display: none !important;
   }
 
