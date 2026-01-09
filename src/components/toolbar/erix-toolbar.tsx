@@ -29,6 +29,8 @@ import {
   undo,
   redo,
   insertTable,
+  setTextLineSpacing,
+  getActiveLineSpacing,
 } from '@src/core';
 import type { ToolbarItem } from '@src/api';
 import type { SelectOption } from '../ui/erix-select/erix-select';
@@ -201,6 +203,23 @@ const BUILTIN_PLUGINS: Record<string, ToolbarPluginDef> = {
     group: 'alignment',
     execute: (view) => { setTextAlignment('justify')(view.state, view.dispatch); view.focus(); },
     isActive: (view) => getActiveAlignment(view.state) === 'justify',
+  },
+
+  // Line Spacing
+  'line-spacing': {
+    id: 'line-spacing',
+    label: 'Line Spacing',
+    icon: 'textLineSpacing',
+    group: 'alignment',
+    type: 'select',
+    options: [
+      { value: 'normal', label: 'Default' },
+      { value: '1', label: 'Single' },
+      { value: '1.15', label: '1.15' },
+      { value: '1.5', label: '1.5' },
+      { value: '2', label: 'Double' },
+    ],
+    execute: (view) => { /* Handled by select change */ view.focus(); },
   },
 
   // Font Family
@@ -420,6 +439,18 @@ export class ErixToolbar {
     this.updateActiveFormats();
   };
 
+
+
+  private handleLineSpacingChange = (event: CustomEvent<string>) => {
+    if (!this.view) return;
+    const spacing = event.detail;
+    if (spacing) {
+      setTextLineSpacing(spacing)(this.view.state, this.view.dispatch);
+      this.view.focus();
+      this.updateActiveFormats();
+    }
+  };
+
   private handleInsertTable = (rows: number, cols: number) => {
     if (!this.view) return;
     this.view.focus();
@@ -460,15 +491,22 @@ export class ErixToolbar {
     let currentValue = '';
     let changeHandler: (event: CustomEvent<string>) => void;
     let width: 'sm' | 'md' | 'lg' = 'md';
+    let iconOnly = false;
 
     if (plugin.id === 'font-size') {
       currentValue = getActiveFontSize(this.view.state) || '';
       changeHandler = this.handleFontSizeChange;
       width = 'sm';
+
     } else if (plugin.id === 'font-family') {
       currentValue = getActiveFontFamily(this.view.state) || '';
       changeHandler = this.handleFontFamilyChange;
       width = 'lg';
+    } else if (plugin.id === 'line-spacing') {
+      currentValue = getActiveLineSpacing(this.view.state) || 'normal';
+      changeHandler = this.handleLineSpacingChange;
+      width = 'sm';
+      iconOnly = true;
     } else {
       // Generic fallback
       currentValue = '';
@@ -488,6 +526,8 @@ export class ErixToolbar {
         value={currentValue}
         selectTitle={plugin.label}
         width={width}
+        iconOnly={iconOnly}
+        triggerIcon={plugin.icon}
         onErixChange={changeHandler}
       />
     );

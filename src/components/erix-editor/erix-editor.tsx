@@ -219,7 +219,7 @@ export class ErixEditor {
             items={this.config?.toolbar?.items || [
               'undo', 'redo', '|', 'font-family', 'font-size', '|',
               'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', '|',
-              'uppercase', 'lowercase', '|', 'align-left', 'align-center', 'align-right', 'align-justify', '|',
+              'uppercase', 'lowercase', '|', 'align-left', 'align-center', 'align-right', 'align-justify', 'line-spacing', '|',
               'bullet-list', 'ordered-list', '|', 'table', '|', 'page-break', 'print', 'import-word'
             ]}
             showThemeToggle={false}
