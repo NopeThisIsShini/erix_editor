@@ -1,5 +1,5 @@
 {
-  "name": "erix",
+  "name": "erixeditor",
   "version": "0.0.1",
   "description": "A rich text editor component with built-in toolbar and plugin system",
   "main": "dist/index.cjs.js",
@@ -7,11 +7,11 @@
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/erix/erix.esm.js",
+  "unpkg": "dist/erixeditor/erixeditor.esm.js",
   "exports": {
     ".": {
-      "import": "./dist/erix/erix.esm.js",
-      "require": "./dist/erix/erix.cjs.js",
+      "import": "./dist/erixeditor/erixeditor.esm.js",
+      "require": "./dist/erixeditor/erixeditor.cjs.js",
       "types": "./dist/types/index.d.ts"
     },
     "./react": {

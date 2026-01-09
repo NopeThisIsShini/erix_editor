@@ -6,7 +6,7 @@ import { angularOutputTarget } from '@stencil/angular-output-target';
 import { vueOutputTarget } from '@stencil/vue-output-target';
 
 export const config: Config = {
-  namespace: 'erix',
+  namespace: 'erixeditor',
   rollupPlugins: {
     before: [
       {
@@ -60,7 +60,7 @@ export const config: Config = {
 
     // Angular Output - generates native Angular module
     angularOutputTarget({
-      componentCorePackage: 'erix',
+      componentCorePackage: 'erixeditor',
       outputType: 'component',
       directivesProxyFile: './dist/angular/components.ts',
       directivesArrayFile: './dist/angular/index.ts',
@@ -68,7 +68,7 @@ export const config: Config = {
 
     // Vue Output - generates native Vue components
     vueOutputTarget({
-      componentCorePackage: 'erix',
+      componentCorePackage: 'erixeditor',
       proxiesFile: './dist/vue/components.ts',
     }),
   ],
