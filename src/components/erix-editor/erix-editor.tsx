@@ -218,7 +218,7 @@ export class ErixEditor {
             theme={this.theme}
             items={this.config?.toolbar?.items || [
               'undo', 'redo', '|', 'font-family', 'font-size', '|',
-              'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', '|',
+              'bold', 'italic', 'underline', 'strikethrough', 'blockquote', 'superscript', 'subscript', '|',
               'uppercase', 'lowercase', '|', 'align-left', 'align-center', 'align-right', 'align-justify', 'line-spacing', '|',
               'bullet-list', 'ordered-list', '|', 'table', '|', 'page-break', 'print', 'import-word'
             ]}

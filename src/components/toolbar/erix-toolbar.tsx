@@ -31,6 +31,8 @@ import {
   insertTable,
   setTextLineSpacing,
   getActiveLineSpacing,
+  toggleBlockquote,
+  isBlockquoteActive,
 } from '@src/core';
 import type { ToolbarItem } from '@src/api';
 import type { SelectOption } from '../ui/erix-select/erix-select';
@@ -142,6 +144,16 @@ const BUILTIN_PLUGINS: Record<string, ToolbarPluginDef> = {
     icon: 'lowerCase',
     group: 'textcase',
     execute: (view) => { setTextCase('lowercase')(view.state, view.dispatch); view.focus(); },
+  },
+
+  // Blockquote
+  'blockquote': {
+    id: 'blockquote',
+    label: 'Blockquote',
+    icon: 'blockQuote',
+    group: 'formatting',
+    execute: (view) => { toggleBlockquote(view.state, view.dispatch); view.focus(); },
+    isActive: (view) => isBlockquoteActive(view.state),
   },
 
   // Lists

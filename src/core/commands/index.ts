@@ -60,6 +60,12 @@ export {
   insertPageBreak,
 } from './document';
 
+// Blockquote Commands
+export {
+  toggleBlockquote,
+  isBlockquoteActive,
+} from './blockquote';
+
 // History Commands
 export { undo, redo } from './history';
 

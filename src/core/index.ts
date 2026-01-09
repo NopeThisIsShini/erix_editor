@@ -61,6 +61,12 @@ export {
   getActiveLineSpacing,
 } from './commands/index';
 
+// Commands - Blockquote
+export {
+  toggleBlockquote,
+  isBlockquoteActive,
+} from './commands/index';
+
 // Commands - Document
 export {
   printDocument,

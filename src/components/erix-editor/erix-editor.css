@@ -175,12 +175,16 @@
 
 /* Blockquote */
 .editor-canvas .ProseMirror blockquote {
-  margin: 1em 0;
-  padding: 0.5em 1em;
-  border-left: 3px solid var(--editor-accent);
-  background-color: var(--editor-surface);
-  color: var(--editor-muted-text);
+  margin: 1.5em 20px;
+  padding: 8px 24px;
+  border-left: 4px solid #d1d5db; /* Grey line like in the image */
+  background-color: transparent;
+  color: var(--editor-text);
   font-style: italic;
+}
+
+:host([data-theme='dark']) .editor-canvas .ProseMirror blockquote {
+  border-left-color: #4b5563;
 }
 
 /* Code Block */
