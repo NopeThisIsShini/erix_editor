@@ -1,6 +1,6 @@
 {
   "name": "erixeditor",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A rich text editor component with built-in toolbar and plugin system",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -34,7 +34,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/erix-editor/erix.git"
+    "url": "https://github.com/NopeThisIsShini/erix_editor.git"
   },
   "files": [
     "dist/",
@@ -58,7 +58,7 @@
     "jest-cli": "^29.7.0",
     "puppeteer": "^24.3.0"
   },
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "keywords": [
     "editor",
     "rich-text",
