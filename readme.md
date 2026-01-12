@@ -175,17 +175,21 @@ function onReady(event) {
 
 ## Documentation
 
-For complete API reference, configuration options, and advanced usage examples, see the **[Full Integration Guide](https://github.com/NopeThisIsShini/erix_editor_public/blob/main/docs/INTEGRATION_GUIDE.md)**.
+For complete API reference, configuration options, and advanced usage examples, see the **[Full Integration Guide](https://github.com/NopeThisIsShini/erix_editor/blob/master/docs/INTEGRATION_GUIDE.md)**.
 
 ## Contributing
 
-The Erix Editor source code is maintained in a **private repository**. We welcome contributions from the community!
+Erix Editor is now **open source**! We welcome contributions from everyone. Whether you're fixing a bug, adding a feature, or improving documentation, your help is appreciated.
 
-**Want to contribute?**
+**How to contribute:**
 
-1. Join our [Discord Community](https://discord.gg/BsXK68EnrR)
-2. Introduce yourself and share your ideas
-3. A member of the Erix development team will reach out to discuss collaboration
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+For discussions and community support, join our [Discord Community](https://discord.gg/BsXK68EnrR).
 
 ## Community
 
@@ -198,41 +202,18 @@ The Erix Editor source code is maintained in a **private repository**. We welcom
 
 ## License
 
-<table>
-<tr>
-<td>
+Erix Editor is licensed under the **MIT License**. It is totally open source and free to use for personal and commercial projects.
 
-### Free License
+**Enterprise Users:**
+While Erix Editor is free to use, we greatly appreciate a shout-out or support from enterprise users. If your company uses Erix Editor, let us know on [Discord](https://discord.gg/BsXK68EnrR) or mention us!
 
-Use Erix Editor freely for:
-
-- Personal projects
-- Open source projects  
-- Educational purposes
-- Non-commercial applications
-
-</td>
-<td>
-
-### Enterprise License
-
-For commercial or enterprise use:
-
-1. Contact the Erix Team via [Discord](https://discord.gg/BsXK68EnrR)
-2. Discuss your use case and requirements
-3. Obtain written permission before use
-
-</td>
-</tr>
-</table>
-
-[View Full License](https://github.com/NopeThisIsShini/erix_editor_public/blob/main/LICENSE)
+[View Full License](https://github.com/NopeThisIsShini/erix_editor/blob/master/LICENSE)
 
 ## Links
 
 - [npm Package](https://www.npmjs.com/package/erixeditor)
-- [Full Integration Guide](https://github.com/NopeThisIsShini/erix_editor_public/blob/main/docs/INTEGRATION_GUIDE.md)
-- [Report Issues](https://github.com/NopeThisIsShini/erix_editor_public/issues)
+- [Full Integration Guide](https://github.com/NopeThisIsShini/erix_editor/blob/master/docs/INTEGRATION_GUIDE.md)
+- [Report Issues](https://github.com/NopeThisIsShini/erix_editor/issues)
 - [Discord Community](https://discord.gg/BsXK68EnrR)
 
 ## Keywords

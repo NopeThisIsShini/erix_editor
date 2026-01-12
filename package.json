@@ -58,7 +58,7 @@
     "jest-cli": "^29.7.0",
     "puppeteer": "^24.3.0"
   },
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "keywords": [
     "editor",
     "rich-text",
