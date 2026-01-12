@@ -215,7 +215,3 @@ While Erix Editor is free to use, we greatly appreciate a shout-out or support f
 - [Full Integration Guide](https://github.com/NopeThisIsShini/erix_editor/blob/master/docs/INTEGRATION_GUIDE.md)
 - [Report Issues](https://github.com/NopeThisIsShini/erix_editor/issues)
 - [Discord Community](https://discord.gg/BsXK68EnrR)
-
-## Keywords
-
-`editor` `wysiwyg` `html` `richtext` `text` `javascript` `typescript` `stencil` `web-component` `react` `angular` `vue` `prosemirror`
