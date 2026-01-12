@@ -94,7 +94,7 @@ import { defineCustomElements } from 'erixeditor/loader';
 // Define custom elements
 defineCustomElements();
 
-function MyEditor() {
+function App() {
   const handleReady = (event: any) => {
     const api = event.detail.api;
     api.setContent('<p>Hello React!</p>', 'html');
@@ -103,14 +103,37 @@ function MyEditor() {
   return (
     <erix-editor
       config={{
-        toolbar: {
-          items: ['undo', 'redo', 'bold', 'italic', 'underline', 'bullet-list'],
-        },
+        toolbar: { items: ['undo', 'redo', 'bold', 'italic'] },
         theme: 'light',
       }}
       onerix-ready={handleReady}
     />
   );
+}
+```
+
+#### TypeScript Setup
+
+Create `src/erix-editor.d.ts` to properly type the custom element:
+
+```typescript
+import 'react';
+
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      'erix-editor': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        'config'?: any;
+        'content'?: string;
+        'theme'?: 'light' | 'dark' | string;
+        'onerix-ready'?: (event: any) => void;
+        'onerix-content-change'?: (event: any) => void;
+        'onerix-selection-change'?: (event: any) => void;
+        'onerix-focus'?: (event: any) => void;
+        'onerix-blur'?: (event: any) => void;
+      };
+    }
+  }
 }
 ```
 
