@@ -210,6 +210,8 @@ function onReady(event) {
 </template>
 ```
 
+> **Note:** Configure `compilerOptions.isCustomElement` in your `vite.config.js` to avoid warnings.
+
 ## Package Exports
 
 | Export Path         | Description            |
