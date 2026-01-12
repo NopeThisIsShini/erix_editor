@@ -1,0 +1,229 @@
+﻿[33mΓ¥»[39m Building...
+[32mΓ£ö[39m Building...
+[1mInitial chunk files[22m  [2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mmain-N33NKS7R.js[39m     [2m | [22m[2mmain[22m                    [2m | [22m[36m206.54 kB[39m[2m | [22m               [36m55.74 kB[39m
+[32mchunk-I6VQAW7D.js[39m    [2m | [22m[2m-[22m                       [2m | [22m [36m43.41 kB[39m[2m | [22m               [36m15.08 kB[39m
+[32mpolyfills-B6TNHZQ6.js[39m[2m | [22m[2mpolyfills[22m               [2m | [22m [36m34.58 kB[39m[2m | [22m               [36m11.32 kB[39m
+[32mchunk-MA2FCXR3.js[39m    [2m | [22m[2m-[22m                       [2m | [22m[36m828 bytes[39m[2m | [22m              [36m828 bytes[39m
+[32mstyles-5INURTSO.css[39m  [2m | [22m[2mstyles[22m                  [2m | [22m  [36m0 bytes[39m[2m | [22m                [36m0 bytes[39m
+
+[1m [22m                    [2m | [22m[1mInitial total[22m           [2m | [22m[1m285.35 kB[22m[2m | [22m               [1m82.97 kB[22m
+
+[1mLazy chunk files[22m     [2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mchunk-A3HORATT.js[39m    [2m | [22m[2m-[22m                       [2m | [22m[36m271.40 kB[39m[2m | [22m               [36m72.80 kB[39m
+[32mchunk-GAKAR3FW.js[39m    [2m | [22m[2merix-button_9-entry[22m     [2m | [22m[36m185.42 kB[39m[2m | [22m               [36m43.12 kB[39m
+[32mchunk-I27PV56I.js[39m    [2m | [22m[2m-[22m                       [2m | [22m[36m117.44 kB[39m[2m | [22m               [36m31.35 kB[39m
+[32mchunk-QLP5ZQBO.js[39m    [2m | [22m[2merix-popover-entry[22m      [2m | [22m  [36m3.80 kB[39m[2m | [22m                [36m1.32 kB[39m
+[32mchunk-2HGXDHFD.js[39m    [2m | [22m[2mindex-Cd4baJQ4[22m          [2m | [22m  [36m3.61 kB[39m[2m | [22m                [36m1.39 kB[39m
+[32mchunk-V2PIEJFI.js[39m    [2m | [22m[2merix-table-toolbar-entry[22m[2m | [22m  [36m2.33 kB[39m[2m | [22m              [36m806 bytes[39m
+
+Application bundle generation complete. [3.458 seconds]
+
+npx : [1m[33m[33mΓû▓ 
+[43;33m[[43;30mWARNING[43;33m][0m 
+[1mThe condition "types" here will never 
+be used as it comes after both "import" 
+and "require"[0m [package.json]
+At line:1 char:1
++ npx ng build 2>&1 | Out-File -FilePath 
+build-output.txt -Encoding utf ...
++ ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecifie 
+   d: ([1m[33m[33mΓ... [package.json]  
+  :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeComma 
+   ndError
+ 
+
+    ../../package.json:15:6:
+[37m      15 Γöé       
+[32m"types"[37m: 
+"./dist/types/index.d.ts"
+         Γò╡       [32m~~~~~~~[0m
+
+  The "import" condition comes earlier 
+and will be used for all "import" 
+statements:
+
+    ../../package.json:13:6:
+[37m      13 Γöé       
+[32m"import"[37m: 
+"./dist/erixeditor/erixeditor.esm.js",
+         Γò╡       [32m~~~~~~~~[0m
+
+  The "require" condition comes earlier 
+and will be used for all "require" calls:
+
+    ../../package.json:14:6:
+[37m      14 Γöé       
+[32m"require"[37m: 
+"./dist/erixeditor/erixeditor.cjs.js",
+         Γò╡       [32m~~~~~~~~~[0m
+
+
+[33mΓû▓ 
+[43;33m[[43;30mWARNING[43;33m][0m 
+[1mThe condition "types" here will never 
+be used as it comes after both "import" 
+and "require"[0m [package.json]
+
+    ../../package.json:32:6:
+[37m      32 Γöé       
+[32m"types"[37m: "./loader/index.d.ts"
+         Γò╡       [32m~~~~~~~[0m
+
+  The "import" condition comes earlier 
+and will be used for all "import" 
+statements:
+
+    ../../package.json:30:6:
+[37m      30 Γöé       
+[32m"import"[37m: "./loader/index.js",
+         Γò╡       [32m~~~~~~~~[0m
+
+  The "require" condition comes earlier 
+and will be used for all "require" calls:
+
+    ../../package.json:31:6:
+[37m      31 Γöé       
+[32m"require"[37m: "./loader/index.cjs",
+         Γò╡       [32m~~~~~~~~~[0m
+
+
+[33mΓû▓ 
+[43;33m[[43;30mWARNING[43;33m][0m 
+[1mThe condition "types" here will never 
+be used as it comes after both "import" 
+and "require"[0m [package.json]
+
+    ../../package.json:15:6:
+[37m      15 Γöé       
+[32m"types"[37m: 
+"./dist/types/index.d.ts"
+         Γò╡       [32m~~~~~~~[0m
+
+  The "import" condition comes earlier 
+and will be used for all "import" 
+statements:
+
+    ../../package.json:13:6:
+[37m      13 Γöé       
+[32m"import"[37m: 
+"./dist/erixeditor/erixeditor.esm.js",
+         Γò╡       [32m~~~~~~~~[0m
+
+  The "require" condition comes earlier 
+and will be used for all "require" calls:
+
+    ../../package.json:14:6:
+[37m      14 Γöé       
+[32m"require"[37m: 
+"./dist/erixeditor/erixeditor.cjs.js",
+         Γò╡       [32m~~~~~~~~~[0m
+
+
+[33mΓû▓ 
+[43;33m[[43;30mWARNING[43;33m][0m 
+[1mThe condition "types" here will never 
+be used as it comes after both "import" 
+and "require"[0m [package.json]
+
+    ../../package.json:32:6:
+[37m      32 Γöé       
+[32m"types"[37m: "./loader/index.d.ts"
+         Γò╡       [32m~~~~~~~[0m
+
+  The "import" condition comes earlier 
+and will be used for all "import" 
+statements:
+
+    ../../package.json:30:6:
+[37m      30 Γöé       
+[32m"import"[37m: "./loader/index.js",
+         Γò╡       [32m~~~~~~~~[0m
+
+  The "require" condition comes earlier 
+and will be used for all "require" calls:
+
+    ../../package.json:31:6:
+[37m      31 Γöé       
+[32m"require"[37m: "./loader/index.cjs",
+         Γò╡       [32m~~~~~~~~~[0m
+
+
+[33mΓû▓ 
+[43;33m[[43;30mWARNING[43;33m][0m 
+[1mThe condition "types" here will never 
+be used as it comes after both "import" 
+and "require"[0m [package.json]
+
+    ../../package.json:15:6:
+[37m      15 Γöé       
+[32m"types"[37m: 
+"./dist/types/index.d.ts"
+         Γò╡       [32m~~~~~~~[0m
+
+  The "import" condition comes earlier 
+and will be used for all "import" 
+statements:
+
+    ../../package.json:13:6:
+[37m      13 Γöé       
+[32m"import"[37m: 
+"./dist/erixeditor/erixeditor.esm.js",
+         Γò╡       [32m~~~~~~~~[0m
+
+  The "require" condition comes earlier 
+and will be used for all "require" calls:
+
+    ../../package.json:14:6:
+[37m      14 Γöé       
+[32m"require"[37m: 
+"./dist/erixeditor/erixeditor.cjs.js",
+         Γò╡       [32m~~~~~~~~~[0m
+
+
+[33mΓû▓ 
+[43;33m[[43;30mWARNING[43;33m][0m 
+[1mThe condition "types" here will never 
+be used as it comes after both "import" 
+and "require"[0m [package.json]
+
+    ../../package.json:32:6:
+[37m      32 Γöé       
+[32m"types"[37m: "./loader/index.d.ts"
+         Γò╡       [32m~~~~~~~[0m
+
+  The "import" condition comes earlier 
+and will be used for all "import" 
+statements:
+
+    ../../package.json:30:6:
+[37m      30 Γöé       
+[32m"import"[37m: "./loader/index.js",
+         Γò╡       [32m~~~~~~~~[0m
+
+  The "require" condition comes earlier 
+and will be used for all "require" calls:
+
+    ../../package.json:31:6:
+[37m      31 Γöé       
+[32m"require"[37m: "./loader/index.cjs",
+         Γò╡       [32m~~~~~~~~~[0m
+
+
+[33mΓû▓ 
+[43;33m[[43;30mWARNING[43;33m][0m 
+[1mModule 'prosemirror-state' used by 
+'../../dist/esm/erix-button_9.entry.js' 
+is not ESM[0m
+
+  CommonJS or AMD dependencies can cause 
+optimization bailouts.
+  For more information see: [4mhttps://an
+gular.dev/tools/cli/build#configuring-comm
+onjs-dependencies[0m
+
+[39m[22m
+Output location: D:\erix\editor_\examples\angular\dist\angular
+

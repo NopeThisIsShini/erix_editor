@@ -53,72 +53,138 @@ npm install erixeditor
 
 ### React
 
-Native React wrapper - no `defineCustomElements` needed!
+Use the `erix-editor` custom element directly. Since React 19, custom elements are fully supported with standard property and event bindings!
 
 ```tsx
-import { ErixEditor } from 'erixeditor/react';
+import { defineCustomElements } from 'erixeditor/loader';
 
-function MyEditor() {
-  const handleReady = event => {
+// Define custom elements
+defineCustomElements();
+import './App.css';
+
+function App() {
+  const handleReady = (event: any) => {
     const api = event.detail.api;
     api.setContent('<p>Hello React!</p>', 'html');
   };
 
+  const handleContentChange = (event: any) => {
+    console.log('Content:', event.detail.content);
+  };
+
   return (
-    <ErixEditor
-      config={{
-        toolbar: {
-          items: ['undo', 'redo', 'bold', 'italic', 'underline', 'bullet-list'],
-        },
-        theme: 'light',
-      }}
-      onErixReady={handleReady}
-    />
+    <>
+      <erix-editor
+        config={{
+          toolbar: {
+            items: ['undo', 'redo', 'bold', 'italic', 'underline', 'bullet-list'],
+          },
+          theme: 'light',
+        }}
+        onerix-ready={handleReady}
+        onerix-content-change={handleContentChange}
+      />
+    </>,
   );
+}
+
+export default App;
+```
+
+#### TypeScript Setup
+
+Create a file named `src/erix-editor.d.ts` (or add to your existing declarations) to properly type the custom element:
+
+```typescript
+import 'react';
+
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      'erix-editor': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        'config'?: any;
+        'content'?: string;
+        'theme'?: 'light' | 'dark' | string;
+        'onerix-ready'?: (event: any) => void;
+        'onerix-content-change'?: (event: any) => void;
+        'onerix-selection-change'?: (event: any) => void;
+        'onerix-focus'?: (event: any) => void;
+        'onerix-blur'?: (event: any) => void;
+      };
+    }
+  }
 }
 ```
 
+> **Note for React < 19:** You may need to use `ref` to assign complex properties like `config` and use `addEventListener` for custom events.
+
 ### Angular
 
-Native Angular module - no `CUSTOM_ELEMENTS_SCHEMA` needed!
+Use the Stencil loader with Angular's `CUSTOM_ELEMENTS_SCHEMA` for reliable integration:
 
 ```typescript
 // app.module.ts
-import { ErixModule } from 'erixeditor/angular';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+
+// Import and define Stencil custom elements
+import { defineCustomElements } from 'erixeditor/loader';
+defineCustomElements();
 
 @NgModule({
-  imports: [ErixModule],
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], // Required for web components
 })
 export class AppModule {}
 ```
 
 ```typescript
 // app.component.ts
+import { Component } from '@angular/core';
+
 @Component({
-  template: ` <erix-editor [config]="editorConfig" (erixReady)="onReady($event)"> </erix-editor> `,
+  selector: 'app-root',
+  template: `
+    <erix-editor [config]="editorConfig" (erix-ready)="onReady($event)" (erix-content-change)="onContentChange($event)"> </erix-editor>
+    <p>Characters: {{ charCount }}</p>
+  `,
 })
 export class AppComponent {
+  charCount = 0;
+  private api: any;
+
   editorConfig = {
     toolbar: {
-      items: ['undo', 'redo', 'bold', 'italic', 'underline'],
+      items: ['undo', 'redo', 'bold', 'italic', 'underline', 'bullet-list'],
     },
     theme: 'light',
   };
 
-  onReady(event: CustomEvent) {
-    const api = event.detail.api;
-    api.setContent('<p>Hello Angular!</p>', 'html');
+  onReady(event: any) {
+    this.api = event.detail.api;
+    this.api.setContent('<p>Hello Angular!</p>', 'html');
+  }
+
+  onContentChange(event: any) {
+    const { content } = event.detail;
+    this.charCount = content.text.length;
   }
 }
 ```
 
 ### Vue
 
-Native Vue components - works naturally!
+Vue 3 has excellent support for custom elements. Just use the tag directly!
 
 ```vue
 <script setup>
-import { ErixEditor } from 'erixeditor/vue';
+import { defineCustomElements } from 'erixeditor/loader';
+
+// Define custom elements
+defineCustomElements();
 
 const editorConfig = {
   toolbar: {
@@ -131,10 +197,14 @@ function onReady(event) {
   const api = event.detail.api;
   api.setContent('<p>Hello Vue!</p>', 'html');
 }
+
+function onContentChange(event) {
+  console.log('Content:', event.detail.content);
+}
 </script>
 
 <template>
-  <ErixEditor :config="editorConfig" @erix-ready="onReady" />
+  <erix-editor :config="editorConfig" @erix-ready="onReady" @erix-content-change="onContentChange" />
 </template>
 ```
 
@@ -455,19 +525,20 @@ editor.addEventListener('erix-ready', e => {
 ### React Example
 
 ```tsx
-import { ErixEditor } from 'erixeditor/react';
+import { defineCustomElements } from 'erixeditor/loader';
 import { useState, useCallback } from 'react';
+
+// Define custom elements
+defineCustomElements();
 
 function MyEditor() {
   const [content, setContent] = useState('');
-  const [api, setApi] = useState(null);
 
-  const handleReady = useCallback(event => {
+  const handleReady = useCallback((event: any) => {
     const editorApi = event.detail.api;
-    setApi(editorApi);
 
     // Listen for content changes
-    editorApi.on('change', ({ content }) => {
+    editorApi.on('change', ({ content }: any) => {
       setContent(content.html);
     });
 
@@ -483,7 +554,7 @@ function MyEditor() {
 
   return (
     <div>
-      <ErixEditor config={{ toolbar: { items: ['bold', 'italic', 'underline'] } }} onErixReady={handleReady} />
+      <erix-editor config={{ toolbar: { items: ['bold', 'italic', 'underline'] } }} onerix-ready={handleReady} />
       <button onClick={handleSave}>Save</button>
       <p>Characters: {content.length}</p>
     </div>
@@ -496,7 +567,7 @@ function MyEditor() {
 ```typescript
 @Component({
   template: `
-    <erix-editor [config]="config" (erixReady)="onReady($event)"></erix-editor>
+    <erix-editor [config]="config" (erix-ready)="onReady($event)"></erix-editor>
     <button (click)="save()">Save</button>
     <p>Characters: {{ content.length }}</p>
   `,
@@ -506,11 +577,11 @@ export class EditorComponent {
   content: string = '';
   private api: any;
 
-  onReady(event: CustomEvent) {
+  onReady(event: any) {
     this.api = event.detail.api;
 
     // Listen for content changes
-    this.api.on('change', ({ content }) => {
+    this.api.on('change', ({ content }: any) => {
       this.content = content.html;
     });
 
@@ -528,10 +599,13 @@ export class EditorComponent {
 
 ### Vue Example
 
-````vue
+```vue
 <script setup>
-import { ErixEditor } from 'erixeditor/vue';
+import { defineCustomElements } from 'erixeditor/loader';
 import { ref, onMounted } from 'vue';
+
+// Define custom elements
+defineCustomElements();
 
 const content = ref('');
 let api = null;
@@ -556,11 +630,13 @@ function save() {
 </script>
 
 <template>
-  <ErixEditor :config="{ toolbar: { items: ['bold', 'italic'] } }" @erix-ready="onReady" />
-  <button @click="save">Save</button>
-  <p>Characters: {{ content.length }}</p>
+  <div class="editor-wrap">
+    <erix-editor :config="{ toolbar: { items: ['bold', 'italic'] } }" @erix-ready="onReady" />
+    <button @click="save">Save</button>
+    <p>Characters: {{ content.length }}</p>
+  </div>
 </template>
----
+```
 
 ## DOM Events
 
@@ -568,23 +644,23 @@ Erix Editor emits DOM events directly on the `<erix-editor>` element. This makes
 
 ### Available DOM Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `erix-content-change` | `{ content: EditorContent }` | Fired on every content change (typing, formatting, etc.) |
-| `erix-selection-change` | `{ selection: EditorSelection }` | Fired when selection/cursor changes |
-| `erix-focus` | `undefined` | Fired when editor gains focus |
-| `erix-blur` | `undefined` | Fired when editor loses focus |
-| `erix-ready` | `{ api: ErixEditorAPI }` | Fired when editor is initialized |
+| Event                   | Detail                           | Description                                              |
+| ----------------------- | -------------------------------- | -------------------------------------------------------- |
+| `erix-content-change`   | `{ content: EditorContent }`     | Fired on every content change (typing, formatting, etc.) |
+| `erix-selection-change` | `{ selection: EditorSelection }` | Fired when selection/cursor changes                      |
+| `erix-focus`            | `undefined`                      | Fired when editor gains focus                            |
+| `erix-blur`             | `undefined`                      | Fired when editor loses focus                            |
+| `erix-ready`            | `{ api: ErixEditorAPI }`         | Fired when editor is initialized                         |
 
 ### EditorContent Type
 
 ```typescript
 interface EditorContent {
-  html: string;        // HTML string representation
-  text: string;        // Plain text representation
-  json: EditorDocumentJSON;  // ProseMirror JSON document
+  html: string; // HTML string representation
+  text: string; // Plain text representation
+  json: EditorDocumentJSON; // ProseMirror JSON document
 }
-````
+```
 
 ### Vanilla JavaScript
 
