@@ -1,6 +1,6 @@
 {
   "name": "erixeditor",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A rich text editor component with built-in toolbar and plugin system",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -36,6 +36,10 @@
     "type": "git",
     "url": "https://github.com/NopeThisIsShini/erix_editor.git"
   },
+  "bugs": {
+    "url": "https://github.com/NopeThisIsShini/erix_editor/issues"
+  },
+  "homepage": "https://github.com/NopeThisIsShini/erix_editor#readme",
   "files": [
     "dist/",
     "loader/"
@@ -61,13 +65,19 @@
   "license": "MIT",
   "keywords": [
     "editor",
-    "rich-text",
     "wysiwyg",
+    "rich-text",
+    "html",
+    "richtext",
+    "text",
+    "javascript",
+    "typescript",
     "stencil",
     "web-component",
     "react",
     "angular",
     "vue",
+    "prosemirror",
     "word-import",
     "docx"
   ],

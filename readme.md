@@ -175,7 +175,7 @@ function onReady(event) {
 
 ## Documentation
 
-For complete API reference, configuration options, and advanced usage examples, see the **[Full Integration Guide](https://github.com/NopeThisIsShini/erix_editor/blob/master/docs/INTEGRATION_GUIDE.md)**.
+For complete API reference, configuration options, and advanced usage examples, see the **[Full Integration Guide](./docs/INTEGRATION_GUIDE.md)**.
 
 ## Contributing
 
@@ -207,15 +207,11 @@ Erix Editor is licensed under the **MIT License**. It is totally open source and
 **Enterprise Users:**
 While Erix Editor is free to use, we greatly appreciate a shout-out or support from enterprise users. If your company uses Erix Editor, let us know on [Discord](https://discord.gg/BsXK68EnrR) or mention us!
 
-[View Full License](https://github.com/NopeThisIsShini/erix_editor/blob/master/LICENSE)
+[View Full License](./LICENSE)
 
 ## Links
 
 - [npm Package](https://www.npmjs.com/package/erixeditor)
-- [Full Integration Guide](https://github.com/NopeThisIsShini/erix_editor/blob/master/docs/INTEGRATION_GUIDE.md)
+- [Full Integration Guide](./docs/INTEGRATION_GUIDE.md)
 - [Report Issues](https://github.com/NopeThisIsShini/erix_editor/issues)
 - [Discord Community](https://discord.gg/BsXK68EnrR)
-
-## Keywords
-
-`editor` `wysiwyg` `html` `richtext` `text` `javascript` `typescript` `stencil` `web-component` `react` `angular` `vue` `prosemirror`

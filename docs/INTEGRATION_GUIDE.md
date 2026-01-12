@@ -7,7 +7,7 @@ A rich text editor component with built-in toolbar and plugin system. Just add t
 ## Installation
 
 ```bash
-npm install erix
+npm install erixeditor
 ```
 
 ---
@@ -18,7 +18,7 @@ npm install erix
 <erix-editor id="editor"></erix-editor>
 
 <script type="module">
-  import 'erix';
+  import 'erixeditor';
 
   const editor = document.querySelector('#editor');
 
@@ -56,7 +56,7 @@ npm install erix
 Native React wrapper - no `defineCustomElements` needed!
 
 ```tsx
-import { ErixEditor } from 'erix/react';
+import { ErixEditor } from 'erixeditor/react';
 
 function MyEditor() {
   const handleReady = event => {
@@ -84,7 +84,7 @@ Native Angular module - no `CUSTOM_ELEMENTS_SCHEMA` needed!
 
 ```typescript
 // app.module.ts
-import { ErixModule } from 'erix/angular';
+import { ErixModule } from 'erixeditor/angular';
 
 @NgModule({
   imports: [ErixModule],
@@ -118,7 +118,7 @@ Native Vue components - works naturally!
 
 ```vue
 <script setup>
-import { ErixEditor } from 'erix/vue';
+import { ErixEditor } from 'erixeditor/vue';
 
 const editorConfig = {
   toolbar: {
@@ -144,7 +144,7 @@ function onReady(event) {
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="module" src="https://unpkg.com/erix/dist/erix/erix.esm.js"></script>
+    <script type="module" src="https://unpkg.com/erixeditor/dist/erixeditor/erixeditor.esm.js"></script>
   </head>
   <body>
     <erix-editor id="editor"></erix-editor>
@@ -455,7 +455,7 @@ editor.addEventListener('erix-ready', e => {
 ### React Example
 
 ```tsx
-import { ErixEditor } from 'erix/react';
+import { ErixEditor } from 'erixeditor/react';
 import { useState, useCallback } from 'react';
 
 function MyEditor() {
@@ -530,7 +530,7 @@ export class EditorComponent {
 
 ````vue
 <script setup>
-import { ErixEditor } from 'erix/vue';
+import { ErixEditor } from 'erixeditor/vue';
 import { ref, onMounted } from 'vue';
 
 const content = ref('');
@@ -815,7 +815,7 @@ editor.content = '<p>Read-only content</p>';
 ## TypeScript Support
 
 ```typescript
-import type { EditorConfig, ErixEditorAPI } from 'erix';
+import type { EditorConfig, ErixEditorAPI } from 'erixeditor';
 
 const config: EditorConfig = {
   toolbar: {

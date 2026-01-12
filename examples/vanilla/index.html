@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Erix Editor - Vanilla JavaScript Example</title>
+  <script type="module" src="https://unpkg.com/erixeditor/dist/erixeditor/erixeditor.esm.js"></script>
+</head>
+
+<body>
+  <h1>Erix Editor Example</h1>
+
+  <erix-editor id="editor"></erix-editor>
+
+  <script type="module">
+    const editor = document.querySelector('#editor');
+
+    // Configure editor
+    editor.config = {
+      toolbar: {
+        items: [
+          'undo',
+          'redo',
+          'bold',
+          'italic',
+          'underline',
+          'strikethrough',
+          'bullet-list',
+          'ordered-list',
+          'font-family',
+          'font-size',
+        ],
+      },
+      theme: 'light',
+      placeholder: 'Start typing...',
+    };
+
+    // Listen for editor ready
+    editor.addEventListener('erix-ready', (e) => {
+      const api = e.detail.api;
+      console.log('Erix Editor is ready!');
+
+      // Set initial content
+      api.setContent('<p>Welcome to <strong>Erix Editor</strong>!</p>', 'html');
+
+      // Listen for content changes
+      api.on('change', ({ content }) => {
+        console.log('Content changed:', content.html);
+      });
+    });
+  </script>
+</body>
+
+</html>
