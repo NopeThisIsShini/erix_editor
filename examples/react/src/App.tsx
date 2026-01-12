@@ -1,34 +1,33 @@
 import { defineCustomElements } from 'erixeditor/loader';
+import './App.css';
 
-// Define custom elements
+// Register Stencil custom elements once
 defineCustomElements();
-import './App.css'
 
 function App() {
-  
-const handleReady = (event: any) => {
+  const handleReady = (event: CustomEvent) => {
     const api = event.detail.api;
-    api.setContent('<p>Hello React with Custom Loader!</p>', 'html');
+    api.setContent('<p>Hello React with Erix Editor!</p>', 'html');
   };
 
-  const handleContentChange = (event: any) => {
+  const handleContentChange = (event: CustomEvent) => {
     console.log('Content changed:', event.detail.content);
   };
 
   return (
-    <>
-  <erix-editor
-      config={{
-        toolbar: {
-          items: ['undo', 'redo', 'bold', 'italic', 'underline', 'bullet-list'],
-        },
-        theme: 'light',
-      }}
-      onerix-ready={handleReady}
-      onerix-content-change={handleContentChange}
-    />
-    </>
-  )
+    <div className="editor-demo">
+      <h1>Erix Editor – React Demo</h1>
+      <p>Testing the Stencil web component integration with React</p>
+
+      <div className="editor-container">
+        <erix-editor
+          id="demo-editor"
+          onerix-ready={handleReady}
+          onerix-content-change={handleContentChange}
+        />
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
