@@ -1,6 +1,6 @@
 {
   "name": "erixeditor",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A rich text editor component with built-in toolbar and plugin system",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
