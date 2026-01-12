@@ -1,9 +1,6 @@
 import { Config } from '@stencil/core';
 import { resolve } from 'path';
 import { existsSync } from 'fs';
-import { reactOutputTarget } from '@stencil/react-output-target';
-import { angularOutputTarget } from '@stencil/angular-output-target';
-import { vueOutputTarget } from '@stencil/vue-output-target';
 
 export const config: Config = {
   namespace: 'erixeditor',
@@ -52,28 +49,10 @@ export const config: Config = {
       type: 'www',
       serviceWorker: null,
     },
-
-    // React Output - generates native React components
-    reactOutputTarget({
-      outDir: './dist/react',
-    }),
-
-    // Angular Output - generates native Angular module
-    angularOutputTarget({
-      componentCorePackage: 'erixeditor',
-      outputType: 'component',
-      directivesProxyFile: './dist/angular/components.ts',
-      directivesArrayFile: './dist/angular/index.ts',
-    }),
-
-    // Vue Output - generates native Vue components
-    vueOutputTarget({
-      componentCorePackage: 'erixeditor',
-      proxiesFile: './dist/vue/components.ts',
-    }),
   ],
   testing: {
     browserHeadless: 'shell',
   },
   plugins: [],
 };
+

@@ -89,44 +89,84 @@ pnpm add erixeditor
 ### React
 
 ```tsx
-import { ErixEditor } from 'erixeditor/react';
+import { defineCustomElements } from 'erixeditor/loader';
 
-function MyEditor() {
-  const handleReady = event => {
+// Define custom elements
+defineCustomElements();
+
+function App() {
+  const handleReady = (event: any) => {
     const api = event.detail.api;
     api.setContent('<p>Hello React!</p>', 'html');
   };
 
   return (
-    <ErixEditor
+    <erix-editor
       config={{
-        toolbar: {
-          items: ['undo', 'redo', 'bold', 'italic', 'underline', 'bullet-list'],
-        },
+        toolbar: { items: ['undo', 'redo', 'bold', 'italic'] },
         theme: 'light',
       }}
-      onErixReady={handleReady}
+      onerix-ready={handleReady}
     />
   );
 }
 ```
 
+#### TypeScript Setup
+
+Create `src/erix-editor.d.ts` to properly type the custom element:
+
+```typescript
+import 'react';
+
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      'erix-editor': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        'config'?: any;
+        'content'?: string;
+        'theme'?: 'light' | 'dark' | string;
+        'onerix-ready'?: (event: any) => void;
+        'onerix-content-change'?: (event: any) => void;
+        'onerix-selection-change'?: (event: any) => void;
+        'onerix-focus'?: (event: any) => void;
+        'onerix-blur'?: (event: any) => void;
+      };
+    }
+  }
+}
+```
+
 ### Angular
+
+Use the Stencil loader with Angular's `CUSTOM_ELEMENTS_SCHEMA` for reliable integration:
 
 ```typescript
 // app.module.ts
-import { ErixModule } from 'erixeditor/angular';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+
+// Import and define Stencil custom elements
+import { defineCustomElements } from 'erixeditor/loader';
+defineCustomElements();
 
 @NgModule({
-  imports: [ErixModule],
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], // Required for web components
 })
 export class AppModule {}
 ```
 
 ```typescript
 // app.component.ts
+import { Component } from '@angular/core';
+
 @Component({
-  template: `<erix-editor [config]="editorConfig" (erixReady)="onReady($event)"></erix-editor>`,
+  selector: 'app-root',
+  template: ` <erix-editor [config]="editorConfig" (erix-ready)="onReady($event)" (erix-content-change)="onContentChange($event)"> </erix-editor> `,
 })
 export class AppComponent {
   editorConfig = {
@@ -134,9 +174,13 @@ export class AppComponent {
     theme: 'light',
   };
 
-  onReady(event: CustomEvent) {
+  onReady(event: any) {
     const api = event.detail.api;
     api.setContent('<p>Hello Angular!</p>', 'html');
+  }
+
+  onContentChange(event: any) {
+    console.log('Content changed:', event.detail.content);
   }
 }
 ```
@@ -145,7 +189,10 @@ export class AppComponent {
 
 ```vue
 <script setup>
-import { ErixEditor } from 'erixeditor/vue';
+import { defineCustomElements } from 'erixeditor/loader';
+
+// Define custom elements
+defineCustomElements();
 
 const editorConfig = {
   toolbar: { items: ['undo', 'redo', 'bold', 'italic', 'bullet-list'] },
@@ -159,19 +206,18 @@ function onReady(event) {
 </script>
 
 <template>
-  <ErixEditor :config="editorConfig" @erix-ready="onReady" />
+  <erix-editor :config="editorConfig" @erix-ready="onReady" />
 </template>
 ```
 
+> **Note:** Configure `compilerOptions.isCustomElement` in your `vite.config.js` to avoid warnings.
+
 ## Package Exports
 
-| Export Path          | Description                |
-| -------------------- | -------------------------- |
-| `erixeditor`         | Main entry (ESM/CJS)       |
-| `erixeditor/react`   | React component wrappers   |
-| `erixeditor/vue`     | Vue component wrappers     |
-| `erixeditor/angular` | Angular component wrappers |
-| `erixeditor/loader`  | Custom elements loader     |
+| Export Path         | Description            |
+| ------------------- | ---------------------- |
+| `erixeditor`        | Main entry (ESM/CJS)   |
+| `erixeditor/loader` | Custom elements loader |
 
 ## Documentation
 

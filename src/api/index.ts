@@ -68,8 +68,31 @@ export {
   openWordFileDialog,
 } from './serializers/word-importer';
 
+
 export type {
   WordImportOptions,
   WordImportResult,
   WordDocumentMetadata,
 } from './serializers/word-importer';
+
+/**
+ * Global JSX Support
+ * This ensures that these custom elements are recognized in JSX/React environments.
+ */
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'erix-button': any;
+      'erix-divider': any;
+      'erix-dropdown': any;
+      'erix-editor': any;
+      'erix-icon': any;
+      'erix-popover': any;
+      'erix-select': any;
+      'erix-status-bar': any;
+      'erix-table-picker': any;
+      'erix-table-toolbar': any;
+      'erix-toolbar': any;
+    }
+  }
+}

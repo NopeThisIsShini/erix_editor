@@ -10,26 +10,14 @@
   "unpkg": "dist/erixeditor/erixeditor.esm.js",
   "exports": {
     ".": {
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/erixeditor/erixeditor.esm.js",
-      "require": "./dist/erixeditor/erixeditor.cjs.js",
-      "types": "./dist/types/index.d.ts"
-    },
-    "./react": {
-      "import": "./dist/react/index.js",
-      "types": "./dist/react/index.d.ts"
-    },
-    "./angular": {
-      "import": "./dist/angular/index.js",
-      "types": "./dist/angular/index.d.ts"
-    },
-    "./vue": {
-      "import": "./dist/vue/components.js",
-      "types": "./dist/vue/components.d.ts"
+      "require": "./dist/erixeditor/erixeditor.cjs.js"
     },
     "./loader": {
+      "types": "./loader/index.d.ts",
       "import": "./loader/index.js",
-      "require": "./loader/index.cjs",
-      "types": "./loader/index.d.ts"
+      "require": "./loader/index.cjs.js"
     }
   },
   "repository": {
@@ -52,10 +40,7 @@
     "generate": "stencil generate"
   },
   "devDependencies": {
-    "@stencil/angular-output-target": "^1.1.1",
     "@stencil/core": "^4.40.1",
-    "@stencil/react-output-target": "^1.2.0",
-    "@stencil/vue-output-target": "^0.11.8",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.5",
     "jest": "^29.7.0",
