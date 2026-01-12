@@ -11,14 +11,15 @@ Simply open `index.html` in your browser. The editor loads from the unpkg CDN.
 ### Option 2: Local npm installation
 
 1. Install the package:
+
    ```bash
-   npm install erix
+   npm install erixeditor
    ```
 
 2. Import in your project:
    ```html
    <script type="module">
-     import 'erix';
+     import 'erixeditor';
    </script>
    ```
 
@@ -40,7 +41,7 @@ Simply open `index.html` in your browser. The editor loads from the unpkg CDN.
 ### 1. Include the Editor
 
 ```html
-<script type="module" src="https://unpkg.com/erix/dist/erix/erix.esm.js"></script>
+<script type="module" src="https://unpkg.com/erixeditor/dist/erixeditor/erixeditor.esm.js"></script>
 ```
 
 ### 2. Add the Editor Element
@@ -66,12 +67,12 @@ editor.config = {
 ### 4. Listen for Events
 
 ```javascript
-editor.addEventListener('erix-ready', (e) => {
+editor.addEventListener('erix-ready', e => {
   const api = e.detail.api;
-  
+
   // Set content
   api.setContent('<p>Hello World!</p>', 'html');
-  
+
   // Listen for changes
   api.on('change', ({ content }) => {
     console.log('Content changed:', content.html);
